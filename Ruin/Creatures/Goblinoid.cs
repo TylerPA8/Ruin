@@ -9,12 +9,18 @@ namespace Ruin.Creatures
 {
     internal class Goblinoid : Creature
     {
-        public StreamReader namesDoc = new StreamReader("C:\\Users\\tyler.paneitz\\OneDrive - Veterans United Home Loans\\Desktop\\Monster Names.txt");
-        protected List<string> BossNames = namesDoc.Split(',').ToList();
-
-
+        public List<string> bossNames = new List <string> { "Grimbrog", "Throghul", "Uzgoth", "Morgraith", "Skuldran", "Foulmaw", "Druknar", "Grimfang", "Blightwraith", "Vorthag", "Kruldak", "Gharnûl", "Morthûm", "Vulgrok", "Drelgath", "Kragmog", "Gorthûn", "Zulgarth", "Vrognir", "Ghûldren" };
         public Goblinoid(string name, int maxhp, int curhp, int ac, List<int> stats, List<Utilities.Attacks> attacks) : base(name, maxhp, curhp, ac, stats, attacks)
         {
+        }
+        public Goblinoid()
+        {
+            Name = Utilities.generateName();
+            Stats = Utilities.generatestatarray();
+            Maxhp = Utilities.generateMaxhp();
+            Curhp = Maxhp;
+            Ac = Utilities.generateAc();
+            Attacks = Utilities.generateAttacks();
         }
     }
 }
