@@ -9,26 +9,21 @@ namespace Ruin
 {
     internal static class Utilities
     {
-        public static List<int> GenerateStatArray()
+        public static int Rounder(int a)
         {
-            Random random = new Random();
-            //TODO
-            return new List<int>();
-        }
-        public static int GenerateMaxhp()
-        {
-            //TODO
-            return 0;
-        }
-        public static int GenerateAc()
-        {
-            //TODO
-            return 0;
-        }
-        public static List<Attacks> GenerateAttacks()
-        {
-            //TODO
-            return new List<Attacks>();
+            int statMod = 0;
+            if (a < 10)
+            {
+                double amod = a / 2;
+                statMod = Convert.ToInt32(Math.Floor(amod));
+            }
+            else
+            {
+                double amod = a / 2;
+                statMod = Convert.ToInt32(Math.Ceiling(amod));
+            }
+
+            return statMod;
         }
     }
 }

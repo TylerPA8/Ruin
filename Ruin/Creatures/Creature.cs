@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -53,18 +54,48 @@ namespace Ruin.Creatures
             }
             else Name = name;
             if (stats == null)
-                Stats = Utilities.GenerateStatArray();
+                Stats = GenerateStatArray();
             else Stats = stats;
-            Maxhp = Utilities.GenerateMaxhp();
+            Maxhp = GenerateHp();
             Curhp = Maxhp;
-            Ac = Utilities.GenerateAc();
+            Ac = GenerateAc();
             if (attacks == null)
-                Attacks = Utilities.GenerateAttacks();
+                Attacks = GenerateAttacks();
             else Attacks = attacks;
         }
         public void displayCreatureStats()
         {
             Console.WriteLine($"Creature name: {name}\nHp: {curhp}/{maxhp}\nAC: {ac}\nStats: {stats}");
+        }
+        public List<int> GenerateStatArray()
+        {
+            //generates 4 stats between 6 and 14 and places them in an array. 
+            Random rnd = new();
+            int strength = rnd.Next(6,15);
+            int strMod = Utilities.Rounder(strength);
+            int dexterity = rnd.Next(6, 15);
+            int dexMod = Utilities.Rounder(dexterity);
+            int constitution = rnd.Next(6, 15);
+            int conMod = Utilities.Rounder(constitution);
+            int mind = rnd.Next(4, 13);
+            int minMod = Utilities.Rounder(mind);
+
+            return new List<int> { strength, strMod, dexterity, dexMod, constitution, conMod, mind, minMod };
+        }
+        public int GenerateHp()
+        {
+            Random rnd = new();
+            int health = rnd.Next(2, 13) + (this.stats[5]); 
+            return health;
+        }
+        public int GenerateAc()
+        {
+            return (10 + this.stats[3]);
+        }
+        public List<Attacks> GenerateAttacks()
+        {
+            //TODO
+            return new List<Attacks>();
         }
     }
 }
