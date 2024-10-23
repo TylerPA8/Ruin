@@ -45,14 +45,24 @@ namespace Ruin.Creatures
             get { return attacks; }
             set { attacks = value; }
         }
-        public Creature (string name, int maxhp, int curhp,  int ac, List<int> stats, List<Utilities.Attacks> attacks)
+        public Creature (string? name, List<int>? stats, int? maxhp,  int? ac, List<Utilities.Attacks>? attacks)
         {
-            Name = name;
-            Maxhp = maxhp;
-            Curhp = curhp;
-            Ac = ac;
-            Stats = stats;
-            Attacks = attacks;
+            if (name == null)
+                Name = Utilities.GenerateName();
+            else Name = name;
+            if (stats == null)
+                Stats = Utilities.GenerateStatArray();
+            else Stats = stats;
+            if (maxhp == null)
+                Maxhp = Utilities.GenerateMaxhp();
+            else Maxhp = maxhp;
+            Curhp = Maxhp;
+            if (ac == null)
+                Ac = Utilities.GenerateAc();
+            else Ac = ac;
+            if (attacks == null)
+                Attacks = Utilities.GenerateAttacks();
+            else Attacks = attacks;
         }
         public void displayCreatureStats()
         {
