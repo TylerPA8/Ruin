@@ -48,7 +48,9 @@ namespace Ruin.Creatures
         public Creature (string? name, List<int>? stats, int? maxhp,  int? ac, List<Utilities.Attacks>? attacks)
         {
             if (name == null)
-                Name = Utilities.GenerateName();
+                {
+                    name = this.GetType().Name;
+                }
             else Name = name;
             if (stats == null)
                 Stats = Utilities.GenerateStatArray();

@@ -7,12 +7,8 @@ using System.Threading.Tasks;
 
 namespace Ruin.Utilities
 {
-    internal class Utilities
+    internal static class Utilities
     {
-        public string GenerateName()
-        {
-            return this.GetType().Name;
-        }
         public static List<int> GenerateStatArray()
         {
             Random random = new Random();

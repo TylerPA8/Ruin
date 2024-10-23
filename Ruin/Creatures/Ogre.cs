@@ -8,7 +8,7 @@ namespace Ruin.Creatures
 {
     internal class Ogre : Goblinoid
     {
-        public Ogre(string name, int maxhp, int curhp, int ac, List<int> stats, List<Utilities.Attacks> attacks) : base(name, maxhp, curhp, ac, stats, attacks)
+        public Ogre(string name, int maxhp, int curhp, int ac, List<int> stats, List<Attacks> attacks) : base(name, maxhp, curhp, ac, stats, attacks)
         {
         }
     }
