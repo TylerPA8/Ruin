@@ -8,7 +8,7 @@ namespace Ruin.Creatures
 {
     internal class Character : Creature
     {
-        public Character(string name, List<int> stats, int maxhp,int ac, List<Attacks> attacks) : base(name, stats, maxhp, ac, attacks)
+        public Character(string name, List<int> stats, List<Attacks> attacks) : base(name, stats, attacks)
         {
         }
     }

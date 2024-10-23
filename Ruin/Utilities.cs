@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ruin.Utilities
+namespace Ruin
 {
     internal static class Utilities
     {

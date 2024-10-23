@@ -13,7 +13,7 @@ namespace Ruin.Creatures
         private int curhp;
         private int ac;
         private List<int> stats;
-        private List<Utilities.Attacks> attacks;
+        private List<Attacks> attacks;
 
         public string Name
         {
@@ -40,28 +40,24 @@ namespace Ruin.Creatures
             get { return stats; }
             set { stats = value; }
         }
-        public List<Utilities.Attacks> Attacks
+        public List<Attacks> Attacks
         {
             get { return attacks; }
             set { attacks = value; }
         }
-        public Creature (string? name, List<int>? stats, int? maxhp,  int? ac, List<Utilities.Attacks>? attacks)
+        public Creature(string? name, List<int>? stats, List<Attacks>? attacks)
         {
             if (name == null)
-                {
-                    name = this.GetType().Name;
-                }
+            {
+                name = this.GetType().Name;
+            }
             else Name = name;
             if (stats == null)
                 Stats = Utilities.GenerateStatArray();
             else Stats = stats;
-            if (maxhp == null)
-                Maxhp = Utilities.GenerateMaxhp();
-            else Maxhp = maxhp;
+            Maxhp = Utilities.GenerateMaxhp();
             Curhp = Maxhp;
-            if (ac == null)
-                Ac = Utilities.GenerateAc();
-            else Ac = ac;
+            Ac = Utilities.GenerateAc();
             if (attacks == null)
                 Attacks = Utilities.GenerateAttacks();
             else Attacks = attacks;
