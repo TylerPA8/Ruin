@@ -8,7 +8,7 @@ namespace Ruin.Creatures
 {
     internal class HobGoblin : Goblinoid
     {
-        public HobGoblin(string name, List<int> stats, List<Attacks> attacks) : base(name, stats, attacks)
+        public HobGoblin(string name, List<int> stats, List<Attack> attacks) : base(name, stats, attacks)
         {
         }
     }

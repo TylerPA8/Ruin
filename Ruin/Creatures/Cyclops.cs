@@ -8,7 +8,7 @@ namespace Ruin.Creatures
 {
     internal class Cyclops : Goblinoid
     {
-        public Cyclops(string name, List<int> stats, List<Attacks> attacks) : base(name, stats, attacks)
+        public Cyclops(string name, List<int> stats, List<Attack> attacks) : base(name, stats, attacks)
         {
         }
     }

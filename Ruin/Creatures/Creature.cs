@@ -9,93 +9,65 @@ namespace Ruin.Creatures
 {
     internal class Creature
     {
-        private string name;
-        private int maxhp;
-        private int curhp;
-        private int ac;
-        private List<int> stats;
-        private List<Attacks> attacks;
+        public string name;
+        public int maxhp;
+        public int curhp;
+        public int ac;
+        public List<int> stats;
+        public List<Attack> attacks;
+        public Dictionary<int, int> statArray = new Dictionary<int,int>() {{1, -5 },{2,-4},{3,-4},{ 4,-3},{ 5,-3},{ 6,-2},{ 7,-2},{ 8,-1},{ 9,-1},{ 10,0},{ 11,0},{ 12,1},{ 13,1},{ 14, 2 },{ 15, 2 },{ 16, 3 },{ 17, 3 },{ 18, 4 },{ 19, 4 },{ 20, 5 } };
 
-        public string Name
-        {
-            get { return name; }
-            set { name = value; }
-        }
-        public int Maxhp
-        {
-            get { return maxhp; }
-            set { maxhp = value; }
-        }
-        public int Curhp
-        {
-            get { return curhp; }
-            set { curhp = value; }
-        }
-        public int Ac
-        {
-            get { return ac; }
-            set { ac = value; }
-        }
-        public List<int> Stats
-        {
-            get { return stats; }
-            set { stats = value; }
-        }
-        public List<Attacks> Attacks
-        {
-            get { return attacks; }
-            set { attacks = value; }
-        }
-        public Creature(string? name, List<int>? stats, List<Attacks>? attacks)
+        public Creature(string? name, List<int>? stats, List<Attack>? attacks)
         {
             if (name == null)
             {
                 name = this.GetType().Name;
             }
-            else Name = name;
             if (stats == null)
-                Stats = GenerateStatArray();
-            else Stats = stats;
-            Maxhp = GenerateHp();
-            Curhp = Maxhp;
-            Ac = GenerateAc();
+            {
+                this.stats = GenerateStatArray();
+            }
+            this.maxhp = GenerateHp(this.stats[5]);
+            this.curhp = this.maxhp;
+            this.ac = GenerateAc(this.stats[3]);
             if (attacks == null)
-                Attacks = GenerateAttacks();
-            else Attacks = attacks;
+                attacks = GenerateAttacks(new List<int> { this.stats[1], this.stats[3], this.stats[7] });
         }
         public void displayCreatureStats()
         {
-            Console.WriteLine($"Creature name: {name}\nHp: {curhp}/{maxhp}\nAC: {ac}\nStats: {stats}");
+            Console.WriteLine($"Creature name: {name}\nHp: {curhp}/{maxhp}\nAC: {ac}\nStats: \nStrength: {stats[0]} Dexterity: {stats[2]} Constitution: {stats[4]} Mind: {stats[6]} \nAttacks: {attacks}");
         }
         public List<int> GenerateStatArray()
         {
             //generates 4 stats between 6 and 14 and places them in an array. 
             Random rnd = new();
             int strength = rnd.Next(6,15);
-            int strMod = Utilities.Rounder(strength);
+            int strMod = statArray[strength];
             int dexterity = rnd.Next(6, 15);
-            int dexMod = Utilities.Rounder(dexterity);
+            int dexMod = statArray[dexterity];
             int constitution = rnd.Next(6, 15);
-            int conMod = Utilities.Rounder(constitution);
+            int conMod = statArray[constitution];
             int mind = rnd.Next(4, 13);
-            int minMod = Utilities.Rounder(mind);
+            int minMod = statArray[mind];
 
             return new List<int> { strength, strMod, dexterity, dexMod, constitution, conMod, mind, minMod };
         }
-        public int GenerateHp()
+        public int GenerateHp(int c)
+        
         {
             Random rnd = new();
-            int health = rnd.Next(2, 13) + (this.stats[5]); 
+            int health = rnd.Next(7, 13) + (c*2); 
             return health;
         }
-        public int GenerateAc()
+        public int GenerateAc(int d)
         {
-            return (10 + this.stats[3]);
+            return (10 + d);
         }
-        public List<Attacks> GenerateAttacks()
+        public List<Attack> GenerateAttacks(List<int> combatMods)
         {
-            //TODO
-            return new List<Attacks>();
+            if ((combatMods[0] >= combatMods[1]) && (combatMods[0] >= combatMods[2])) { return this.attacks.Add(Punch, Slash); }
+            if ((combatMods[1] >= combatMods[0]) && (combatMods[1] >= combatMods[2])) { return this.attacks.Add(Stab, Slash); }
+            else { return this.attacks.Add(ArcaneBolt, Slash); }
         }
     }
 }

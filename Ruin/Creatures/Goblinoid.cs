@@ -10,7 +10,7 @@ namespace Ruin.Creatures
     internal class Goblinoid : Creature
     {
         public List<string> bossNames = new List <string> { "Grimbrog", "Throghul", "Uzgoth", "Morgraith", "Skuldran", "Foulmaw", "Druknar", "Grimfang", "Blightwraith", "Vorthag", "Kruldak", "Gharnûl", "Morthûm", "Vulgrok", "Drelgath", "Kragmog", "Gorthûn", "Zulgarth", "Vrognir", "Ghûldren" };
-        public Goblinoid(string name, List<int> stats, List<Attacks> attacks) : base(name, stats, attacks)
+        public Goblinoid(string name, List<int> stats, List<Attack> attacks) : base(name, stats, attacks)
         {
         }
         public static int GenerateAc()
