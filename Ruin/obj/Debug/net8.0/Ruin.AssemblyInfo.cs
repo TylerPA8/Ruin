@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Ruin")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4ae8743ee4a71f80ca657e3c8bb15edc26a65aee")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d70fc64e5063c3f890b3687c4388bf6f0320ae24")]
 [assembly: System.Reflection.AssemblyProductAttribute("Ruin")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Ruin")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
