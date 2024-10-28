@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Ruin.Creatures
 {
-    internal class Creature
+    internal class Creatures
     {
         public string name;
         public int maxhp;
@@ -16,8 +16,8 @@ namespace Ruin.Creatures
         public List<int> stats;
         public List<Attack> attacks;
         public Dictionary<int, int> statArray = new Dictionary<int,int>() {{1, -5 },{2,-4},{3,-4},{ 4,-3},{ 5,-3},{ 6,-2},{ 7,-2},{ 8,-1},{ 9,-1},{ 10,0},{ 11,0},{ 12,1},{ 13,1},{ 14, 2 },{ 15, 2 },{ 16, 3 },{ 17, 3 },{ 18, 4 },{ 19, 4 },{ 20, 5 } };
-        public List<Creature> creatures = new List<Creature>();
-        public Creature(string? name, List<int>? stats, List<Attack>? attacks)
+        public static List<Creatures> creatures = new List<Creatures>();
+        public Creatures(string? name, List<int>? stats, List<Attack>? attacks)
         {
             if (name == null)
             {
@@ -35,13 +35,20 @@ namespace Ruin.Creatures
             //Passes on a list of running active creatures for the save state. Surely a better way to do this.
             creatures.Add(this);
         }
-        public Creature(string name, List<int> stats, List<Attack> attacks, int ac, int maxhp, int curhp)
+        public Creatures(string name, List<int> stats, List<Attack> attacks, int ac, int maxhp, int curhp)
         {
         }
 
         public void displayCreatureStats()
         {
-            Console.WriteLine($"Creature name: {name}\nHp: {curhp}/{maxhp}\nAC: {ac}\nStats: \nStrength: {stats[0]} Dexterity: {stats[2]} Constitution: {stats[4]} Mind: {stats[6]} \nAttacks: {attacks}");
+            Console.WriteLine($"Creature name: {name}\nHp: {curhp}/{maxhp}\nAC: {ac}\nStats: Strength: {stats[0]} Dexterity: {stats[2]} Constitution: {stats[4]} Mind: {stats[6]} \nAttacks: {attacks}");
+        }
+        public static void DisplayCreatures()
+        {
+            foreach (Creatures c in creatures)
+            {
+                Console.WriteLine($"{c.name}\nHp: {c.curhp}/{c.maxhp}");
+            }
         }
         public List<int> GenerateStatArray()
         {
@@ -71,10 +78,27 @@ namespace Ruin.Creatures
         }
         public List<Attack> GenerateAttacks(List<int> combatMods)
         {
-            if ((combatMods[0] >= combatMods[1]) && (combatMods[0] >= combatMods[2])) { return this.attacks.Add(Punch, Slash); }
-            if ((combatMods[1] >= combatMods[0]) && (combatMods[1] >= combatMods[2])) { return this.attacks.Add(Stab, Slash); }
-            else { return this.attacks.Add(ArcaneBolt, Slash); }
+            if ((combatMods[0] >= combatMods[1]) && (combatMods[0] >= combatMods[2])) 
+            {
+                this.attacks.Add(Attack.GetAttacks()[0]);
+                this.attacks.Add(Attack.GetAttacks()[4]);
+                return this.attacks;
+            }
+            if ((combatMods[1] >= combatMods[0]) && (combatMods[1] >= combatMods[2])) 
+            {
+                this.attacks.Add(Attack.GetAttacks()[2]);
+                this.attacks.Add(Attack.GetAttacks()[4]);
+                return this.attacks;
+            }
+            else 
+            { 
+                this.attacks.Add(Attack.GetAttacks()[4]); 
+                this.attacks.Add(Attack.GetAttacks()[14]);
+                return this.attacks;
+            }
         }
+
+        public static List<Creatures> GetCreatures() => creatures;
     }
 }
 

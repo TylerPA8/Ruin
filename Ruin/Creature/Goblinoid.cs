@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Ruin.Creatures
 {
-    internal class Goblinoid : Creature
+    internal class Goblinoid : Creatures
     {
         public List<string> bossNames = new List <string> { "Grimbrog", "Throghul", "Uzgoth", "Morgraith", "Skuldran", "Foulmaw", "Druknar", "Grimfang", "Blightwraith", "Vorthag", "Kruldak", "Gharnûl", "Morthûm", "Vulgrok", "Drelgath", "Kragmog", "Gorthûn", "Zulgarth", "Vrognir", "Ghûldren" };
         public Goblinoid(string name, List<int> stats, List<Attack> attacks) : base(name, stats, attacks)

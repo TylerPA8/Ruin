@@ -1,15 +1,13 @@
-﻿// See https://aka.ms/new-console-template for more information
-using Ruin.Creatures;
+﻿using Ruin.Creatures;
+
+Attack.InitializeAttacks();
 
 Console.WriteLine("Generating Creatures...");
-Creature Creature = new Creature("Creature", null, null);
-Creature.displayCreatureStats();
 
-//Creature Creature2 = new Creature("Creature 2", null, null);
-//Creature2.displayCreatureStats();
+Creatures Creature = new Creatures("Creature", null, null);
+Creatures Creature2 = new Creatures("Creature 2", null, null);
+Creatures Creature3 = new Creatures("Creature 3", null, null);
+Creatures Creature4 = new Creatures("Creature 4", null, null);
 
-//Creature Creature3 = new Creature("Creature 3", null, null);
-//Creature3.displayCreatureStats();
 
-//Creature Creature4 = new Creature("Creature 4", null, null);
-//Creature4.displayCreatureStats();
+Creatures.DisplayCreatures();

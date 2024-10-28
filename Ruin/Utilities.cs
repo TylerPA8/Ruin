@@ -18,30 +18,39 @@ namespace Ruin
         }
         public static void SaveGame(string saveName)
         {
-            //TODO write method to be called to write file to save game
-            string fileName = @$"C:\Ruin\{saveName}.txt";
-            try
+            if (File.Exists(@$"C:\Ruin\{saveName}.txt"))
             {
-                if (File.Exists(fileName))
-                {
-                    string tempFile = @"C:\Ruin\GameStateTemp.txt";
-                    //TODO : Write method for copying game state so user can reload.
-                }
-                else
-                {
-                    using (TextWriter tw = new StreamWriter(fileName))
-                    {
-                        foreach (var item in objects.List)
-                        {
-                            tw.WriteLine(string.Format($"Name: {0}\n{1}: {1}", item.Name, item.curhp.ToString(), item.maxhp.ToString(), item.ac.ToString(), item.stats.ToString(), item.attacks.ToString()));
-                        }
-                    }
-                }
+                string tempFile = @"C:\Ruin\GameStateTemp.txt";
+                File.Copy(saveName, tempFile);
+                List<Attack> attacks = Attack.GetAttacks();
+                //List<Creatures> creatures = Creatures.GetCreatures();
+                //WriteSave(saveName, attacks, creatures);
+
+             }
+            else
+            {
+                
             }
         }
         public static void LoadGame()
+
         {
             //TODO write method to be called to write file to save game
+        }
+        public static void WriteSave(string saveName, List<Attack> attacks, List<Creatures> creatures)
+        {
+            string fileName = @$"C:\Ruin\{saveName}.txt";
+            using (TextWriter tw = new StreamWriter(fileName))
+            {
+                foreach (var item in attacks)
+                {
+                    tw.WriteLine(string.Format($"{0}, {1}, {2}, {3}, {4}\n", item.attackName.ToString(), item.attackDescription, item.minDmg.ToString(), item.maxDmg.ToString(), item.attackType.ToString()));
+                }
+                foreach (var item in creatures)
+                {
+                    tw.WriteLine(string.Format($"{0}, {1}, {2}, {3}, {4}, {5}\n", item.name, item.curhp.ToString(), item.maxhp.ToString(), item.ac.ToString(), item.stats.ToString(), item.attacks.ToString()));
+                }
+            }
         }
     }
 }

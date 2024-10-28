@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Ruin.Creatures
 {
-    internal class Character(string name, List<int> stats, List<Attack> attacks) : Creature(name, stats, attacks)
+    internal class Character(string name, List<int> stats, List<Attack> attacks) : Creatures(name, stats, attacks)
     {
 
     }
