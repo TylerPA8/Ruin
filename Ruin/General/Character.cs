@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ruin.Creatures
+namespace Ruin.General
 {
     internal class Character(string name, List<int> stats, List<Attack> attacks) : Creatures(name, stats, attacks)
     {

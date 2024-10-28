@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ruin.Creatures
+namespace Ruin.General
 {
     public enum AttackType
     {

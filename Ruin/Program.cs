@@ -1,4 +1,4 @@
-﻿using Ruin.Creatures;
+﻿using Ruin.General;
 
 Attack.InitializeAttacks();
 
