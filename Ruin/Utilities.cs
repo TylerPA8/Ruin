@@ -1,4 +1,4 @@
-﻿using Ruin.Creatures;
+﻿using Ruin.General;
 using System;
 using System.Collections.Generic;
 using System.Linq;

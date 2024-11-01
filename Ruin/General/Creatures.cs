@@ -50,7 +50,7 @@ namespace Ruin.General
                 Console.WriteLine($"{c.name}\nHp: {c.curhp}/{c.maxhp}");
             }
         }
-        public List<int> GenerateStatArray()
+        public virtual List<int> GenerateStatArray()
         {
             //generates 4 stats between 6 and 14 and places them in an array. 
             Random rnd = new();
@@ -60,7 +60,7 @@ namespace Ruin.General
             int dexMod = statArray[dexterity];
             int constitution = rnd.Next(6, 15);
             int conMod = statArray[constitution];
-            int mind = rnd.Next(4, 13);
+            int mind = rnd.Next(6, 15);
             int minMod = statArray[mind];
 
             return new List<int> { strength, strMod, dexterity, dexMod, constitution, conMod, mind, minMod };
@@ -72,7 +72,7 @@ namespace Ruin.General
             int health = rnd.Next(7, 13) + (c*2); 
             return health;
         }
-        public int GenerateAc(int d)
+        public virtual int GenerateAc(int d)
         {
             return (10 + d);
         }
@@ -81,19 +81,41 @@ namespace Ruin.General
             if ((combatMods[0] >= combatMods[1]) && (combatMods[0] >= combatMods[2])) 
             {
                 this.attacks.Add(Attack.GetAttacks()[0]);
+                this.attacks.Add(Attack.GetAttacks()[1]);
                 this.attacks.Add(Attack.GetAttacks()[4]);
+                this.attacks.Add(Attack.GetAttacks()[5]);
                 return this.attacks;
             }
             if ((combatMods[1] >= combatMods[0]) && (combatMods[1] >= combatMods[2])) 
             {
                 this.attacks.Add(Attack.GetAttacks()[2]);
+                this.attacks.Add(Attack.GetAttacks()[3]);
                 this.attacks.Add(Attack.GetAttacks()[4]);
+                this.attacks.Add(Attack.GetAttacks()[5]);
                 return this.attacks;
             }
             else 
             { 
                 this.attacks.Add(Attack.GetAttacks()[4]); 
                 this.attacks.Add(Attack.GetAttacks()[14]);
+                Console.WriteLine("Select a page for your spellbook using the number listed:\n1. Fire\n2. Poison\n3. Cold\n4. Lightning");
+                //Needs choice validation
+                int choice = Convert.ToInt32(Console.ReadLine());
+                switch (choice)
+                {
+                    case 1:
+                        this.attacks.Add(Attack.GetAttacks()[6]);
+                        break;
+                    case 2:
+                        this.attacks.Add(Attack.GetAttacks()[8]);
+                        break;
+                    case 3:
+                        this.attacks.Add(Attack.GetAttacks()[10]);
+                        break;
+                    case 4:
+                        this.attacks.Add(Attack.GetAttacks()[12]);
+                        break;
+                }
                 return this.attacks;
             }
         }
