@@ -1,4 +1,4 @@
-﻿using Ruin.Creatures;
+﻿using Ruin.General;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +22,7 @@ namespace Ruin
             {
                 string tempFile = @"C:\Ruin\GameStateTemp.txt";
                 File.Copy(saveName, tempFile);
-                List<Attack> attacks = Attack.GetAttacks();
+                List<Attack> attacks = AttackLibrary.attacksList;
                 //List<Creatures> creatures = Creatures.GetCreatures();
                 //WriteSave(saveName, attacks, creatures);
 

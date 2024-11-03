@@ -14,24 +14,33 @@ namespace Ruin.General
         public int curhp;
         public int ac;
         public List<int> stats;
-        public List<Attack> attacks;
+        public List<Attack> attacks = new List<Attack>();
         public Dictionary<int, int> statArray = new Dictionary<int,int>() {{1, -5 },{2,-4},{3,-4},{ 4,-3},{ 5,-3},{ 6,-2},{ 7,-2},{ 8,-1},{ 9,-1},{ 10,0},{ 11,0},{ 12,1},{ 13,1},{ 14, 2 },{ 15, 2 },{ 16, 3 },{ 17, 3 },{ 18, 4 },{ 19, 4 },{ 20, 5 } };
         public static List<Creatures> creatures = new List<Creatures>();
+        private int strength;
+        private int strMod;
+        private int dexterity;
+        private int dexMod;
+        private int constitution;
+        private int conMod;
+        private int mind;
+        private int minMod;
+
         public Creatures(string? name, List<int>? stats, List<Attack>? attacks)
         {
-            if (name == null)
+            this.name = name;
+            if (stats is null)
             {
-                name = this.GetType().Name;
+                GenerateStatArray();
             }
-            if (stats == null)
+            else
             {
-                this.stats = GenerateStatArray();
+                this.stats = GenerateStatArray(stats);
             }
             this.maxhp = GenerateHp(this.stats[5]);
             this.curhp = this.maxhp;
             this.ac = GenerateAc(this.stats[3]);
-            if (attacks == null)
-                attacks = GenerateAttacks(new List<int> { this.stats[1], this.stats[3], this.stats[7] });
+            this.attacks = GenerateAttacks(new List<int> { this.stats[1], this.stats[3], this.stats[7] });
             //Passes on a list of running active creatures for the save state. Surely a better way to do this.
             creatures.Add(this);
         }
@@ -47,25 +56,56 @@ namespace Ruin.General
         {
             foreach (Creatures c in creatures)
             {
-                Console.WriteLine($"{c.name}\nHp: {c.curhp}/{c.maxhp}");
+                Console.WriteLine($"{c.name}\nHp: {c.curhp}/{c.maxhp}\n{c.attacks[0].attackName}, {c.attacks[1].attackName}\n");
             }
         }
-        public List<int> GenerateStatArray()
+        private void GenerateStatArray()
         {
             //generates 4 stats between 6 and 14 and places them in an array. 
             Random rnd = new();
-            int strength = rnd.Next(6,15);
-            int strMod = statArray[strength];
-            int dexterity = rnd.Next(6, 15);
-            int dexMod = statArray[dexterity];
-            int constitution = rnd.Next(6, 15);
-            int conMod = statArray[constitution];
-            int mind = rnd.Next(4, 13);
-            int minMod = statArray[mind];
+            this.stats = new List<int>();
+            this.strength = rnd.Next(6, 15);
+            this.dexterity = rnd.Next(6, 15);
+            this.constitution = rnd.Next(6, 15);
+            this.mind = rnd.Next(4, 13);
+            PullMods();
+            PopulateArray();
+
+        }
+
+        private void PopulateArray()
+        {
+            this.stats.Add(this.strength);
+            this.stats.Add(this.strMod);
+            this.stats.Add(this.dexterity);
+            this.stats.Add(this.dexMod);
+            this.stats.Add(this.constitution);
+            this.stats.Add(this.conMod);
+            this.stats.Add(this.mind);
+            this.stats.Add(this.minMod);
+        }
+
+        private void PullMods()
+        {
+            this.strMod = statArray[this.strength];
+            this.dexMod = statArray[this.dexterity];
+            this.conMod = statArray[this.constitution];
+            this.minMod = statArray[this.mind];
+        }
+        public List<int> GenerateStatArray(List<int> stats)
+        {
+            this.strength = stats[0];
+            this.strMod = statArray[strength];
+            this.dexterity = stats[1];
+            this.dexMod = statArray[dexterity];
+            this.constitution = stats[2];
+            this.conMod = statArray[constitution];
+            this.mind = stats[3];
+            this.minMod = statArray[mind];
 
             return new List<int> { strength, strMod, dexterity, dexMod, constitution, conMod, mind, minMod };
         }
-        public int GenerateHp(int c)
+            public int GenerateHp(int c)
         
         {
             Random rnd = new();
@@ -80,20 +120,20 @@ namespace Ruin.General
         {
             if ((combatMods[0] >= combatMods[1]) && (combatMods[0] >= combatMods[2])) 
             {
-                this.attacks.Add(Attack.GetAttacks()[0]);
-                this.attacks.Add(Attack.GetAttacks()[4]);
+                this.attacks.Add(AttackLibrary.attacksList[0]);
+                this.attacks.Add(AttackLibrary.attacksList[4]);
                 return this.attacks;
             }
             if ((combatMods[1] >= combatMods[0]) && (combatMods[1] >= combatMods[2])) 
             {
-                this.attacks.Add(Attack.GetAttacks()[2]);
-                this.attacks.Add(Attack.GetAttacks()[4]);
+                this.attacks.Add(AttackLibrary.attacksList[2]);
+                this.attacks.Add(AttackLibrary.attacksList[4]);
                 return this.attacks;
             }
             else 
             { 
-                this.attacks.Add(Attack.GetAttacks()[4]); 
-                this.attacks.Add(Attack.GetAttacks()[14]);
+                this.attacks.Add(AttackLibrary.attacksList[14]);
+                this.attacks.Add(AttackLibrary.attacksList[4]); 
                 return this.attacks;
             }
         }
