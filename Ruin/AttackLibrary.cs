@@ -29,6 +29,7 @@ namespace Ruin
             Attack LightningBolt = new("Lightning Bolt", "A crackling bolt of lightning that electrocutes the target.", 2, 24, AttackType.Lightning);
             Attack ArcaneBolt = new("Arcane Bolt", "A simple blast of magic that damages and regenerates mana for the caster.", 1, 4, AttackType.Arcane);
             Attack MagicMissile = new("Magic Missile", "A focused burst of magic that damages and regenerates mana for the caster.", 2, 8, AttackType.Arcane);
+            Attack GoblinNeedle = new("Goblin Needle", "A stab with a poisoned hunk of iron.", 2, 5, AttackType.Poison);
             attacksList.Add(Wack);
             attacksList.Add(Crush);
             attacksList.Add(Stab);
@@ -45,6 +46,7 @@ namespace Ruin
             attacksList.Add(LightningBolt);
             attacksList.Add(ArcaneBolt);
             attacksList.Add(MagicMissile);
+            attacksList.Add(GoblinNeedle);
         }
     }
 }

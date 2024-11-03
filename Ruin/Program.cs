@@ -7,10 +7,13 @@ attackLibrary.InitializeAttacks();
 
 Console.WriteLine("Generating Creatures...");
 List <Attack> emptyattacks = new List<Attack>();    
-Creatures Creature = new Creatures("Creature", null, emptyattacks);
-Creatures Creature2 = new Creatures("Creature 2", null, emptyattacks);
-Creatures Creature3 = new Creatures("Creature 3", null, emptyattacks);
-Creatures Creature4 = new Creatures("Creature 4", null, emptyattacks);
+Goblinoid Goblin = new ("Goblin", null, emptyattacks);
+Goblinoid Goblin2 = new("Goblin", null, emptyattacks);
+Goblinoid Goblin3 = new("Goblin", null, emptyattacks);
+Goblinoid Goblin4 = new("Goblin", null, emptyattacks);
 
 
-Creatures.DisplayCreatures();
+Goblin.DisplayCreature();
+Goblin2.DisplayCreature();
+Goblin3.DisplayCreature();
+Goblin4.DisplayCreature();

@@ -16,15 +16,14 @@ namespace Ruin.General
         public List<int> stats;
         public List<Attack> attacks = new List<Attack>();
         public Dictionary<int, int> statArray = new Dictionary<int,int>() {{1, -5 },{2,-4},{3,-4},{ 4,-3},{ 5,-3},{ 6,-2},{ 7,-2},{ 8,-1},{ 9,-1},{ 10,0},{ 11,0},{ 12,1},{ 13,1},{ 14, 2 },{ 15, 2 },{ 16, 3 },{ 17, 3 },{ 18, 4 },{ 19, 4 },{ 20, 5 } };
-        public static List<Creatures> creatures = new List<Creatures>();
-        private int strength;
-        private int strMod;
-        private int dexterity;
-        private int dexMod;
-        private int constitution;
-        private int conMod;
-        private int mind;
-        private int minMod;
+        protected int strength;
+        protected int strMod;
+        protected int dexterity;
+        protected int dexMod;
+        protected int constitution;
+        protected int conMod;
+        protected int mind;
+        protected int minMod;
 
         public Creatures(string? name, List<int>? stats, List<Attack>? attacks)
         {
@@ -41,8 +40,6 @@ namespace Ruin.General
             this.curhp = this.maxhp;
             this.ac = GenerateAc(this.stats[3]);
             this.attacks = GenerateAttacks(new List<int> { this.stats[1], this.stats[3], this.stats[7] });
-            //Passes on a list of running active creatures for the save state. Surely a better way to do this.
-            creatures.Add(this);
         }
         public Creatures(string name, List<int> stats, List<Attack> attacks, int ac, int maxhp, int curhp)
         {
@@ -52,14 +49,11 @@ namespace Ruin.General
         {
             Console.WriteLine($"Creature name: {name}\nHp: {curhp}/{maxhp}\nAC: {ac}\nStats: Strength: {stats[0]} Dexterity: {stats[2]} Constitution: {stats[4]} Mind: {stats[6]} \nAttacks: {attacks}");
         }
-        public static void DisplayCreatures()
+        public virtual void DisplayCreature()
         {
-            foreach (Creatures c in creatures)
-            {
-                Console.WriteLine($"{c.name}\nHp: {c.curhp}/{c.maxhp}\n{c.attacks[0].attackName}, {c.attacks[1].attackName}\n");
-            }
+                Console.WriteLine($"{this.name}\nHp: {this.curhp}/{this.maxhp}\n{this.attacks[0].attackName}, {this.attacks[1].attackName}\n");
         }
-        private void GenerateStatArray()
+        protected virtual void GenerateStatArray()
         {
             //generates 4 stats between 6 and 14 and places them in an array. 
             Random rnd = new();
@@ -73,7 +67,7 @@ namespace Ruin.General
 
         }
 
-        private void PopulateArray()
+        protected void PopulateArray()
         {
             this.stats.Add(this.strength);
             this.stats.Add(this.strMod);
@@ -85,7 +79,7 @@ namespace Ruin.General
             this.stats.Add(this.minMod);
         }
 
-        private void PullMods()
+        protected void PullMods()
         {
             this.strMod = statArray[this.strength];
             this.dexMod = statArray[this.dexterity];
@@ -112,11 +106,11 @@ namespace Ruin.General
             int health = rnd.Next(7, 13) + (c*2); 
             return health;
         }
-        public int GenerateAc(int d)
+        public virtual int GenerateAc(int d)
         {
             return (10 + d);
         }
-        public List<Attack> GenerateAttacks(List<int> combatMods)
+        public virtual List<Attack> GenerateAttacks(List<int> combatMods)
         {
             if ((combatMods[0] >= combatMods[1]) && (combatMods[0] >= combatMods[2])) 
             {
@@ -137,8 +131,6 @@ namespace Ruin.General
                 return this.attacks;
             }
         }
-
-        public static List<Creatures> GetCreatures() => creatures;
     }
 }
 
