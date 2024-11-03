@@ -116,12 +116,14 @@ namespace Ruin.General
             {
                 this.attacks.Add(AttackLibrary.attacksList[0]);
                 this.attacks.Add(AttackLibrary.attacksList[4]);
+                this.attacks.Add(Attack.GetAttacks()[5]);
                 return this.attacks;
             }
             if ((combatMods[1] >= combatMods[0]) && (combatMods[1] >= combatMods[2])) 
             {
                 this.attacks.Add(AttackLibrary.attacksList[2]);
                 this.attacks.Add(AttackLibrary.attacksList[4]);
+                this.attacks.Add(Attack.GetAttacks()[5]);
                 return this.attacks;
             }
             else 
