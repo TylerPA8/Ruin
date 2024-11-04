@@ -61,7 +61,7 @@ namespace Ruin.General
             this.strength = rnd.Next(6, 15);
             this.dexterity = rnd.Next(6, 15);
             this.constitution = rnd.Next(6, 15);
-            this.mind = rnd.Next(4, 13);
+            this.mind = rnd.Next(6, 15);
             PullMods();
             PopulateArray();
 
@@ -115,21 +115,38 @@ namespace Ruin.General
             if ((combatMods[0] >= combatMods[1]) && (combatMods[0] >= combatMods[2])) 
             {
                 this.attacks.Add(AttackLibrary.attacksList[0]);
+                this.attacks.Add(AttackLibrary.attacksList[1]);
                 this.attacks.Add(AttackLibrary.attacksList[4]);
-                this.attacks.Add(Attack.GetAttacks()[5]);
                 return this.attacks;
             }
             if ((combatMods[1] >= combatMods[0]) && (combatMods[1] >= combatMods[2])) 
             {
                 this.attacks.Add(AttackLibrary.attacksList[2]);
                 this.attacks.Add(AttackLibrary.attacksList[4]);
-                this.attacks.Add(Attack.GetAttacks()[5]);
+                this.attacks.Add(AttackLibrary.attacksList[5]);
                 return this.attacks;
             }
             else 
             { 
                 this.attacks.Add(AttackLibrary.attacksList[14]);
-                this.attacks.Add(AttackLibrary.attacksList[4]); 
+                this.attacks.Add(AttackLibrary.attacksList[4]);
+                Console.WriteLine("Choose your magic speciality:\n1. Fire 2.Poison 3. Cold 4. Lightning");
+                int magicSelect = Convert.ToInt32(Console.ReadLine());
+                switch (magicSelect)
+                {
+                    case 1:
+                        this.attacks.Add(AttackLibrary.attacksList[6]);
+                        break;
+                    case 2:
+                        this.attacks.Add(AttackLibrary.attacksList[8]);
+                        break;
+                    case 3:
+                        this.attacks.Add(AttackLibrary.attacksList[10]);
+                        break;
+                    case 4:
+                        this.attacks.Add(AttackLibrary.attacksList[12]);
+                        break;
+                }
                 return this.attacks;
             }
         }
