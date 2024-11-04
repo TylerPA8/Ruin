@@ -37,20 +37,20 @@ namespace Ruin
         {
             //TODO write method to be called to write file to save game
         }
-        public static void WriteSave(string saveName, List<Attack> attacks, List<Creatures> creatures)
-        {
-            string fileName = @$"C:\Ruin\{saveName}.txt";
-            using (TextWriter tw = new StreamWriter(fileName))
-            {
-                foreach (var item in attacks)
-                {
-                    tw.WriteLine(string.Format($"{0}, {1}, {2}, {3}, {4}\n", item.attackName.ToString(), item.attackDescription, item.minDmg.ToString(), item.maxDmg.ToString(), item.attackType.ToString()));
-                }
-                foreach (var item in creatures)
-                {
-                    tw.WriteLine(string.Format($"{0}, {1}, {2}, {3}, {4}, {5}\n", item.name, item.curhp.ToString(), item.maxhp.ToString(), item.ac.ToString(), item.stats.ToString(), item.attacks.ToString()));
-                }
-            }
-        }
+        //public static void WriteSave(string saveName, List<Attack> attacks, List<Creatures> creatures)
+        //{
+        //    string fileName = @$"C:\Ruin\{saveName}.txt";
+        //    using (TextWriter tw = new StreamWriter(fileName))
+        //    {
+        //        foreach (var item in attacks)
+        //        {
+        //            tw.WriteLine(string.Format($"{0}, {1}, {2}, {3}, {4}\n", item.attackName.ToString(), item.attackDescription, item.minDmg.ToString(), item.maxDmg.ToString(), item.attackType.ToString()));
+        //        }
+        //        foreach (var item in creatures)
+        //        {
+        //            tw.WriteLine(string.Format($"{0}, {1}, {2}, {3}, {4}, {5}\n", item.name, item.curhp.ToString(), item.maxhp.ToString(), item.ac.ToString(), item.stats.ToString(), item.attacks.ToString()));
+        //        }
+        //    }
+        //}
     }
 }

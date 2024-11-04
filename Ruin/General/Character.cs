@@ -24,7 +24,7 @@ namespace Ruin.General
             
                 while (totalStats > 0)
                 {
-                    Console.WriteLine($"You have {totalStats} points to spend.\nEach stat can be increased up to 15. Which stat would you like to increase?\n1. Strength: {this.strength} 2. Dexterity: {this.dexterity} 3. Constitution: {this.constitution} 4. Mind: {this.mind}");
+                    Console.WriteLine($"You have {totalStats} points to spend.\nEach stat can be increased up to 15. Which stat would you like to increase?\n1. Strength: {this.strength} 2. Dexterity: {this.dexterity} 3. Constitution: {this.constitution} 4. Mind: {this.mind}\n");
                     int statChoice = Convert.ToInt32(Console.ReadLine());
                     string statChoiceString = " ";
                     int curStat = 0; 
@@ -49,7 +49,7 @@ namespace Ruin.General
                     }
                     Console.WriteLine($"How much would you like to increase {statChoiceString}?");
                     int statRaise = Convert.ToInt32(Console.ReadLine());
-                    if (((totalStats - statRaise) >= 0) && ((statRaise + statChoice) <= 15))
+                    if (((totalStats - statRaise) >= 0) && ((statRaise + statChoice) <= 15) )
                     {
                         switch(statChoice)
                         {
@@ -82,7 +82,7 @@ namespace Ruin.General
 
         public override List<Attack> GenerateAttacks(List<int> combatMods)
         {
-            if ((combatMods[2] >= combatMods[0]) && (combatMods[2] >= combatMods[0]))
+            if ((combatMods[2] >= combatMods[0]) && (combatMods[2] >= combatMods[1]))
             {
                 this.attacks.Add(AttackLibrary.attacksList[14]);
                 this.attacks.Add(AttackLibrary.attacksList[4]);
@@ -130,7 +130,6 @@ namespace Ruin.General
             }
         }
 
-
         public override void DisplayCreature()
         {
             string atkString = "";
@@ -142,8 +141,7 @@ namespace Ruin.General
                     atkString += ($"{atk.attackName}, ");
             }
                 string statString = ($"Strength: {this.stats[0]} Dexterity: {this.stats[2]} Constitution: {this.stats[4]} Mind: {this.stats[6]}");
-            Console.WriteLine($"{this.name}\nHp: {this.curhp}/{this.maxhp} AC: {this.ac}\n{statString}\nAttacks: {atkString}\n");
+            Console.WriteLine($"{this.name}\nHp: {this.curhp}/{this.maxhp} AC: {this.ac}\nStamina: {this.curstamina}/{this.maxstamina} Mana: {this.curmana}/{this.maxmana}\n{statString}\nAttacks: {atkString}\n");
         }
-    }
-    
+    }   
 }
