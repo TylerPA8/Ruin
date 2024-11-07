@@ -49,6 +49,7 @@ namespace Ruin.General
             this.ac = GenerateAc(this.stats[3]);
             this.attacks = GenerateAttacks(new List<int> { this.stats[1], this.stats[3], this.stats[7] });
         }
+
         public Creatures(string name, List<int> stats, List<Attack> attacks, int ac, int maxhp, int curhp, int maxstamina, int curstamina, int maxmana, int curmana)
         {
         }
@@ -57,6 +58,7 @@ namespace Ruin.General
         {
                 Console.WriteLine($"{this.name}\nHp: {this.curhp}/{this.maxhp}\n{this.attacks[0].attackName}, {this.attacks[1].attackName}\n");
         }
+
         protected virtual void GenerateStatArray()
         {
             //generates 4 stats between 6 and 14 and places them in an array. 
@@ -90,6 +92,7 @@ namespace Ruin.General
             this.conMod = statArray[this.constitution];
             this.minMod = statArray[this.mind];
         }
+
         public List<int> GenerateStatArray(List<int> stats)
         {
             this.strength = stats[0];
@@ -103,16 +106,19 @@ namespace Ruin.General
 
             return new List<int> { strength, strMod, dexterity, dexMod, constitution, conMod, mind, minMod };
         }
+
         public int GenerateHp(int c) 
         {
             Random rnd = new();
             int health = rnd.Next(7, 13) + (c*2); 
             return health;
         }
+
         public virtual int GenerateAc(int d)
         {
             return (10 + d);
         }
+
         public virtual List<Attack> GenerateAttacks(List<int> combatMods)
         {
             if ((combatMods[0] >= combatMods[1]) && (combatMods[0] >= combatMods[2])) 
@@ -153,6 +159,7 @@ namespace Ruin.General
                 return this.attacks;
             }
         }
+
         public void TakeDamage(int d)
         {
             if (this.curhp - d <= 0)
@@ -164,6 +171,7 @@ namespace Ruin.General
                 this.curhp -= d;
             }
         }
+        
         public void AttackRoll(Attack atk, int proficiencyBonus, Creatures target)
         {
             Random dice = new ();
@@ -215,16 +223,19 @@ namespace Ruin.General
 
             }
         }
+
         public bool CheckHit(int atkRoll, Creatures target)
         {
             if (atkRoll >= target.ac)
                 return true;
             else; return false;
         }
+
         public void DealDamage(int dmg, Creatures target)
         {
             target.curhp -= dmg;
         }
+
     }
 }
 
