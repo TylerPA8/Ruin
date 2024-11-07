@@ -8,5 +8,9 @@ namespace Ruin.General
 {
     internal class Combat
     {
+        public void StartCombat(Character player, List<Creatures> enemies)
+        {
+
+        }
     }
 }

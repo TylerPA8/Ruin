@@ -6,8 +6,8 @@ var attackLibrary = new AttackLibrary();
 attackLibrary.InitializeAttacks();
 List<Attack> emptyattacks = new List<Attack>();
 Goblinoid Goblin = new("Goblin", null, emptyattacks);
-Goblin.DisplayCreature();
-//Goblinoid Goblin2 = new("Goblin", null, emptyattacks);
+Goblinoid Goblin2 = new("Goblin", null, emptyattacks);
+List<Creatures> enemies = new List<Creatures> { Goblin, Goblin2};
 //Goblinoid Goblin3 = new("Goblin", null, emptyattacks);
 //Goblinoid Goblin4 = new("Goblin", null, emptyattacks);
 
@@ -17,8 +17,8 @@ string nm = Console.ReadLine();
 Console.WriteLine("\nGenerating your hero...\n");
 Character Character1 = new(nm, null, emptyattacks);
 Character1.DisplayCreature();
-Character1.AttackRoll(AttackLibrary.attacksList[5], 2, Goblin);
-Goblin.DisplayCreature();
+Creatures target = Character1.SelectTarget(enemies);
+Character1.AttackRoll(AttackLibrary.attacksList[5], 2, target);
 
 
 

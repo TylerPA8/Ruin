@@ -236,6 +236,20 @@ namespace Ruin.General
             target.curhp -= dmg;
         }
 
+        public Creatures SelectTarget(List<Creatures> targets)
+        {
+            Console.WriteLine($"Select a target:");
+            int x = 1;
+            foreach (Creatures c in targets)
+            {
+                Console.Write($"{x}: {c.name} ");
+                x++;
+            }
+            Console.WriteLine("\n");
+            Creatures target = targets[Convert.ToInt32(Console.ReadLine())];
+            return target;
+        }
+
     }
 }
 
