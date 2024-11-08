@@ -17,10 +17,9 @@ namespace Ruin.General
         public int maxDmg;
         public int stamCost;
         public int manaCost;
-        public AttackType attackType;
         //public Random roll;
 
-        public Attack (string attackName, string attackDescription, int minDmg, int maxDmg, int stamCost, int manaCost, AttackType attackType)
+        public Attack (string attackName, string attackDescription, int minDmg, int maxDmg, int stamCost, int manaCost)
         {
             this.attackName = attackName;
             this.attackDescription = attackDescription;
@@ -28,7 +27,6 @@ namespace Ruin.General
             this.maxDmg = maxDmg;
             this.stamCost = stamCost;
             this.manaCost = manaCost;
-            this.attackType = attackType;
         }
 
         //public int RollDamage(Attack attack) => roll.Next(this.minDmg, (this.maxDmg + 1));

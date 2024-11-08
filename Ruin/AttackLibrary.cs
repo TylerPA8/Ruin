@@ -29,6 +29,8 @@ namespace Ruin
             Attack LightningBolt = new("Lightning Bolt", "A crackling bolt of lightning that electrocutes the target.", 2, 24, 2, 5, AttackType.Lightning);
             Attack ArcaneBolt = new("Arcane Bolt", "A simple blast of magic that damages and regenerates mana for the caster.", 1, 4, 1, -2, AttackType.Arcane);
             Attack MagicMissile = new("Magic Missile", "A focused burst of magic that damages and regenerates mana for the caster.", 2, 8, 2, -4, AttackType.Arcane);
+            Attack HealingBreeze = new("Healing Breeze", "A gentle wave of magic that heals the target.", 1, 4, 2, 3, AttackType.Arcane);
+            Attack Curse = new("Curse", "A curse made to tangle the targets abilities.", 1, 4, 2, 4, AttackType.Arcane);
             Attack GoblinNeedle = new("Goblin Needle", "A stab with a poisoned hunk of iron.", 2, 5, 4, 0, AttackType.Poison);
             attacksList.Add(Wack);
             attacksList.Add(Crush);

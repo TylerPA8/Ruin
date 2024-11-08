@@ -34,7 +34,7 @@ namespace Ruin.General
         {
             this.attacks.Add(AttackLibrary.attacksList[2]);
             this.attacks.Add(AttackLibrary.attacksList[4]);
-            this.attacks.Add(AttackLibrary.attacksList[16]);
+            this.attacks.Add(AttackLibrary.attacksList[18]);
             return this.attacks;
         }
         public override void DisplayCreature()

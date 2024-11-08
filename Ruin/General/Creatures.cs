@@ -50,7 +50,7 @@ namespace Ruin.General
             this.attacks = GenerateAttacks(new List<int> { this.stats[1], this.stats[3], this.stats[7] });
         }
 
-        public Creatures(string name, List<int> stats, List<Attack> attacks, int ac, int maxhp, int curhp, int maxstamina, int curstamina, int maxmana, int curmana)
+        public Creatures(string name, List<int> stats, List<Attack> attacks, int ac, int maxhp, int curhp, int maxstamina, int curstamina, int maxmana, int curmana, Status status)
         {
         }
 
@@ -139,7 +139,7 @@ namespace Ruin.General
             { 
                 this.attacks.Add(AttackLibrary.attacksList[14]);
                 this.attacks.Add(AttackLibrary.attacksList[4]);
-                Console.WriteLine("Choose your magic speciality:\n1. Fire 2.Poison 3. Cold 4. Lightning");
+                Console.WriteLine("Choose your magic speciality:\n1. Fire 2.Poison 3. Cold 4. Lightning 5. Healing 6. Occult");
                 int magicSelect = Convert.ToInt32(Console.ReadLine());
                 switch (magicSelect)
                 {
@@ -154,6 +154,12 @@ namespace Ruin.General
                         break;
                     case 4:
                         this.attacks.Add(AttackLibrary.attacksList[12]);
+                        break;
+                    case 5:
+                        this.attacks.Add(AttackLibrary.attacksList[16]);
+                        break;
+                    case 6:
+                        this.attacks.Add(AttackLibrary.attacksList[17]);
                         break;
                 }
                 return this.attacks;
@@ -178,15 +184,15 @@ namespace Ruin.General
             int roll = dice.Next(1, 21);
             int dmgRoll = dice.Next(atk.minDmg, (atk.maxDmg+1));
             int dmgMod = 0;
-            switch(atk.attackType)
+            switch(atk.attackName)
             {
-                case (AttackType.Bludgeoning):
+                case ("Wack" or "Crush"):
                     dmgMod = this.strMod;
                     break;
-                case (AttackType.Piercing):
+                case ("Stab" or "Puncture"):
                     dmgMod = this.dexMod;
                     break;
-                case (AttackType.Slashing):
+                case ("Nick" or "Slash"):
                     if (this.strMod >= this.dexMod)
                     {
                         dmgMod = this.strMod;
