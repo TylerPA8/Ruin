@@ -89,7 +89,7 @@ namespace Ruin.General
                 int spellPages = combatMods[2];
                 while (spellPages > 0)
                 {
-                    Console.WriteLine("Choose your magic speciality:\n1. Fire 2.Poison 3. Cold 4. Lightning");
+                    Console.WriteLine("Choose your magic speciality:\n1. Fire 2.Poison 3. Cold 4. Lightning 5. Healing 6. Occult");
                     int magicSelect = Convert.ToInt32(Console.ReadLine());
                     switch (magicSelect)
                     {
@@ -104,6 +104,12 @@ namespace Ruin.General
                             break;
                         case 4:
                             this.attacks.Add(AttackLibrary.attacksList[12]);
+                            break;
+                        case 5:
+                            this.attacks.Add(AttackLibrary.attacksList[16]);
+                            break;
+                        case 6:
+                            this.attacks.Add(AttackLibrary.attacksList[17]);
                             break;
                     }
                     spellPages--;
