@@ -17,6 +17,7 @@ namespace Ruin.General
         protected int maxmana;
         protected int curmana;
         protected int ac;
+        protected int proficiency;
         protected List<int> stats;
         protected List<Attack> attacks = new List<Attack>();
         protected Dictionary<int, int> statArray = new Dictionary<int,int>() {{1, -5 },{2,-4},{3,-4},{ 4,-3},{ 5,-3},{ 6,-2},{ 7,-2},{ 8,-1},{ 9,-1},{ 10,0},{ 11,0},{ 12,1},{ 13,1},{ 14, 2 },{ 15, 2 },{ 16, 3 },{ 17, 3 },{ 18, 4 },{ 19, 4 },{ 20, 5 } };
@@ -29,7 +30,7 @@ namespace Ruin.General
         protected int mind;
         protected int minMod;
 
-        public Creatures(string? name, List<int>? stats, List<Attack>? attacks)
+        public Creatures(string? name, List<int>? stats, List<Attack>? attacks, int proficiency = 2)
         {
             this.name = name;
             if (stats is null)
@@ -50,7 +51,7 @@ namespace Ruin.General
             this.attacks = GenerateAttacks(new List<int> { this.stats[1], this.stats[3], this.stats[7] });
         }
 
-        public Creatures(string name, List<int> stats, List<Attack> attacks, int ac, int maxhp, int curhp, int maxstamina, int curstamina, int maxmana, int curmana, Status status)
+        public Creatures(string name, List<int> stats, List<Attack> attacks, int ac, int maxhp, int curhp, int maxstamina, int curstamina, int maxmana, int curmana, List<Status> status, int proficiency = 2)
         {
         }
 
@@ -107,7 +108,7 @@ namespace Ruin.General
             return new List<int> { strength, strMod, dexterity, dexMod, constitution, conMod, mind, minMod };
         }
 
-        public int GenerateHp(int c) 
+        public int GenerateHp(int c)
         {
             Random rnd = new();
             int health = rnd.Next(7, 13) + (c*2); 
@@ -172,7 +173,7 @@ namespace Ruin.General
             }
         }
         
-        public void AttackRoll(Attack atk, int proficiencyBonus, Creatures target)
+        public void AttackRoll(Attack atk, Creatures target)
         {
             Random dice = new ();
             int roll = dice.Next(1, 21);
@@ -208,12 +209,12 @@ namespace Ruin.General
             }
             else
             {
-                int atkRoll = roll+dmgMod+proficiencyBonus;
+                int atkRoll = roll+dmgMod+this.proficiency;
                 bool hit = CheckHit(atkRoll, target);
                 switch (hit)
                 {
                     case true:
-                        Console.Write($"A {atkRoll} hits {target.name} for {dmgRoll}!\n");
+                        Console.Write($"A {atkRoll} ({roll} + {dmgMod} + {this.proficiency}) hits {target.name} for {dmgRoll}!\n");
                         DealDamage(dmgRoll, target);
                         break;
                     case false:

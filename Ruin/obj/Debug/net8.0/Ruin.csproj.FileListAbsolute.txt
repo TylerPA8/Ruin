@@ -3,13 +3,3 @@ C:\Ruin\Ruin\obj\Debug\net8.0\Ruin.AssemblyInfoInputs.cache
 C:\Ruin\Ruin\obj\Debug\net8.0\Ruin.AssemblyInfo.cs
 C:\Ruin\Ruin\obj\Debug\net8.0\Ruin.csproj.CoreCompileInputs.cache
 C:\Ruin\Ruin\obj\Debug\net8.0\Ruin.sourcelink.json
-C:\Ruin\Ruin\bin\Debug\net8.0\Ruin.exe
-C:\Ruin\Ruin\bin\Debug\net8.0\Ruin.deps.json
-C:\Ruin\Ruin\bin\Debug\net8.0\Ruin.runtimeconfig.json
-C:\Ruin\Ruin\bin\Debug\net8.0\Ruin.dll
-C:\Ruin\Ruin\bin\Debug\net8.0\Ruin.pdb
-C:\Ruin\Ruin\obj\Debug\net8.0\Ruin.dll
-C:\Ruin\Ruin\obj\Debug\net8.0\refint\Ruin.dll
-C:\Ruin\Ruin\obj\Debug\net8.0\Ruin.pdb
-C:\Ruin\Ruin\obj\Debug\net8.0\Ruin.genruntimeconfig.cache
-C:\Ruin\Ruin\obj\Debug\net8.0\ref\Ruin.dll
