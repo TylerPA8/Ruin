@@ -11,6 +11,23 @@ namespace Ruin.General
         public Character(string name, List<int> stats, List<Attack> attacks): base(name, stats, attacks) 
         {
         }
+
+        public Character(string name, List<int> stats, List<Attack> attacks, int ac, int maxhp, int curhp, int maxstamina, int curstamina, int maxmana, int curmana, List<Status> status, int proficiency = 2):base(name,stats, attacks, ac, maxhp, curhp, maxstamina,curstamina, maxmana, curmana, status, proficiency)
+        {
+            this.name = name;
+            this.stats = GenerateStatArray(stats);
+            this.attacks = attacks;
+            this.ac = ac;
+            this.maxhp = maxhp;
+            this.curhp = curhp;
+            this.maxstamina = maxstamina;
+            this.curstamina = curstamina;
+            this.maxmana = maxmana;
+            this.curmana = curmana;
+            this.status = status;
+            this.proficiency = proficiency;
+        }
+
         protected override void GenerateStatArray()
         {
             //generates 4 stats between 6 and 14 and places them in an array. 

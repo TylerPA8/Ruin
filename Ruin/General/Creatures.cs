@@ -20,6 +20,7 @@ namespace Ruin.General
         protected int proficiency;
         protected List<int> stats;
         protected List<Attack> attacks = new List<Attack>();
+        protected List<Status> status = new List<Status>();
         protected Dictionary<int, int> statArray = new Dictionary<int,int>() {{1, -5 },{2,-4},{3,-4},{ 4,-3},{ 5,-3},{ 6,-2},{ 7,-2},{ 8,-1},{ 9,-1},{ 10,0},{ 11,0},{ 12,1},{ 13,1},{ 14, 2 },{ 15, 2 },{ 16, 3 },{ 17, 3 },{ 18, 4 },{ 19, 4 },{ 20, 5 } };
         protected int strength;
         protected int strMod;
@@ -29,6 +30,40 @@ namespace Ruin.General
         protected int conMod;
         protected int mind;
         protected int minMod;
+        public string Name => name;
+        public int MaxHp => maxhp;
+        public int CurHp
+            {
+            get { return curhp; }
+            set { curhp = value; }
+            } 
+        public int MaxStamina => maxstamina;
+        public int CurStamina
+        {
+            get { return curstamina; }
+            set { curstamina = value; }
+        }
+        public int MaxMana => maxmana;
+        public int CurMana
+        {
+            get { return curmana; }
+            set { curmana = value; }
+        }
+        public int Ac => ac;
+        public int Proficiency => proficiency;
+        public List<Attack> Attacks => attacks;
+        public List<Status> Status => status;
+        public int Strength => strength;
+        public int StrMod => strMod;
+        public int Dexterity => dexterity;
+        public int DexterityMod => dexMod;
+        public int Constitution => constitution;
+        public int ConMod => conMod;
+        public int Mind => mind;
+        public int MindMod => minMod;
+
+
+
 
         public Creatures(string? name, List<int>? stats, List<Attack>? attacks, int proficiency = 2)
         {
@@ -53,6 +88,18 @@ namespace Ruin.General
 
         public Creatures(string name, List<int> stats, List<Attack> attacks, int ac, int maxhp, int curhp, int maxstamina, int curstamina, int maxmana, int curmana, List<Status> status, int proficiency = 2)
         {
+            this.name = name;
+            this.stats = stats;
+            this.attacks = attacks;
+            this.ac = ac;
+            this.maxhp = maxhp;
+            this.curhp = curhp;
+            this.maxstamina = maxstamina;
+            this.curstamina = curstamina;
+            this.maxmana = maxmana;
+            this.curmana = curmana;
+            this.status = status;
+            this.proficiency = proficiency;
         }
 
         public virtual void DisplayCreature()
@@ -74,6 +121,20 @@ namespace Ruin.General
 
         }
 
+        public List<int> GenerateStatArray(List<int> stats)
+        {
+            this.strength = stats[0];
+            this.strMod = statArray[strength];
+            this.dexterity = stats[1];
+            this.dexMod = statArray[dexterity];
+            this.constitution = stats[2];
+            this.conMod = statArray[constitution];
+            this.mind = stats[3];
+            this.minMod = statArray[mind];
+
+            return new List<int> { strength, strMod, dexterity, dexMod, constitution, conMod, mind, minMod };
+        }
+
         protected void PopulateArray()
         {
             this.stats.Add(this.strength);
@@ -92,20 +153,6 @@ namespace Ruin.General
             this.dexMod = statArray[this.dexterity];
             this.conMod = statArray[this.constitution];
             this.minMod = statArray[this.mind];
-        }
-
-        public List<int> GenerateStatArray(List<int> stats)
-        {
-            this.strength = stats[0];
-            this.strMod = statArray[strength];
-            this.dexterity = stats[1];
-            this.dexMod = statArray[dexterity];
-            this.constitution = stats[2];
-            this.conMod = statArray[constitution];
-            this.mind = stats[3];
-            this.minMod = statArray[mind];
-
-            return new List<int> { strength, strMod, dexterity, dexMod, constitution, conMod, mind, minMod };
         }
 
         public int GenerateHp(int c)
@@ -234,23 +281,22 @@ namespace Ruin.General
 
         public void DealDamage(int dmg, Creatures target)
         {
-            target.curhp -= dmg;
+            target.CurHp -= dmg;
         }
 
-        public Creatures SelectTarget(List<Creatures> targets)
+        public Attack SelectAttack()
         {
-            Console.WriteLine($"Select a target:");
-            int x = 1;
-            foreach (Creatures c in targets)
+            string choices = "";
+            int runner = 1;
+            foreach (Attack atk in this.attacks)
             {
-                Console.Write($"{x}: {c.name} ");
-                x++;
+                choices += ($"{runner}. {atk.attackName} ");
+                runner++;
             }
-            Console.WriteLine("\n");
-            Creatures target = targets[Convert.ToInt32(Console.ReadLine())];
-            return target;
+            Console.WriteLine($"Select attack:\n{choices}");
+            Attack atkchoice = this.attacks[Convert.ToInt32(Console.ReadLine())];
+            return atkchoice;
         }
-
     }
 }
 
