@@ -28,7 +28,8 @@ namespace Ruin.General
                 }
 
                 else
-                    Escape();
+                    escape = Escape();
+                break;
 
                 Creatures target = SelectTarget(enemies);
                 Attack atk = player.SelectAttack();
@@ -42,7 +43,8 @@ namespace Ruin.General
         public static bool Escape()
         {
             //Add % chance to escape based on enemy total health.
-            return Escape();
+            bool flee = true;
+            return flee;
         }
         public static Creatures SelectTarget(List<Creatures> targets)
         {
