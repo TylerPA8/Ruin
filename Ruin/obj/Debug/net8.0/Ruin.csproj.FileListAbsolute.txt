@@ -1,5 +1,0 @@
-C:\Ruin\Ruin\obj\Debug\net8.0\Ruin.GeneratedMSBuildEditorConfig.editorconfig
-C:\Ruin\Ruin\obj\Debug\net8.0\Ruin.AssemblyInfoInputs.cache
-C:\Ruin\Ruin\obj\Debug\net8.0\Ruin.AssemblyInfo.cs
-C:\Ruin\Ruin\obj\Debug\net8.0\Ruin.csproj.CoreCompileInputs.cache
-C:\Ruin\Ruin\obj\Debug\net8.0\Ruin.sourcelink.json
