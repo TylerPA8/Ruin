@@ -40,10 +40,17 @@ namespace Ruin.General
                     }
                     foreach(Creatures c in enemies)
                     {
-                        
+                        //TODO select attacks for creatures.
+                        Attack catk = c.SelectAttack();
+                        c.AttackRoll(atk, player);
+                        if (player.CurHp <= 0)
+                        {
+                            Console.WriteLine("You have been slain.");
+                            break;
+                        }
                     }
                 }
-
+                
                 else
                 {
                     escape = Escape(enemies, maxCreatureHp);

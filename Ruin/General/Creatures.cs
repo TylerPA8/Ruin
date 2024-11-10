@@ -288,7 +288,7 @@ namespace Ruin.General
         public Attack SelectAttack()
         {
             Random rnd = new Random();
-            List<Attack> tempAttacks = this.Attacks;
+            List <Attack> tempAttacks = new (this.Attacks);
             foreach (Attack attack in tempAttacks)
             {
                 if (attack.stamCost > this.CurStamina)
