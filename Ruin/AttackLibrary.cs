@@ -33,6 +33,7 @@ namespace Ruin
             Attack HealingBreeze = new("Healing Breeze", "A gentle wave of magic that heals the target.", 1, 4, 2, 3);
             Attack Curse = new("Curse", "A curse made to tangle the targets abilities.", 1, 4, 2, 4);
             Attack GoblinNeedle = new("Goblin Needle", "A stab with a poisoned hunk of iron.", 2, 5, 4, 0);
+            Attack Rest = new("Rest", "Recovers some stamina and mana.", 0, 0, -2, -1);
             attacksList.Add(Wack);
             attacksList.Add(Crush);
             attacksList.Add(Stab);
@@ -52,6 +53,7 @@ namespace Ruin
             attacksList.Add(HealingBreeze);
             attacksList.Add(Curse);
             attacksList.Add(GoblinNeedle);
+            attacksList.Add(Rest);
         }
     }
 }

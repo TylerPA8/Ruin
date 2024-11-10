@@ -78,9 +78,9 @@ namespace Ruin.General
             }
             this.maxhp = GenerateHp(this.stats[5]);
             this.curhp = this.maxhp;
-            this.maxstamina = this.constitution;
+            this.maxstamina = this.constitution/2;
             this.curstamina = this.maxstamina;
-            this.maxmana = this.mind;
+            this.maxmana = this.mind/2;
             this.curmana = maxmana;
             this.ac = GenerateAc(this.stats[3]);
             this.attacks = GenerateAttacks(new List<int> { this.stats[1], this.stats[3], this.stats[7] });
@@ -226,6 +226,7 @@ namespace Ruin.General
             int roll = dice.Next(1, 21);
             int dmgRoll = dice.Next(atk.minDmg, (atk.maxDmg+1));
             int dmgMod = 0;
+            int dmg = 0;
             switch(atk.attackName)
             {
                 case ("Wack" or "Crush"):
@@ -248,7 +249,7 @@ namespace Ruin.General
                     dmgMod = this.minMod;
                     break;
             }
-            dmgRoll += dmgMod;
+            dmg = dmgMod+dmgRoll;
             if (roll == 20)
             {
                 Console.WriteLine($"A critical hit for {atk.maxDmg + dmgRoll}!");
@@ -261,11 +262,11 @@ namespace Ruin.General
                 switch (hit)
                 {
                     case true:
-                        Console.Write($"A {atkRoll} ({roll} + {dmgMod} + {this.proficiency}) hits {target.name} for {dmgRoll}!\n");
-                        DealDamage(dmgRoll, target);
+                        Console.Write($"A {atkRoll} hits {target.name} for {dmg} ({dmgRoll} + {dmgMod})!\n");
+                        DealDamage(dmg, target);
                         break;
                     case false:
-                        Console.Write($"A {atkRoll} misses {target.name}!");
+                        Console.Write($"A {atkRoll} misses {target.name}!\n");
                         break;
                 }
 
@@ -286,17 +287,25 @@ namespace Ruin.General
 
         public Attack SelectAttack()
         {
-            string choices = "";
-            int runner = 1;
-            foreach (Attack atk in this.attacks)
+            Random rnd = new Random();
+            List<Attack> tempAttacks = this.Attacks;
+            foreach (Attack attack in tempAttacks)
             {
-                choices += ($"{runner}. {atk.attackName} ");
-                runner++;
+                if (attack.stamCost > this.CurStamina)
+                { tempAttacks.Remove(attack); }
+                if (attack.manaCost > this.CurMana)
+                { tempAttacks.Remove(attack); }
+
             }
-            Console.WriteLine($"Select attack:\n{choices}");
-            Attack atkchoice = this.attacks[Convert.ToInt32(Console.ReadLine())];
+            int atkNumber = tempAttacks.Count - 1;
+            if (atkNumber < 0)
+            {
+                return AttackLibrary.attacksList[19];
+            }
+            Attack atkchoice = tempAttacks[rnd.Next(0, atkNumber)];
             return atkchoice;
         }
+
     }
 }
 

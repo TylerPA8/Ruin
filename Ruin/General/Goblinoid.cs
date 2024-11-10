@@ -11,8 +11,7 @@ namespace Ruin.General
     {
         public List<string> bossNames = new List<string> { "Grimbrog", "Throghul", "Uzgoth", "Morgraith", "Skuldran", "Foulmaw", "Druknar", "Grimfang", "Blightwraith", "Vorthag", "Kruldak", "Gharnûl", "Morthûm", "Vulgrok", "Drelgath", "Kragmog", "Gorthûn", "Zulgarth", "Vrognir", "Ghûldren" };
         public Goblinoid(string name, List<int> stats, List<Attack> attacks) : base(name, stats, attacks)
-        {
-        }
+        {}
         protected override void GenerateStatArray()
         {
             //generates 4 stats between 6 and 14 and places them in an array. 
@@ -41,5 +40,6 @@ namespace Ruin.General
         {
             Console.WriteLine($"{this.name}\nHp: {this.curhp}/{this.maxhp}\n{this.attacks[0].attackName}, {this.attacks[1].attackName}, {this.attacks[2].attackName}\n");
         }
+
     }
 }

@@ -166,5 +166,22 @@ namespace Ruin.General
                 string statString = ($"Strength: {this.stats[0]} Dexterity: {this.stats[2]} Constitution: {this.stats[4]} Mind: {this.stats[6]}");
             Console.WriteLine($"{this.name}\nHp: {this.curhp}/{this.maxhp} AC: {this.ac}\nStamina: {this.curstamina}/{this.maxstamina} Mana: {this.curmana}/{this.maxmana}\n{statString}\nAttacks: {atkString}\n");
         }
+        public Attack SelectAttack()
+        {
+            string choices = "";
+            int runner = 1;
+            foreach (Attack atk in this.attacks)
+            {
+                choices += ($"{runner}. {atk.attackName} Stamina Cost: {atk.stamCost} Mana Cost: {atk.manaCost}\n");
+                runner++;
+            }
+            Console.WriteLine($"Select attack:\n{choices}");
+            Attack atkchoice = this.Attacks[Convert.ToInt32(Console.ReadLine()) - 1];
+            if (atkchoice.stamCost > this.CurStamina)
+                Console.WriteLine($"{this.Name} pants heavily, their stamina too low to do that attack.");
+            if (atkchoice.manaCost > this.CurMana)
+                Console.WriteLine($"{this.Name}'s head pounds, unable to conjour enough mana for that attack.");
+            return atkchoice;
+        }
     }   
 }
