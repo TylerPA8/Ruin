@@ -17,7 +17,7 @@ namespace Ruin.General
             {
                 maxCreatureHp += c.MaxHp;
             }
-
+            Console.Clear();
             Console.WriteLine($"There are {enemies.Count()} creatures before you.\nWhat will you do?");
 
             while (!escape)
@@ -57,6 +57,13 @@ namespace Ruin.General
                 }
                 if (escape == true)
                     break;
+                //TODO Display players hp, stamina/mana and Creatures hp and stamina.
+                Console.WriteLine($"{player.Name}\nHp:{player.CurHp}/{player.MaxHp} Stamina: {player.CurStamina}/{player.MaxStamina} Mana: {player.CurMana}/{player.MaxMana}\n");
+                Console.WriteLine("Enemies:");
+                foreach (Creatures c in enemies)
+                {
+                    Console.WriteLine($"{c.Name}\nHp:{c.CurHp}/{c.MaxHp} Stamina: {c.CurStamina}/{c.MaxStamina} Mana: {c.CurMana}/{c.MaxMana}\n");
+                }
             }
         }
         public static bool Escape(List<Creatures> e, int max)
