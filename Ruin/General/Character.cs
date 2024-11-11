@@ -177,11 +177,22 @@ namespace Ruin.General
             }
             Console.WriteLine($"Select attack:\n{choices}");
             Attack atkchoice = this.Attacks[Convert.ToInt32(Console.ReadLine()) - 1];
-            if (atkchoice.stamCost > this.CurStamina)
+            if ((atkchoice.stamCost > this.CurStamina) || ((this.CurStamina - atkchoice.stamCost) < 0))
+            {
                 Console.WriteLine($"{this.Name} pants heavily, their stamina too low to do that attack.");
-            if (atkchoice.manaCost > this.CurMana)
+                return AttackLibrary.attacksList[19];
+            }
+
+            if ((atkchoice.manaCost > this.CurMana) || ((this.CurMana - atkchoice.manaCost) < 0))
+            {
                 Console.WriteLine($"{this.Name}'s head pounds, unable to conjour enough mana for that attack.");
-            return atkchoice;
+                return AttackLibrary.attacksList[19];
+            }
+
+            else
+            {
+                return atkchoice;
+            }
         }
     }   
 }

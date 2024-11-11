@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -37,38 +38,39 @@ namespace Ruin.General
                     if (target.CurHp <= 0)
                     {
                         enemies.Remove(target);
-                    }
-                    foreach(Creatures c in enemies)
-                    {
-                        //TODO select attacks for creatures.
-                        Attack catk = c.SelectAttack();
-                        c.AttackRoll(atk, player);
-                        if (player.CurHp <= 0)
+                        if (enemies.Count() == 0)
                         {
-                            Console.WriteLine("You have been slain.");
+                            Console.WriteLine($"{player.Name} wins!");
                             break;
                         }
                     }
+                    CreatureAttack(player, enemies);
+                    if (player.CurHp <= 0)
+                    {
+                        Console.WriteLine("You have been slain.");
+                        break;
+                    }
                 }
-                
+
                 else
                 {
-                    escape = Escape(enemies, maxCreatureHp);
+                    escape = Escape(enemies, maxCreatureHp, player);
                 }
                 if (escape == true)
                     break;
-                //TODO Display players hp, stamina/mana and Creatures hp and stamina.
-                Console.WriteLine($"{player.Name}\nHp:{player.CurHp}/{player.MaxHp} Stamina: {player.CurStamina}/{player.MaxStamina} Mana: {player.CurMana}/{player.MaxMana}\n");
+
+                Console.WriteLine($"\n{player.Name}\nHp:{player.CurHp}/{player.MaxHp} Stamina: {player.CurStamina}/{player.MaxStamina} Mana: {player.CurMana}/{player.MaxMana}\n");
                 Console.WriteLine("Enemies:");
+                
                 foreach (Creatures c in enemies)
                 {
                     Console.WriteLine($"{c.Name}\nHp:{c.CurHp}/{c.MaxHp} Stamina: {c.CurStamina}/{c.MaxStamina} Mana: {c.CurMana}/{c.MaxMana}\n");
                 }
+                EndRoundRegen(player, enemies);
             }
         }
-        public static bool Escape(List<Creatures> e, int max)
+        public static bool Escape(List<Creatures> e, int max, Character player)
         {
-            //Add % chance to escape based on enemy total health.
             bool flee = false;
             int totalHp = 0;
             int curHp = 0;
@@ -86,6 +88,7 @@ namespace Ruin.General
             }
             else
                 Console.WriteLine("Can't escape!");
+            CreatureAttack(player, e);
                 return flee;        
         }
         public static Creatures SelectTarget(List<Creatures> targets)
@@ -94,6 +97,74 @@ namespace Ruin.General
             //TODO try/catch block for out of bounds numbers.
             Creatures target = targets[Convert.ToInt32(Console.ReadLine())-1];
             return target;
+        }
+
+        public static void CreatureAttack(Character player, List<Creatures> enemies)
+        {
+            foreach (Creatures c in enemies)
+            {
+                //TODO select attacks for creatures.
+                Attack catk = c.SelectAttack();
+                c.AttackRoll(catk, player);
+            }
+        }
+
+        public static void EndRoundRegen(Character player, List<Creatures> enemies)
+        {        
+            if (player.CurStamina < player.MaxStamina)
+            {
+                if (player.ConMod <= 0)
+                    if (player.CurStamina + 1 <= player.MaxStamina)
+                    {
+                        player.CurStamina += 1;
+                    }
+                if ((player.ConMod > 0) && (((player.CurStamina + player.ConMod) > player.MaxStamina)))
+                    player.CurStamina = player.MaxStamina;
+                else
+                    player.CurStamina += player.ConMod;
+            }
+
+            if (player.CurMana < player.MaxMana)
+            {
+                if (player.MindMod <= 0)
+                    if (player.CurMana + 1 <= player.MaxMana)
+                    {
+                        player.CurMana += 1;
+                    }
+                if ((player.MindMod > 0) && (((player.CurMana + player.MindMod) > player.MaxMana)))
+                    player.CurMana = player.MaxMana;
+                else
+                    player.CurMana += player.MindMod;
+            }
+
+            foreach (Creatures c in enemies)
+            {
+                if (player.CurStamina < player.MaxStamina)
+                {
+                    if (player.ConMod <= 0)
+                        if (player.CurStamina + 1 <= player.MaxStamina)
+                        {
+                            player.CurStamina += 1;
+                        }
+                    if ((player.ConMod > 0) && (((player.CurStamina + player.ConMod) > player.MaxStamina)))
+                        player.CurStamina = player.MaxStamina;
+                    else
+                        player.CurStamina += player.ConMod;
+                }
+
+                if (player.CurMana < player.MaxMana)
+                {
+                    if (player.MindMod <= 0)
+                        if (player.CurMana + 1 <= player.MaxMana)
+                        {
+                            player.CurMana += 1;
+                        }
+                    if ((player.MindMod > 0) && (((player.CurMana + player.MindMod) > player.MaxMana)))
+                        player.CurMana = player.MaxMana;
+                    else
+                        player.CurMana += player.MindMod;
+                }
+            }
         }
     }
 }

@@ -252,8 +252,10 @@ namespace Ruin.General
             dmg = dmgMod+dmgRoll;
             if (roll == 20)
             {
-                Console.WriteLine($"A critical hit for {atk.maxDmg + dmgRoll}!");
+                Console.WriteLine($"A critical hit on {target.Name} for {atk.maxDmg + dmgRoll}!");
                 DealDamage((atk.maxDmg + dmgRoll), target);
+                if (target.CurHp <= 0)
+                    Console.WriteLine($"{target.Name} has been slain!");
             }
             else
             {
@@ -262,11 +264,15 @@ namespace Ruin.General
                 switch (hit)
                 {
                     case true:
-                        Console.Write($"A {atkRoll} hits {target.name} for {dmg} ({dmgRoll} + {dmgMod})!\n");
+                        Console.Write($"{this.Name} uses {atk.attackName}! A {atkRoll} hits {target.name} for {dmg} ({dmgRoll} + {dmgMod})!\n");
                         DealDamage(dmg, target);
+                        if (target.CurHp <= 0)
+                            Console.WriteLine($"{target.Name} has been slain!\n");
+                        ResourceCost(this, atk);
+
                         break;
                     case false:
-                        Console.Write($"A {atkRoll} misses {target.name}!\n");
+                        Console.Write($"{this.Name} uses {atk.attackName}! A {atkRoll} misses {target.name}!\n");
                         break;
                 }
 
@@ -288,22 +294,27 @@ namespace Ruin.General
         public Attack SelectAttack()
         {
             Random rnd = new Random();
-            List <Attack> tempAttacks = new (this.Attacks);
-            foreach (Attack attack in tempAttacks)
+            List <Attack> tempAttacks = new (this.attacks.ToList());
+            foreach (Attack attack in this.attacks)
             {
                 if (attack.stamCost > this.CurStamina)
                 { tempAttacks.Remove(attack); }
+            }
+            foreach (Attack attack in tempAttacks)
                 if (attack.manaCost > this.CurMana)
                 { tempAttacks.Remove(attack); }
-
-            }
-            int atkNumber = tempAttacks.Count - 1;
-            if (atkNumber < 0)
+            if (tempAttacks.Count == 0)
             {
                 return AttackLibrary.attacksList[19];
             }
-            Attack atkchoice = tempAttacks[rnd.Next(0, atkNumber)];
+            Attack atkchoice = tempAttacks[rnd.Next(0, (tempAttacks.Count()-1))];
             return atkchoice;
+        }
+
+        public static void ResourceCost(Creatures c, Attack a)
+        {
+            c.CurStamina -= a.stamCost;
+            c.CurMana -= a.manaCost;
         }
 
     }
