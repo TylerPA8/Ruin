@@ -18,57 +18,86 @@ namespace Ruin.General
             {
                 maxCreatureHp += c.MaxHp;
             }
-            Console.Clear();
-            Console.WriteLine($"There are {enemies.Count()} creatures before you.\nWhat will you do?");
+            Console.WriteLine($"There are {enemies.Count()} creatures before you.");
+            foreach (Creatures c in enemies)
+            { Console.WriteLine($"{c.Name}\nHp:{c.CurHp}/{c.MaxHp} Stamina: {c.CurStamina}/{c.MaxStamina} Mana: {c.CurMana}/{c.MaxMana}\n"); }
+            Console.WriteLine($"\nWhat will you do?");
 
+            //Combat loop begins here.
             while (!escape)
             {
-                Console.WriteLine("1. Fight 2. Run");
-                if (Convert.ToInt32(Console.ReadLine()) == 1)
+                Console.WriteLine("1. Fight 2. Recover 3. Run");
+                int choice = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine("\n");
+                switch (choice)
                 {
-                    int x = 1;
-                    foreach (Creatures c in enemies)
-                    {
-                        Console.WriteLine($"{x}: {c.Name}\n   {c.CurHp}/{c.MaxHp}");
-                        x++;
-                    }
-                    Creatures target = SelectTarget(enemies);
-                    Attack atk = player.SelectAttack();
-                    player.AttackRoll(atk, target);
-                    if (target.CurHp <= 0)
-                    {
-                        enemies.Remove(target);
-                        if (enemies.Count() == 0)
+                    case (1):
                         {
-                            Console.WriteLine($"{player.Name} wins!");
+                            int x = 1;
+                            foreach (Creatures c in enemies)
+                            {
+                                Console.WriteLine($"{x}: {c.Name}\n   {c.CurHp}/{c.MaxHp}");
+                                x++;
+                            }
+                            Creatures target = SelectTarget(enemies);
+                            Attack atk = player.SelectAttack();
+                            player.AttackRoll(atk, target);
+                            if (target.CurHp <= 0)
+                            {
+                                enemies.Remove(target);
+                            }
+                            CreatureAttack(player, enemies);
+                            if (player.CurHp <= 0)
+                            {
+                                Console.WriteLine("You have been slain.");
+                                break;
+                            }
+                            EndRoundRegen(player, enemies);
                             break;
                         }
-                    }
-                    CreatureAttack(player, enemies);
-                    if (player.CurHp <= 0)
-                    {
-                        Console.WriteLine("You have been slain.");
-                        break;
-                    }
+                    case (2):
+                        {
+                            CreatureAttack(player, enemies);
+                            if (player.CurHp <= 0)
+                            {
+                                Console.WriteLine("You have been slain.");
+                                break;
+                            }
+                            Recover(player);
+                            EndRoundRegen(player, enemies);
+                            break;
+                        }
+                    case (3):
+                        {
+                            escape = Escape(enemies, maxCreatureHp, player);
+                            if (escape == true)
+                                break;
+                            EndRoundRegen(player, enemies);
+                            break;
+                        }
                 }
 
+
+                if (enemies.Count() == 0 || player.CurHp == 0)
+                {
+                    if (enemies.Count() == 0)
+                        Console.WriteLine($"{player.Name} wins!");
+                    escape = true;
+                }
                 else
                 {
-                    escape = Escape(enemies, maxCreatureHp, player);
-                }
-                if (escape == true)
-                    break;
+                    Console.WriteLine($"\n{player.Name}\nHp:{player.CurHp}/{player.MaxHp} Stamina: {player.CurStamina}/{player.MaxStamina} Mana: {player.CurMana}/{player.MaxMana}\n");
+                    Console.WriteLine("Enemies:");
 
-                Console.WriteLine($"\n{player.Name}\nHp:{player.CurHp}/{player.MaxHp} Stamina: {player.CurStamina}/{player.MaxStamina} Mana: {player.CurMana}/{player.MaxMana}\n");
-                Console.WriteLine("Enemies:");
-                
-                foreach (Creatures c in enemies)
-                {
-                    Console.WriteLine($"{c.Name}\nHp:{c.CurHp}/{c.MaxHp} Stamina: {c.CurStamina}/{c.MaxStamina} Mana: {c.CurMana}/{c.MaxMana}\n");
+                    foreach (Creatures c in enemies)
+                    {
+                        Console.WriteLine($"{c.Name}\nHp:{c.CurHp}/{c.MaxHp} Stamina: {c.CurStamina}/{c.MaxStamina} Mana: {c.CurMana}/{c.MaxMana}\n");
+                    }
                 }
-                EndRoundRegen(player, enemies);
             }
         }
+
+
         public static bool Escape(List<Creatures> e, int max, Character player)
         {
             bool flee = false;
@@ -91,37 +120,52 @@ namespace Ruin.General
             CreatureAttack(player, e);
                 return flee;        
         }
+
+
         public static Creatures SelectTarget(List<Creatures> targets)
         {
             Console.WriteLine("\n Chose your target: ");
             //TODO try/catch block for out of bounds numbers.
             Creatures target = targets[Convert.ToInt32(Console.ReadLine())-1];
+            Console.WriteLine("\n");
             return target;
         }
+
 
         public static void CreatureAttack(Character player, List<Creatures> enemies)
         {
             foreach (Creatures c in enemies)
             {
-                //TODO select attacks for creatures.
                 Attack catk = c.SelectAttack();
-                c.AttackRoll(catk, player);
+                if (catk == null)
+                {
+                    Console.Write($"{c.Name} pants heavily, attempting to catch their breath.");
+                    Recover(c);
+                }
+                else
+                {
+                    c.AttackRoll(catk, player);
+                }
             }
         }
+
 
         public static void EndRoundRegen(Character player, List<Creatures> enemies)
         {        
             if (player.CurStamina < player.MaxStamina)
             {
                 if (player.ConMod <= 0)
-                    if (player.CurStamina + 1 <= player.MaxStamina)
+                    if ((player.CurStamina + 1) <= player.MaxStamina)
                     {
                         player.CurStamina += 1;
                     }
-                if ((player.ConMod > 0) && (((player.CurStamina + player.ConMod) > player.MaxStamina)))
-                    player.CurStamina = player.MaxStamina;
                 else
                     player.CurStamina += player.ConMod;
+
+                if (player.CurStamina > player.MaxStamina)
+                {
+                    player.CurStamina = player.MaxStamina;
+                }
             }
 
             if (player.CurMana < player.MaxMana)
@@ -131,40 +175,60 @@ namespace Ruin.General
                     {
                         player.CurMana += 1;
                     }
-                if ((player.MindMod > 0) && (((player.CurMana + player.MindMod) > player.MaxMana)))
-                    player.CurMana = player.MaxMana;
                 else
                     player.CurMana += player.MindMod;
+
+                if (player.CurMana > player.MaxMana)
+                {
+                    player.CurMana = player.MaxMana;
+                }
             }
 
             foreach (Creatures c in enemies)
             {
-                if (player.CurStamina < player.MaxStamina)
+                if (c.CurStamina < c.MaxStamina)
                 {
-                    if (player.ConMod <= 0)
-                        if (player.CurStamina + 1 <= player.MaxStamina)
+                    if (c.ConMod <= 0)
+                        if (c.CurStamina + 1 <= c.MaxStamina)
                         {
-                            player.CurStamina += 1;
+                            c.CurStamina += 1;
                         }
-                    if ((player.ConMod > 0) && (((player.CurStamina + player.ConMod) > player.MaxStamina)))
-                        player.CurStamina = player.MaxStamina;
                     else
-                        player.CurStamina += player.ConMod;
+                        c.CurStamina += c.ConMod;
+
+                    if (c.CurStamina > c.MaxStamina)
+                    {
+                        c.CurStamina = c.MaxStamina;
+                    }
                 }
 
-                if (player.CurMana < player.MaxMana)
+                if (c.CurMana < c.MaxMana)
                 {
-                    if (player.MindMod <= 0)
-                        if (player.CurMana + 1 <= player.MaxMana)
+                    if (c.MindMod <= 0)
+                        if (c.CurMana + 1 <= c.MaxMana)
                         {
-                            player.CurMana += 1;
+                            c.CurMana += 1;
                         }
-                    if ((player.MindMod > 0) && (((player.CurMana + player.MindMod) > player.MaxMana)))
-                        player.CurMana = player.MaxMana;
                     else
-                        player.CurMana += player.MindMod;
+                        c.CurMana += c.MindMod;
+
+                    if (c.CurMana  > c.MaxMana)
+                    {
+                        c.CurMana = c.MaxMana;
+                    }
                 }
             }
+        }
+
+
+        public static void Recover(Creatures c)
+        {
+            c.CurHp += c.ConMod;
+            c.CurStamina += c.ConMod;
+            c.CurMana += c.MindMod;
+            if (c.CurStamina > c.MaxStamina) { c.CurStamina = c.MaxStamina; }
+            if (c.CurMana > c.MaxMana) { c.CurMana = c.MaxMana; }
+            if (c.CurHp > c.MaxHp) { c.CurHp = c.MaxHp; }
         }
     }
 }

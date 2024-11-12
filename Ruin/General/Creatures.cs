@@ -254,6 +254,7 @@ namespace Ruin.General
             {
                 Console.WriteLine($"A critical hit on {target.Name} for {atk.maxDmg + dmgRoll}!");
                 DealDamage((atk.maxDmg + dmgRoll), target);
+                ResourceCost(this, atk);
                 if (target.CurHp <= 0)
                     Console.WriteLine($"{target.Name} has been slain!");
             }
@@ -273,6 +274,7 @@ namespace Ruin.General
                         break;
                     case false:
                         Console.Write($"{this.Name} uses {atk.attackName}! A {atkRoll} misses {target.name}!\n");
+                        ResourceCost(this, atk);
                         break;
                 }
 
@@ -291,7 +293,7 @@ namespace Ruin.General
             target.CurHp -= dmg;
         }
 
-        public Attack SelectAttack()
+        public Attack? SelectAttack()
         {
             Random rnd = new Random();
             List <Attack> tempAttacks = new (this.attacks.ToList());
@@ -305,7 +307,7 @@ namespace Ruin.General
                 { tempAttacks.Remove(attack); }
             if (tempAttacks.Count == 0)
             {
-                return AttackLibrary.attacksList[19];
+                return null;
             }
             Attack atkchoice = tempAttacks[rnd.Next(0, (tempAttacks.Count()-1))];
             return atkchoice;
