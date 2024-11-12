@@ -20,7 +20,7 @@ namespace Ruin.General
             }
             Console.WriteLine($"There are {enemies.Count()} creatures before you.");
             foreach (Creatures c in enemies)
-            { Console.WriteLine($"{c.Name}\nHp:{c.CurHp}/{c.MaxHp} Stamina: {c.CurStamina}/{c.MaxStamina} Mana: {c.CurMana}/{c.MaxMana}\n"); }
+            { Display(c); }
             Console.WriteLine($"\nWhat will you do?");
 
             //Combat loop begins here.
@@ -28,7 +28,7 @@ namespace Ruin.General
             {
                 Console.WriteLine("1. Fight 2. Recover 3. Run");
                 int choice = Convert.ToInt32(Console.ReadLine());
-                Console.WriteLine("\n");
+
                 switch (choice)
                 {
                     case (1):
@@ -36,7 +36,7 @@ namespace Ruin.General
                             int x = 1;
                             foreach (Creatures c in enemies)
                             {
-                                Console.WriteLine($"{x}: {c.Name}\n   {c.CurHp}/{c.MaxHp}");
+                                DisplayWithNum(x, c);
                                 x++;
                             }
                             Creatures target = SelectTarget(enemies);
@@ -52,7 +52,10 @@ namespace Ruin.General
                                 Console.WriteLine("You have been slain.");
                                 break;
                             }
-                            EndRoundRegen(player, enemies);
+                            else
+                            {
+                                EndRoundRegen(player, enemies);
+                            }
                             break;
                         }
                     case (2):
@@ -75,6 +78,11 @@ namespace Ruin.General
                             EndRoundRegen(player, enemies);
                             break;
                         }
+                    default:
+                        {
+                            Console.WriteLine("Please select 1, 2, or 3.");
+                            break;
+                        }
                 }
 
 
@@ -86,12 +94,12 @@ namespace Ruin.General
                 }
                 else
                 {
-                    Console.WriteLine($"\n{player.Name}\nHp:{player.CurHp}/{player.MaxHp} Stamina: {player.CurStamina}/{player.MaxStamina} Mana: {player.CurMana}/{player.MaxMana}\n");
+                    Display(player);
                     Console.WriteLine("Enemies:");
 
                     foreach (Creatures c in enemies)
                     {
-                        Console.WriteLine($"{c.Name}\nHp:{c.CurHp}/{c.MaxHp} Stamina: {c.CurStamina}/{c.MaxStamina} Mana: {c.CurMana}/{c.MaxMana}\n");
+                        Display(c);
                     }
                 }
             }
@@ -126,9 +134,17 @@ namespace Ruin.General
         {
             Console.WriteLine("\n Chose your target: ");
             //TODO try/catch block for out of bounds numbers.
-            Creatures target = targets[Convert.ToInt32(Console.ReadLine())-1];
-            Console.WriteLine("\n");
-            return target;
+            try
+            {
+                Creatures target = targets[Convert.ToInt32(Console.ReadLine()) - 1];
+                Console.WriteLine("\n");
+                return target;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Please select a valid target (1 - {targets.Count()}).");
+                return SelectTarget(targets);
+            }        
         }
 
 
@@ -139,7 +155,7 @@ namespace Ruin.General
                 Attack catk = c.SelectAttack();
                 if (catk == null)
                 {
-                    Console.Write($"{c.Name} pants heavily, attempting to catch their breath.");
+                    Console.Write($"{c.Name} pants heavily, attempting to catch their breath.\n");
                     Recover(c);
                 }
                 else
@@ -155,33 +171,41 @@ namespace Ruin.General
             if (player.CurStamina < player.MaxStamina)
             {
                 if (player.ConMod <= 0)
+                {
                     if ((player.CurStamina + 1) <= player.MaxStamina)
                     {
                         player.CurStamina += 1;
                     }
-                else
-                    player.CurStamina += player.ConMod;
-
-                if (player.CurStamina > player.MaxStamina)
-                {
-                    player.CurStamina = player.MaxStamina;
                 }
+                else
+                    {
+                        player.CurStamina += player.ConMod;
+                        if (player.CurStamina > player.MaxStamina)
+                        {
+                            player.CurStamina = player.MaxStamina;
+                        }
+                    }
+
             }
 
             if (player.CurMana < player.MaxMana)
             {
                 if (player.MindMod <= 0)
+                {
                     if (player.CurMana + 1 <= player.MaxMana)
                     {
                         player.CurMana += 1;
                     }
-                else
-                    player.CurMana += player.MindMod;
-
-                if (player.CurMana > player.MaxMana)
-                {
-                    player.CurMana = player.MaxMana;
                 }
+                else
+                    {
+                        player.CurMana += player.MindMod;
+                        if (player.CurMana > player.MaxMana)
+                        {
+                            player.CurMana = player.MaxMana;
+                        }
+                    }
+
             }
 
             foreach (Creatures c in enemies)
@@ -229,6 +253,40 @@ namespace Ruin.General
             if (c.CurStamina > c.MaxStamina) { c.CurStamina = c.MaxStamina; }
             if (c.CurMana > c.MaxMana) { c.CurMana = c.MaxMana; }
             if (c.CurHp > c.MaxHp) { c.CurHp = c.MaxHp; }
+        }
+
+
+        public static void Display(Creatures c)
+        {
+            Console.Write($"{c.Name}\tHp: ");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write($"{c.CurHp}/{c.MaxHp} ");
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.Write("Stamina: ");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write($"{c.CurStamina}/{c.MaxStamina} ");
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.Write($"Mana: ");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.Write($"{c.CurMana}/{c.MaxMana}\n\n");
+            Console.ForegroundColor = ConsoleColor.Gray;
+        }
+
+
+        public static void DisplayWithNum (int x, Creatures c)
+        {
+            Console.Write($"{x}. {c.Name} Hp: ");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write($"{c.CurHp}/{c.MaxHp} ");
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.Write("Stamina: ");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write($"{c.CurStamina}/{c.MaxStamina} ");
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.Write($"Mana: ");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.Write($"{c.CurMana}/{c.MaxMana}\n\n");
+            Console.ForegroundColor = ConsoleColor.Gray;
         }
     }
 }

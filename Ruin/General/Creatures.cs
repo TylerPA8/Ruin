@@ -62,9 +62,6 @@ namespace Ruin.General
         public int Mind => mind;
         public int MindMod => minMod;
 
-
-
-
         public Creatures(string? name, List<int>? stats, List<Attack>? attacks, int proficiency = 2)
         {
             this.name = name;
@@ -104,7 +101,11 @@ namespace Ruin.General
 
         public virtual void DisplayCreature()
         {
-                Console.WriteLine($"{this.name}\nHp: {this.curhp}/{this.maxhp}\n{this.attacks[0].attackName}, {this.attacks[1].attackName}\n");
+            Console.Write($"{this.name}\nHp: ");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write($"{this.curhp}/{this.maxhp}\n");
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.Write($"{this.attacks[0].attackName}, {this.attacks[1].attackName}\n");
         }
 
         protected virtual void GenerateStatArray()
@@ -250,10 +251,14 @@ namespace Ruin.General
                     break;
             }
             dmg = dmgMod+dmgRoll;
+
+            if (dmg <= 0)
+                dmg = 0;
+
             if (roll == 20)
             {
                 Console.WriteLine($"A critical hit on {target.Name} for {atk.maxDmg + dmgRoll}!");
-                DealDamage((atk.maxDmg + dmgRoll), target);
+                DealDamage((atk.maxDmg + dmg), target);
                 ResourceCost(this, atk);
                 if (target.CurHp <= 0)
                     Console.WriteLine($"{target.Name} has been slain!");

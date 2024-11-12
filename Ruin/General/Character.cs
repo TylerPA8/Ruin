@@ -164,8 +164,22 @@ namespace Ruin.General
                     atkString += ($"{atk.attackName}, ");
             }
                 string statString = ($"Strength: {this.stats[0]} Dexterity: {this.stats[2]} Constitution: {this.stats[4]} Mind: {this.stats[6]}");
-            Console.WriteLine($"{this.name}\nHp: {this.curhp}/{this.maxhp} AC: {this.ac}\nStamina: {this.curstamina}/{this.maxstamina} Mana: {this.curmana}/{this.maxmana}\n{statString}\nAttacks: {atkString}\n");
+            Console.Write($"{this.name}\nHp: ");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write($"{this.curhp}/{this.maxhp} ");
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.Write($"AC: {this.ac}\nStamina: ");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write($"{this.curstamina}/{this.maxstamina} ");
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.Write("Mana: ");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.Write($"{this.curmana}/{this.maxmana}\n");
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.Write($"{ statString}\nAttacks: { atkString}\n\n");
         }
+
+
         public Attack SelectAttack()
         {
             string choices = "";
