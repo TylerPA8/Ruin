@@ -8,11 +8,23 @@ namespace Ruin.General
 {
     internal class Character : Creatures
     {
+        protected int exp;
+        protected int level;
+        public int Exp
+        {
+            get { return exp; }
+            set { exp = value; }
+        }
+        public int Level
+        {
+            get { return level; }
+            set { level = value; }
+        }
         public Character(string name, List<int> stats, List<Attack> attacks): base(name, stats, attacks) 
         {
         }
 
-        public Character(string name, List<int> stats, List<Attack> attacks, int ac, int maxhp, int curhp, int maxstamina, int curstamina, int maxmana, int curmana, List<Status> status, int proficiency = 2):base(name,stats, attacks, ac, maxhp, curhp, maxstamina,curstamina, maxmana, curmana, status, proficiency)
+        public Character(string name, List<int> stats, List<Attack> attacks, int ac, int maxhp, int curhp, int maxstamina, int curstamina, int maxmana, int curmana, List<Status> status, int level, int exp, int proficiency = 2):base(name,stats, attacks, ac, maxhp, curhp, maxstamina,curstamina, maxmana, curmana, status, proficiency)
         {
             this.name = name;
             this.stats = GenerateStatArray(stats);
@@ -25,6 +37,8 @@ namespace Ruin.General
             this.maxmana = maxmana;
             this.curmana = curmana;
             this.status = status;
+            this.level = level;
+            this.exp = exp;
             this.proficiency = proficiency;
         }
 
@@ -180,7 +194,7 @@ namespace Ruin.General
         }
 
 
-        public Attack SelectAttack()
+        public Attack? SelectAttack()
         {
             string choices = "";
             int runner = 1;
@@ -194,19 +208,63 @@ namespace Ruin.General
             if ((atkchoice.stamCost > this.CurStamina) || ((this.CurStamina - atkchoice.stamCost) < 0))
             {
                 Console.WriteLine($"{this.Name} pants heavily, their stamina too low to do that attack.");
-                return AttackLibrary.attacksList[19];
+                return null;
             }
 
             if ((atkchoice.manaCost > this.CurMana) || ((this.CurMana - atkchoice.manaCost) < 0))
             {
                 Console.WriteLine($"{this.Name}'s head pounds, unable to conjour enough mana for that attack.");
-                return AttackLibrary.attacksList[19];
+                return null;
             }
 
             else
             {
                 return atkchoice;
             }
+        }
+
+
+        public void LevelCheck()
+        {
+            if (this.exp >= Utilities.levelChart[this.level])
+            {
+                LevelUp();
+            }
+        }
+        public void LevelUp()
+        {
+            Random rnd = new Random();
+            this.Exp -= Utilities.levelChart[this.level];
+            this.Level++;
+            StatIncrease();
+            this.MaxHp += (rnd.Next(1, 9) + this.ConMod);
+            this.CurHp = this.MaxHp;
+        }
+        public void StatIncrease()
+        {
+            int si = 2;
+            while (si > 0)
+            {
+                Console.WriteLine("Which stat will you increase? 1. Strength 2. Dexterity 3. Constitution 4. Mind");
+                int choice = Convert.ToInt32(Console.ReadLine());
+                switch (choice)
+                {
+                    case (1):
+                        this.Strength++;
+                        break;
+                    case (2):
+                        this.Dexterity++;
+                        break;
+                    case (3):
+                        this.Constitution++;
+                        break;
+                    case (4):
+                        this.Mind++;
+                        break;
+                }
+                si--;
+            }
+            this.PullMods();
         }
     }   
 }

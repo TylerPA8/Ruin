@@ -11,18 +11,19 @@ namespace Ruin
     internal class Utilities
     {
         public Dictionary<int, int> statArray = new Dictionary<int, int>() { { 1, -5 }, { 2, -4 }, { 3, -4 }, { 4, -3 }, { 5, -3 }, { 6, -2 }, { 7, -2 }, { 8, -1 }, { 9, -1 }, { 10, 0 }, { 11, 0 }, { 12, 1 }, { 13, 1 }, { 14, 2 }, { 15, 2 }, { 16, 3 }, { 17, 3 }, { 18, 4 }, { 19, 4 }, { 20, 5 } };
+        public static readonly Dictionary<int, int> levelChart = new Dictionary<int, int>() { { 1, 250 }, { 2, 500 }, { 3, 1000 }, { 4, 2000 }, { 5, 4000 }, { 6, 8000 }, { 7, 16000 }, { 8, 32000 }, { 9, 64000 } };
 
         public static void NewGame()
         {
 
         }
+
         public static void SaveGame(string saveName)
         {
             if (File.Exists(@$"C:\Ruin\{saveName}.txt"))
             {
                 string tempFile = @"C:\Ruin\GameStateTemp.txt";
                 File.Copy(saveName, tempFile);
-                List<Attack> attacks = AttackLibrary.attacksList;
                 //List<Creatures> creatures = Creatures.GetCreatures();
                 //WriteSave(saveName, attacks, creatures);
 

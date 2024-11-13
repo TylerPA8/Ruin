@@ -30,37 +30,100 @@ namespace Ruin.General
         protected int conMod;
         protected int mind;
         protected int minMod;
+
         public string Name => name;
-        public int MaxHp => maxhp;
+        public int MaxHp
+        {
+            get {return maxhp;}
+            set {maxhp = value;}
+        }
+
         public int CurHp
             {
             get { return curhp; }
             set { curhp = value; }
             } 
-        public int MaxStamina => maxstamina;
+        public int MaxStamina 
+        {
+            get { return maxstamina;}
+            set {maxstamina = value;}
+        }
         public int CurStamina
         {
             get { return curstamina; }
             set { curstamina = value; }
         }
-        public int MaxMana => maxmana;
+        public int MaxMana
+        {
+            get { return maxmana; }
+            set { maxmana = value; }
+        }
         public int CurMana
         {
             get { return curmana; }
             set { curmana = value; }
         }
-        public int Ac => ac;
-        public int Proficiency => proficiency;
-        public List<Attack> Attacks => attacks;
-        public List<Status> Status => status;
-        public int Strength => strength;
-        public int StrMod => strMod;
-        public int Dexterity => dexterity;
-        public int DexterityMod => dexMod;
-        public int Constitution => constitution;
-        public int ConMod => conMod;
-        public int Mind => mind;
-        public int MindMod => minMod;
+        public int Ac
+        {
+            get { return ac; }
+            set { ac = value; }
+        }
+        public int Proficiency
+        {
+            get { return proficiency; }
+            set { proficiency = value; }
+        }
+        public List<Attack> Attacks
+        { 
+            get { return attacks; }
+            set { attacks = value; }
+        }
+        public List<Status> Status
+        {
+            get { return status; }
+            set { status = value; }
+        }
+        public int Strength
+        {
+            get { return strength; }
+            set { strength = value; }
+        }
+        public int StrMod
+        {
+            get { return strMod; }
+            set { strMod = value; }
+        }
+        public int Dexterity
+        {
+            get { return dexterity; }
+            set { dexterity = value; }
+        }
+        public int DexMod
+        {
+            get { return dexMod; }
+            set { dexMod = value; }
+        }
+        public int Constitution
+        {
+            get { return constitution; }
+            set { constitution = value; }
+        }
+        public int ConMod 
+        {
+            get { return conMod; }
+            set { conMod = value; }
+        }
+        public int Mind
+        {
+            get { return mind; }
+            set { mind = value; }
+        }
+        public int MinMod
+        {
+            get { return minMod; }
+            set { minMod = value; }
+        }
+
 
         public Creatures(string? name, List<int>? stats, List<Attack>? attacks, int proficiency = 2)
         {
@@ -150,10 +213,10 @@ namespace Ruin.General
 
         protected void PullMods()
         {
-            this.strMod = statArray[this.strength];
-            this.dexMod = statArray[this.dexterity];
-            this.conMod = statArray[this.constitution];
-            this.minMod = statArray[this.mind];
+            this.StrMod = statArray[this.Strength];
+            this.DexMod = statArray[this.Dexterity];
+            this.ConMod = statArray[this.Constitution];
+            this.MinMod = statArray[this.Mind];
         }
 
         public int GenerateHp(int c)
@@ -324,6 +387,17 @@ namespace Ruin.General
             c.CurMana -= a.manaCost;
         }
 
+        public static int ExpCalc(Creatures c)
+        {
+            int exp = (c.Strength + c.Dexterity + c.Constitution + c.Mind + c.MaxHp);
+            return (exp);
+        }
+
+        public static int FleeExpCalc(Creatures c) 
+        {
+            int exp = (c.Strength + c.Dexterity + c.Constitution + c.Mind + c.CurHp);
+            return (exp);
+        }
     }
 }
 

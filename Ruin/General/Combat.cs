@@ -41,9 +41,19 @@ namespace Ruin.General
                             }
                             Creatures target = SelectTarget(enemies);
                             Attack atk = player.SelectAttack();
-                            player.AttackRoll(atk, target);
+                            if (atk == null)
+                            {
+                                Recover(player);
+                            }
+
+                            else
+                            {
+                                player.AttackRoll(atk, target);
+                            }
+
                             if (target.CurHp <= 0)
                             {
+                                player.Exp += Creatures.ExpCalc(target);
                                 enemies.Remove(target);
                             }
                             CreatureAttack(player, enemies);
@@ -74,7 +84,12 @@ namespace Ruin.General
                         {
                             escape = Escape(enemies, maxCreatureHp, player);
                             if (escape == true)
+                            {
+                                foreach (Creatures c in enemies)
+                                    player.Exp += Creatures.FleeExpCalc(c);
                                 break;
+                            }
+
                             EndRoundRegen(player, enemies);
                             break;
                         }
@@ -213,10 +228,12 @@ namespace Ruin.General
                 if (c.CurStamina < c.MaxStamina)
                 {
                     if (c.ConMod <= 0)
+                    {
                         if (c.CurStamina + 1 <= c.MaxStamina)
                         {
                             c.CurStamina += 1;
                         }
+                    }
                     else
                         c.CurStamina += c.ConMod;
 
@@ -229,10 +246,12 @@ namespace Ruin.General
                 if (c.CurMana < c.MaxMana)
                 {
                     if (c.MindMod <= 0)
+                    {
                         if (c.CurMana + 1 <= c.MaxMana)
                         {
                             c.CurMana += 1;
                         }
+                    }
                     else
                         c.CurMana += c.MindMod;
 
