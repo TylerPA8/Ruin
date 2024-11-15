@@ -205,7 +205,7 @@ namespace Ruin.General
 
             if (player.CurMana < player.MaxMana)
             {
-                if (player.MindMod <= 0)
+                if (player.MinMod <= 0)
                 {
                     if (player.CurMana + 1 <= player.MaxMana)
                     {
@@ -214,7 +214,7 @@ namespace Ruin.General
                 }
                 else
                     {
-                        player.CurMana += player.MindMod;
+                        player.CurMana += player.MinMod;
                         if (player.CurMana > player.MaxMana)
                         {
                             player.CurMana = player.MaxMana;
@@ -245,7 +245,7 @@ namespace Ruin.General
 
                 if (c.CurMana < c.MaxMana)
                 {
-                    if (c.MindMod <= 0)
+                    if (c.MinMod <= 0)
                     {
                         if (c.CurMana + 1 <= c.MaxMana)
                         {
@@ -253,7 +253,7 @@ namespace Ruin.General
                         }
                     }
                     else
-                        c.CurMana += c.MindMod;
+                        c.CurMana += c.MinMod;
 
                     if (c.CurMana  > c.MaxMana)
                     {
@@ -268,7 +268,7 @@ namespace Ruin.General
         {
             c.CurHp += c.ConMod;
             c.CurStamina += c.ConMod;
-            c.CurMana += c.MindMod;
+            c.CurMana += c.MinMod;
             if (c.CurStamina > c.MaxStamina) { c.CurStamina = c.MaxStamina; }
             if (c.CurMana > c.MaxMana) { c.CurMana = c.MaxMana; }
             if (c.CurHp > c.MaxHp) { c.CurHp = c.MaxHp; }

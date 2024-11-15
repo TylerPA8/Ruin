@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -18,25 +19,60 @@ namespace Ruin
 
         }
 
-        public static void SaveGame(string saveName)
+        public static void SaveGame(string saveName, List<Creatures> enemies, Character player)
         {
             if (File.Exists(@$"C:\Ruin\{saveName}.txt"))
             {
+                Console.WriteLine("Save file already exists. Overwriting.");
                 string tempFile = @"C:\Ruin\GameStateTemp.txt";
-                File.Copy(saveName, tempFile);
-                //List<Creatures> creatures = Creatures.GetCreatures();
-                //WriteSave(saveName, attacks, creatures);
-
-             }
+                //File.Copy(saveName, tempFile);
+                string path = ($@"C:\Ruin\{saveName}.txt");
+                CreatureWrite(player);
+                foreach (Creatures e in enemies)
+                {
+                    CreatureWrite(e);
+                }
+            }
             else
             {
-                
+                File.Create(@$"C:\Ruin\{saveName}.txt");
+                string path = ($@"C:\Ruin\{saveName}.txt");
+                CreatureWrite(player);
+                foreach (Creatures e in enemies)
+                {
+                    CreatureWrite(e);
+                }
             }
         }
-        public static void LoadGame()
+        public static void LoadGame(string saveName)
 
         {
-            //TODO write method to be called to write file to save game
+            string path = @$"C:\Ruin\{saveName}.txt";
+            string[] lines = File.ReadAllLines(path);
+            foreach (string l in lines)
+            {
+                Console.WriteLine(l);
+            }
+        }
+
+        public static StringBuilder CreatureWrite(Creatures c)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append($"{c.Name}, [{c.Strength}, {c.Dexterity}, {c.Constitution}, {c.Mind}], [");
+            foreach (Attack a in c.Attacks)
+                if (a != (c.Attacks.Last()))
+                {
+                    sb.Append($"{a.attackName}, ");
+                }
+                else
+                {
+                    sb.Append($"{a.attackName}], ");
+                }
+            sb.Append($"{c.Ac}, {c.MaxHp}, {c.CurHp}, {c.MaxStamina}, {c.CurStamina}, {c.MaxMana}, {c.CurMana}, {c.Status.ToString()}, ")
+            if (c.GetType()==Character) 
+                sb.Append($"{c.Level}, {c.Exp}, ");
+            sb.Append($"{c.Proficiency}");
+            return sb; 
         }
         //public static void WriteSave(string saveName, List<Attack> attacks, List<Creatures> creatures)
         //{
