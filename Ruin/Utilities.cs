@@ -19,7 +19,7 @@ namespace Ruin
 
         }
 
-        public static void SaveGame(string saveName, List<Creatures> enemies, Character player)
+        public static void SaveGame(string saveName, List<Creatures> enemies, Creatures player)
         {
             if (File.Exists(@$"C:\Ruin\{saveName}.txt"))
             {
@@ -58,7 +58,7 @@ namespace Ruin
         public static StringBuilder CreatureWrite(Creatures c)
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append($"{c.Name}, [{c.Strength}, {c.Dexterity}, {c.Constitution}, {c.Mind}], [");
+            sb.Append($"{c.Name}, [");
             foreach (Attack a in c.Attacks)
                 if (a != (c.Attacks.Last()))
                 {
@@ -68,10 +68,7 @@ namespace Ruin
                 {
                     sb.Append($"{a.attackName}], ");
                 }
-            sb.Append($"{c.Ac}, {c.MaxHp}, {c.CurHp}, {c.MaxStamina}, {c.CurStamina}, {c.MaxMana}, {c.CurMana}, {c.Status.ToString()}, ")
-            if (c.GetType()==Character) 
-                sb.Append($"{c.Level}, {c.Exp}, ");
-            sb.Append($"{c.Proficiency}");
+            sb.Append($"{c.Ac}, {c.MaxHp}, {c.CurHp}, {c.Status.ToString()}, ");
             return sb; 
         }
         //public static void WriteSave(string saveName, List<Attack> attacks, List<Creatures> creatures)

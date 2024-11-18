@@ -15,21 +15,18 @@ namespace Ruin.General
         public string attackDescription = string.Empty;
         public int minDmg;
         public int maxDmg;
-        public int stamCost;
-        public int manaCost;
+        public List<int> usePosition;
+        public List<int> targetPosition;
         //public Random roll;
 
-        public Attack (string attackName, string attackDescription, int minDmg, int maxDmg, int stamCost, int manaCost)
+        public Attack (string attackName, int minDmg, int maxDmg, List<int> usePosition, List<int> targetPosition)
         {
             this.attackName = attackName;
-            this.attackDescription = attackDescription;
             this.minDmg = minDmg;
             this.maxDmg = maxDmg;
-            this.stamCost = stamCost;
-            this.manaCost = manaCost;
+            this.usePosition = usePosition;
+            this.targetPosition = targetPosition;
         }
-
-        //public int RollDamage(Attack attack) => roll.Next(this.minDmg, (this.maxDmg + 1));
     }
 }
 

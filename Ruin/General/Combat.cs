@@ -9,7 +9,9 @@ namespace Ruin.General
 {
     internal class Combat
     {
-        public static void StartCombat(Character player, List<Creatures> enemies)
+        //TODO change to list of player characters
+        //TODO when creatures die all slide forward and the back most slot becomes locked.
+        public static void StartCombat(Creatures player, List<Creatures> enemies)
         {
             bool escape = false;
             int maxCreatureHp = 0;
@@ -26,7 +28,7 @@ namespace Ruin.General
             //Combat loop begins here.
             while (!escape)
             {
-                Console.WriteLine("1. Fight 2. Recover 3. Run");
+                Console.WriteLine("1. Fight 2. Run");
                 int choice = Convert.ToInt32(Console.ReadLine());
 
                 switch (choice)
@@ -41,19 +43,11 @@ namespace Ruin.General
                             }
                             Creatures target = SelectTarget(enemies);
                             Attack atk = player.SelectAttack();
-                            if (atk == null)
-                            {
-                                Recover(player);
-                            }
-
-                            else
-                            {
-                                player.AttackRoll(atk, target);
-                            }
+                            player.AttackRoll(atk, target);
 
                             if (target.CurHp <= 0)
                             {
-                                player.Exp += Creatures.ExpCalc(target);
+                                player.Exp += target.ExpValue;
                                 enemies.Remove(target);
                             }
                             CreatureAttack(player, enemies);
@@ -62,25 +56,9 @@ namespace Ruin.General
                                 Console.WriteLine("You have been slain.");
                                 break;
                             }
-                            else
-                            {
-                                EndRoundRegen(player, enemies);
-                            }
                             break;
                         }
                     case (2):
-                        {
-                            CreatureAttack(player, enemies);
-                            if (player.CurHp <= 0)
-                            {
-                                Console.WriteLine("You have been slain.");
-                                break;
-                            }
-                            Recover(player);
-                            EndRoundRegen(player, enemies);
-                            break;
-                        }
-                    case (3):
                         {
                             escape = Escape(enemies, maxCreatureHp, player);
                             if (escape == true)
@@ -89,13 +67,11 @@ namespace Ruin.General
                                     player.Exp += Creatures.FleeExpCalc(c);
                                 break;
                             }
-
-                            EndRoundRegen(player, enemies);
                             break;
                         }
                     default:
                         {
-                            Console.WriteLine("Please select 1, 2, or 3.");
+                            Console.WriteLine("Please select 1 or 2.");
                             break;
                         }
                 }
@@ -121,7 +97,7 @@ namespace Ruin.General
         }
 
 
-        public static bool Escape(List<Creatures> e, int max, Character player)
+        public static bool Escape(List<Creatures> e, int max, Creatures player)
         {
             bool flee = false;
             int totalHp = 0;
@@ -163,17 +139,11 @@ namespace Ruin.General
         }
 
 
-        public static void CreatureAttack(Character player, List<Creatures> enemies)
+        public static void CreatureAttack(Creatures player, List<Creatures> enemies)
         {
             foreach (Creatures c in enemies)
             {
-                Attack catk = c.SelectAttack();
-                if (catk == null)
-                {
-                    Console.Write($"{c.Name} pants heavily, attempting to catch their breath.\n");
-                    Recover(c);
-                }
-                else
+                Attack catk = c.SelectAttack(c.Attacks);
                 {
                     c.AttackRoll(catk, player);
                 }
@@ -181,96 +151,9 @@ namespace Ruin.General
         }
 
 
-        public static void EndRoundRegen(Character player, List<Creatures> enemies)
-        {        
-            if (player.CurStamina < player.MaxStamina)
-            {
-                if (player.ConMod <= 0)
-                {
-                    if ((player.CurStamina + 1) <= player.MaxStamina)
-                    {
-                        player.CurStamina += 1;
-                    }
-                }
-                else
-                    {
-                        player.CurStamina += player.ConMod;
-                        if (player.CurStamina > player.MaxStamina)
-                        {
-                            player.CurStamina = player.MaxStamina;
-                        }
-                    }
-
-            }
-
-            if (player.CurMana < player.MaxMana)
-            {
-                if (player.MinMod <= 0)
-                {
-                    if (player.CurMana + 1 <= player.MaxMana)
-                    {
-                        player.CurMana += 1;
-                    }
-                }
-                else
-                    {
-                        player.CurMana += player.MinMod;
-                        if (player.CurMana > player.MaxMana)
-                        {
-                            player.CurMana = player.MaxMana;
-                        }
-                    }
-
-            }
-
-            foreach (Creatures c in enemies)
-            {
-                if (c.CurStamina < c.MaxStamina)
-                {
-                    if (c.ConMod <= 0)
-                    {
-                        if (c.CurStamina + 1 <= c.MaxStamina)
-                        {
-                            c.CurStamina += 1;
-                        }
-                    }
-                    else
-                        c.CurStamina += c.ConMod;
-
-                    if (c.CurStamina > c.MaxStamina)
-                    {
-                        c.CurStamina = c.MaxStamina;
-                    }
-                }
-
-                if (c.CurMana < c.MaxMana)
-                {
-                    if (c.MinMod <= 0)
-                    {
-                        if (c.CurMana + 1 <= c.MaxMana)
-                        {
-                            c.CurMana += 1;
-                        }
-                    }
-                    else
-                        c.CurMana += c.MinMod;
-
-                    if (c.CurMana  > c.MaxMana)
-                    {
-                        c.CurMana = c.MaxMana;
-                    }
-                }
-            }
-        }
-
-
         public static void Recover(Creatures c)
         {
-            c.CurHp += c.ConMod;
-            c.CurStamina += c.ConMod;
-            c.CurMana += c.MinMod;
-            if (c.CurStamina > c.MaxStamina) { c.CurStamina = c.MaxStamina; }
-            if (c.CurMana > c.MaxMana) { c.CurMana = c.MaxMana; }
+            c.CurHp += 2;
             if (c.CurHp > c.MaxHp) { c.CurHp = c.MaxHp; }
         }
 
@@ -281,14 +164,6 @@ namespace Ruin.General
             Console.ForegroundColor = ConsoleColor.Red;
             Console.Write($"{c.CurHp}/{c.MaxHp} ");
             Console.ForegroundColor = ConsoleColor.Gray;
-            Console.Write("Stamina: ");
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write($"{c.CurStamina}/{c.MaxStamina} ");
-            Console.ForegroundColor = ConsoleColor.Gray;
-            Console.Write($"Mana: ");
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.Write($"{c.CurMana}/{c.MaxMana}\n\n");
-            Console.ForegroundColor = ConsoleColor.Gray;
         }
 
 
@@ -297,14 +172,6 @@ namespace Ruin.General
             Console.Write($"{x}. {c.Name} Hp: ");
             Console.ForegroundColor = ConsoleColor.Red;
             Console.Write($"{c.CurHp}/{c.MaxHp} ");
-            Console.ForegroundColor = ConsoleColor.Gray;
-            Console.Write("Stamina: ");
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write($"{c.CurStamina}/{c.MaxStamina} ");
-            Console.ForegroundColor = ConsoleColor.Gray;
-            Console.Write($"Mana: ");
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.Write($"{c.CurMana}/{c.MaxMana}\n\n");
             Console.ForegroundColor = ConsoleColor.Gray;
         }
     }

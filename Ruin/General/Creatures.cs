@@ -12,24 +12,12 @@ namespace Ruin.General
         protected string name;
         protected int maxhp;
         protected int curhp;
-        protected int maxstamina;
-        protected int curstamina;
-        protected int maxmana;
-        protected int curmana;
         protected int ac;
-        protected int proficiency;
-        protected List<int> stats;
         protected List<Attack> attacks = new List<Attack>();
         protected List<Status> status = new List<Status>();
-        protected Dictionary<int, int> statArray = new Dictionary<int,int>() {{1, -5 },{2,-4},{3,-4},{ 4,-3},{ 5,-3},{ 6,-2},{ 7,-2},{ 8,-1},{ 9,-1},{ 10,0},{ 11,0},{ 12,1},{ 13,1},{ 14, 2 },{ 15, 2 },{ 16, 3 },{ 17, 3 },{ 18, 4 },{ 19, 4 },{ 20, 5 } };
-        protected int strength;
-        protected int strMod;
-        protected int dexterity;
-        protected int dexMod;
-        protected int constitution;
-        protected int conMod;
-        protected int mind;
-        protected int minMod;
+        protected int expvalue;
+        protected int level;
+        protected int exp;
 
         public string Name => name;
         public int MaxHp
@@ -37,41 +25,15 @@ namespace Ruin.General
             get {return maxhp;}
             set {maxhp = value;}
         }
-
         public int CurHp
             {
             get { return curhp; }
             set { curhp = value; }
             } 
-        public int MaxStamina 
-        {
-            get { return maxstamina;}
-            set {maxstamina = value;}
-        }
-        public int CurStamina
-        {
-            get { return curstamina; }
-            set { curstamina = value; }
-        }
-        public int MaxMana
-        {
-            get { return maxmana; }
-            set { maxmana = value; }
-        }
-        public int CurMana
-        {
-            get { return curmana; }
-            set { curmana = value; }
-        }
         public int Ac
         {
             get { return ac; }
             set { ac = value; }
-        }
-        public int Proficiency
-        {
-            get { return proficiency; }
-            set { proficiency = value; }
         }
         public List<Attack> Attacks
         { 
@@ -83,193 +45,60 @@ namespace Ruin.General
             get { return status; }
             set { status = value; }
         }
-        public int Strength
+        public int ExpValue
         {
-            get { return strength; }
-            set { strength = value; }
+            get { return expvalue; }
+            set { expvalue = value; }
         }
-        public int StrMod
+        public int Level
         {
-            get { return strMod; }
-            set { strMod = value; }
+            get { return level; }
+            set { level = value; }
         }
-        public int Dexterity
+        public int Exp
         {
-            get { return dexterity; }
-            set { dexterity = value; }
+            get { return exp; }
+            set { exp = value; }
         }
-        public int DexMod
-        {
-            get { return dexMod; }
-            set { dexMod = value; }
-        }
-        public int Constitution
-        {
-            get { return constitution; }
-            set { constitution = value; }
-        }
-        public int ConMod 
-        {
-            get { return conMod; }
-            set { conMod = value; }
-        }
-        public int Mind
-        {
-            get { return mind; }
-            set { mind = value; }
-        }
-        public int MinMod
-        {
-            get { return minMod; }
-            set { minMod = value; }
-        }
+        
 
 
-        public Creatures(string? name, List<int>? stats, List<Attack>? attacks, int proficiency = 2)
+        public Creatures(string name, int ac, int maxhp, int curhp, List<Status>? status)
         {
             this.name = name;
-            if (stats is null)
-            {
-                GenerateStatArray();
-            }
-            else
-            {
-                this.stats = GenerateStatArray(stats);
-            }
-            this.maxhp = GenerateHp(this.stats[5]);
-            this.curhp = this.maxhp;
-            this.maxstamina = this.constitution/2;
-            this.curstamina = this.maxstamina;
-            this.maxmana = this.mind/2;
-            this.curmana = maxmana;
-            this.ac = GenerateAc(this.stats[3]);
-            this.attacks = GenerateAttacks(new List<int> { this.stats[1], this.stats[3], this.stats[7] });
+            this.ac = ac;
+            this.maxhp = maxhp;
+            this.curhp = curhp;
+            this.status = status;
         }
 
-        public Creatures(string name, List<int> stats, List<Attack> attacks, int ac, int maxhp, int curhp, int maxstamina, int curstamina, int maxmana, int curmana, List<Status> status, int proficiency = 2)
+        public Creatures(string name, List<Attack>? attacks, int ac, int maxhp, int curhp, List<Status>? status, int level, int exp)
         {
             this.name = name;
-            this.stats = stats;
             this.attacks = attacks;
             this.ac = ac;
             this.maxhp = maxhp;
             this.curhp = curhp;
-            this.maxstamina = maxstamina;
-            this.curstamina = curstamina;
-            this.maxmana = maxmana;
-            this.curmana = curmana;
             this.status = status;
-            this.proficiency = proficiency;
+            this.level = level;
+            this.exp = exp;
         }
 
-        public virtual void DisplayCreature()
+        public void DisplayCreature()
         {
+            string atkString = "";
+            foreach (Attack atk in this.attacks)
+            {
+                if (atk.Equals(this.attacks[(this.attacks.Count) - 1]))
+                    atkString += ($"{atk.attackName} ");
+                else
+                    atkString += ($"{atk.attackName}, ");
+            }
             Console.Write($"{this.name}\nHp: ");
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.Write($"{this.curhp}/{this.maxhp}\n");
+            Console.Write($"{this.curhp}/{this.maxhp} ");
             Console.ForegroundColor = ConsoleColor.Gray;
-            Console.Write($"{this.attacks[0].attackName}, {this.attacks[1].attackName}\n");
-        }
-
-        protected virtual void GenerateStatArray()
-        {
-            //generates 4 stats between 6 and 14 and places them in an array. 
-            Random rnd = new();
-            this.stats = new List<int>();
-            this.strength = rnd.Next(6, 15);
-            this.dexterity = rnd.Next(6, 15);
-            this.constitution = rnd.Next(6, 15);
-            this.mind = rnd.Next(6, 15);
-            PullMods();
-            PopulateArray();
-
-        }
-
-        public List<int> GenerateStatArray(List<int> stats)
-        {
-            this.strength = stats[0];
-            this.strMod = statArray[strength];
-            this.dexterity = stats[1];
-            this.dexMod = statArray[dexterity];
-            this.constitution = stats[2];
-            this.conMod = statArray[constitution];
-            this.mind = stats[3];
-            this.minMod = statArray[mind];
-
-            return new List<int> { strength, strMod, dexterity, dexMod, constitution, conMod, mind, minMod };
-        }
-
-        protected void PopulateArray()
-        {
-            this.stats.Add(this.strength);
-            this.stats.Add(this.strMod);
-            this.stats.Add(this.dexterity);
-            this.stats.Add(this.dexMod);
-            this.stats.Add(this.constitution);
-            this.stats.Add(this.conMod);
-            this.stats.Add(this.mind);
-            this.stats.Add(this.minMod);
-        }
-
-        protected void PullMods()
-        {
-            this.StrMod = statArray[this.Strength];
-            this.DexMod = statArray[this.Dexterity];
-            this.ConMod = statArray[this.Constitution];
-            this.MinMod = statArray[this.Mind];
-        }
-
-        public int GenerateHp(int c)
-        {
-            Random rnd = new();
-            int health = rnd.Next(7, 13) + (c*2); 
-            return health;
-        }
-
-        public virtual int GenerateAc(int d)
-        {
-            return (10 + d);
-        }
-
-        public virtual List<Attack> GenerateAttacks(List<int> combatMods)
-        {
-            if ((combatMods[0] >= combatMods[1]) && (combatMods[0] >= combatMods[2])) 
-            {
-                this.attacks.Add(AttackLibrary.attacksList[0]);
-                this.attacks.Add(AttackLibrary.attacksList[1]);
-                this.attacks.Add(AttackLibrary.attacksList[4]);
-                return this.attacks;
-            }
-            if ((combatMods[1] >= combatMods[0]) && (combatMods[1] >= combatMods[2])) 
-            {
-                this.attacks.Add(AttackLibrary.attacksList[2]);
-                this.attacks.Add(AttackLibrary.attacksList[4]);
-                this.attacks.Add(AttackLibrary.attacksList[5]);
-                return this.attacks;
-            }
-            else 
-            { 
-                this.attacks.Add(AttackLibrary.attacksList[14]);
-                this.attacks.Add(AttackLibrary.attacksList[4]);
-                Console.WriteLine("Choose your magic speciality:\n1. Fire 2.Poison 3. Cold 4. Lightning");
-                int magicSelect = Convert.ToInt32(Console.ReadLine());
-                switch (magicSelect)
-                {
-                    case 1:
-                        this.attacks.Add(AttackLibrary.attacksList[6]);
-                        break;
-                    case 2:
-                        this.attacks.Add(AttackLibrary.attacksList[8]);
-                        break;
-                    case 3:
-                        this.attacks.Add(AttackLibrary.attacksList[10]);
-                        break;
-                    case 4:
-                        this.attacks.Add(AttackLibrary.attacksList[12]);
-                        break;
-                }
-                return this.attacks;
-            }
+            Console.Write($"\nAttacks: {atkString}\n\n");
         }
 
         public void TakeDamage(int d)
@@ -283,66 +112,35 @@ namespace Ruin.General
                 this.curhp -= d;
             }
         }
-        
+
         public void AttackRoll(Attack atk, Creatures target)
         {
             Random dice = new ();
             int roll = dice.Next(1, 21);
-            int dmgRoll = dice.Next(atk.minDmg, (atk.maxDmg+1));
-            int dmgMod = 0;
-            int dmg = 0;
-            switch(atk.attackName)
-            {
-                case ("Wack" or "Crush"):
-                    dmgMod = this.strMod;
-                    break;
-                case ("Stab" or "Puncture"):
-                    dmgMod = this.dexMod;
-                    break;
-                case ("Nick" or "Slash"):
-                    if (this.strMod >= this.dexMod)
-                    {
-                        dmgMod = this.strMod;
-                    }
-                    else
-                    {
-                        dmgMod += this.dexMod;
-                    }
-                    break;
-                default:
-                    dmgMod = this.minMod;
-                    break;
-            }
-            dmg = dmgMod+dmgRoll;
-
-            if (dmg <= 0)
-                dmg = 0;
+            int dmg = dice.Next(atk.minDmg, (atk.maxDmg+1));
 
             if (roll == 20)
             {
-                Console.WriteLine($"A critical hit on {target.Name} for {atk.maxDmg + dmgRoll}!");
+                Console.WriteLine($"A critical hit on {target.Name} for {atk.maxDmg + dmg}!");
                 DealDamage((atk.maxDmg + dmg), target);
-                ResourceCost(this, atk);
                 if (target.CurHp <= 0)
                     Console.WriteLine($"{target.Name} has been slain!");
             }
             else
             {
-                int atkRoll = roll+dmgMod+this.proficiency;
+                int atkRoll = roll;
                 bool hit = CheckHit(atkRoll, target);
                 switch (hit)
                 {
                     case true:
-                        Console.Write($"{this.Name} uses {atk.attackName}! A {atkRoll} hits {target.name} for {dmg} ({dmgRoll} + {dmgMod})!\n");
+                        Console.Write($"{this.Name} uses {atk.attackName}! A {atkRoll} hits {target.name} for {dmg}!\n");
                         DealDamage(dmg, target);
                         if (target.CurHp <= 0)
                             Console.WriteLine($"{target.Name} has been slain!\n");
-                        ResourceCost(this, atk);
 
                         break;
                     case false:
                         Console.Write($"{this.Name} uses {atk.attackName}! A {atkRoll} misses {target.name}!\n");
-                        ResourceCost(this, atk);
                         break;
                 }
 
@@ -363,41 +161,107 @@ namespace Ruin.General
 
         public Attack? SelectAttack()
         {
+            string choices = "";
+            int runner = 1;
+            List<int> validAttacks = new List<int>();
+            foreach (Attack atk in this.attacks)
+            {
+
+                //TODO add checker to see if the player is in the right spot and if there is a target available for that attack
+
+                choices += ($"{runner}. {atk.attackName} ");
+                runner++;
+            }
+            Console.WriteLine($"Select attack:\n{choices}");
+            Attack atkchoice = this.Attacks[(Convert.ToInt32(Console.ReadLine())) - 1];
+            //if (validAttacks.Count() == 0)
+            //{
+            //    return null;
+            //}
+
+            //else
+            //{
+                return atkchoice;
+            //}
+        }
+        public Attack? SelectAttack(List<Attack> atks)
+        {
             Random rnd = new Random();
-            List <Attack> tempAttacks = new (this.attacks.ToList());
-            foreach (Attack attack in this.attacks)
-            {
-                if (attack.stamCost > this.CurStamina)
-                { tempAttacks.Remove(attack); }
-            }
-            foreach (Attack attack in tempAttacks)
-                if (attack.manaCost > this.CurMana)
-                { tempAttacks.Remove(attack); }
-            if (tempAttacks.Count == 0)
-            {
-                return null;
-            }
-            Attack atkchoice = tempAttacks[rnd.Next(0, (tempAttacks.Count()-1))];
-            return atkchoice;
+            return atks[rnd.Next(0,(atks.Count-1))];
+
         }
 
-        public static void ResourceCost(Creatures c, Attack a)
-        {
-            c.CurStamina -= a.stamCost;
-            c.CurMana -= a.manaCost;
-        }
+        //TODO Check where enemies and you are, then select an attack.
+        //public Attack? SelectAttack(List<Attack> attacks)
+        //{
+        //    Random rnd = new Random();
+        //    List <Attack> tempAttacks = new (this.attacks.ToList());
+        //    foreach (Attack attack in this.attacks)
+        //    {
+        //        if (attack.stamCost > this.CurStamina)
+        //        { tempAttacks.Remove(attack); }
+        //    }
+        //    foreach (Attack attack in tempAttacks)
+        //        if (attack.manaCost > this.CurMana)
+        //        { tempAttacks.Remove(attack); }
+        //    if (tempAttacks.Count == 0)
+        //    {
+        //        return null;
+        //    }
+        //    Attack atkchoice = tempAttacks[rnd.Next(0, (tempAttacks.Count()-1))];
+        //    return atkchoice;
+        //}
 
-        public static int ExpCalc(Creatures c)
-        {
-            int exp = (c.Strength + c.Dexterity + c.Constitution + c.Mind + c.MaxHp);
-            return (exp);
-        }
 
         public static int FleeExpCalc(Creatures c) 
         {
-            int exp = (c.Strength + c.Dexterity + c.Constitution + c.Mind + c.CurHp);
+            int exp = ((c.CurHp/c.MaxHp)*c.ExpValue);
             return (exp);
         }
+
+        //public void LevelCheck()
+        //{
+        //    if (this.exp >= Utilities.levelChart[this.level])
+        //    {
+        //        LevelUp();
+        //    }
+        //}
+        //TODO allow increasing, hp, ac, or variables of attacks on level.
+
+        //public void LevelUp()
+        //{
+        //    Random rnd = new Random();
+        //    this.Exp -= Utilities.levelChart[this.level];
+        //    this.Level++;
+        //    StatIncrease();
+        //    this.MaxHp += (rnd.Next(1, 9) + this.ConMod);
+        //    this.CurHp = this.MaxHp;
+        //}
+
+        //public void StatIncrease()
+        //{
+        //    int si = 2;
+        //    while (si > 0)
+        //    {
+        //        Console.WriteLine("Which stat will you increase? 1. Strength 2. Dexterity 3. Constitution 4. Mind");
+        //        int choice = Convert.ToInt32(Console.ReadLine());
+        //        switch (choice)
+        //        {
+        //            case (1):
+        //                this.Strength++;
+        //                break;
+        //            case (2):
+        //                this.Dexterity++;
+        //                break;
+        //            case (3):
+        //                this.Constitution++;
+        //                break;
+        //            case (4):
+        //                this.Mind++;
+        //                break;
+        //        }
+        //        si--;
+        //    }
     }
 }
 

@@ -6,23 +6,25 @@ using static System.Formats.Asn1.AsnWriter;
 var attackLibrary = new AttackLibrary(); 
 attackLibrary.InitializeAttacks();
 List<Attack> emptyattacks = new List<Attack>();
-Goblinoid Goblin = new("Goblin", null, emptyattacks);
-Goblinoid Goblin2 = new("Goblin", null, emptyattacks);
-List<Creatures> enemies = new List<Creatures> { Goblin, Goblin2};
+Goblin Goblin1 = new("Goblin", null, 12, 6, 6, null, 50);
+Goblin Goblin2 = new("Goblin", null, 12, 6, 6, null, 50);
+Goblin Goblin3 = new("Goblin", null, 12, 6, 6, null, 50);
+Goblin Goblin4 = new("Goblin", null, 12, 6, 6, null, 50);
+
+List<Creatures> enemies = new List<Creatures> { Goblin1, Goblin2, Goblin3, Goblin4};
 
 Console.WriteLine("Welcome to Ruin\n");
 Console.WriteLine("What is your character's name?");
 //string nm = Console.ReadLine();
+Phalanx Asher = new("Asher", null, 15, 28, 28, [], 1, 0);
+//Character Migan = new("Migan", [10, 14, 15, 15], [AttackLibrary.attacksList[2], AttackLibrary.attacksList[6], AttackLibrary.attacksList[7], AttackLibrary.attacksList[14]], 12, 12, 12, 7, 7, 7, 7, [], 1, 0, 2);
+List<Creatures> player = new List<Creatures> { Asher };
+Asher.DisplayCreature();
+Goblin1.DisplayCreature();
+//Utilities.SaveGame("MiganPlaythrough", enemies, Migan);
+//Utilities.LoadGame("MiganPlaythrough");
 
-Console.WriteLine("\nGenerating your hero...\n");
-//Character Character1 = new(nm, null, emptyattacks);
-//Character Asher = new("Asher", [12, 15, 15, 12], [AttackLibrary.attacksList[2], AttackLibrary.attacksList[4], AttackLibrary.attacksList[5], AttackLibrary.attacksList[12]], 12, 12, 12, 7, 7, 6, 6,[], 0, 2);
-Character Migan = new("Migan", [10, 14, 15, 15], [AttackLibrary.attacksList[2], AttackLibrary.attacksList[6], AttackLibrary.attacksList[7], AttackLibrary.attacksList[14]], 12, 12, 12, 7, 7, 7, 7, [], 1, 0, 2);
-Migan.DisplayCreature();
-Utilities.SaveGame("MiganPlaythrough", enemies, Migan);
-Utilities.LoadGame("MiganPlaythrough");
-
-//Combat.StartCombat(Migan, enemies);
+Combat.StartCombat(Asher, enemies);
 //Migan.LevelCheck();
 
 
