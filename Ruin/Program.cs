@@ -6,10 +6,10 @@ using static System.Formats.Asn1.AsnWriter;
 var attackLibrary = new AttackLibrary(); 
 attackLibrary.InitializeAttacks();
 List<Attack> emptyattacks = new List<Attack>();
-Goblin Goblin1 = new("Goblin", null, 12, 6, 6, null, 50);
-Goblin Goblin2 = new("Goblin", null, 12, 6, 6, null, 50);
-Goblin Goblin3 = new("Goblin", null, 12, 6, 6, null, 50);
-Goblin Goblin4 = new("Goblin", null, 12, 6, 6, null, 50);
+Goblin Goblin1 = new("Goblin", null, 12, 1, 1, null, 50);
+Goblin Goblin2 = new("Goblin", null, 12, 2, 2, null, 50);
+Goblin Goblin3 = new("Goblin", null, 12, 3, 3, null, 50);
+Goblin Goblin4 = new("Goblin", null, 12, 4, 4, null, 50);
 
 List<Creatures> enemies = new List<Creatures> { Goblin1, Goblin2, Goblin3, Goblin4};
 

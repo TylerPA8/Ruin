@@ -19,7 +19,7 @@ namespace Ruin.General
         public List<int> targetPosition;
         //public Random roll;
 
-        public Attack (string attackName, int minDmg, int maxDmg, List<int> usePosition, List<int> targetPosition)
+        public Attack(string attackName, int minDmg, int maxDmg, List<int> usePosition, List<int> targetPosition)
         {
             this.attackName = attackName;
             this.minDmg = minDmg;

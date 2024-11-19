@@ -101,6 +101,11 @@ namespace Ruin.General
             Console.Write($"\nAttacks: {atkString}\n\n");
         }
 
+        public virtual Creatures? SelectAttack(List<Creatures> enemies)
+        {
+            return null;
+        }
+
         public void TakeDamage(int d)
         {
             if (this.curhp - d <= 0)
@@ -116,10 +121,10 @@ namespace Ruin.General
         public void AttackRoll(Attack atk, Creatures target)
         {
             Random dice = new ();
-            int roll = dice.Next(1, 21);
+            int atkRoll = dice.Next(1, 21);
             int dmg = dice.Next(atk.minDmg, (atk.maxDmg+1));
 
-            if (roll == 20)
+            if (atkRoll == 20)
             {
                 Console.WriteLine($"A critical hit on {target.Name} for {atk.maxDmg + dmg}!");
                 DealDamage((atk.maxDmg + dmg), target);
@@ -128,7 +133,6 @@ namespace Ruin.General
             }
             else
             {
-                int atkRoll = roll;
                 bool hit = CheckHit(atkRoll, target);
                 switch (hit)
                 {
@@ -159,37 +163,12 @@ namespace Ruin.General
             target.CurHp -= dmg;
         }
 
-        public Attack? SelectAttack()
-        {
-            string choices = "";
-            int runner = 1;
-            List<int> validAttacks = new List<int>();
-            foreach (Attack atk in this.attacks)
-            {
+        //public Attack? SelectAttack(List<Attack> atks)
+        //{
+        //    Random rnd = new Random();
+        //    return atks[rnd.Next(0,(atks.Count-1))];
 
-                //TODO add checker to see if the player is in the right spot and if there is a target available for that attack
-
-                choices += ($"{runner}. {atk.attackName} ");
-                runner++;
-            }
-            Console.WriteLine($"Select attack:\n{choices}");
-            Attack atkchoice = this.Attacks[(Convert.ToInt32(Console.ReadLine())) - 1];
-            //if (validAttacks.Count() == 0)
-            //{
-            //    return null;
-            //}
-
-            //else
-            //{
-                return atkchoice;
-            //}
-        }
-        public Attack? SelectAttack(List<Attack> atks)
-        {
-            Random rnd = new Random();
-            return atks[rnd.Next(0,(atks.Count-1))];
-
-        }
+        //}
 
         //TODO Check where enemies and you are, then select an attack.
         //public Attack? SelectAttack(List<Attack> attacks)

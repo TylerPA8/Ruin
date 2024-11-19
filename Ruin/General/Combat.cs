@@ -41,9 +41,8 @@ namespace Ruin.General
                                 DisplayWithNum(x, c);
                                 x++;
                             }
-                            Creatures target = SelectTarget(enemies);
-                            Attack atk = player.SelectAttack();
-                            player.AttackRoll(atk, target);
+                            Creatures target = player.SelectAttack(enemies);
+                            //player.AttackRoll(atk, target);
 
                             if (target.CurHp <= 0)
                             {
@@ -121,29 +120,12 @@ namespace Ruin.General
         }
 
 
-        public static Creatures SelectTarget(List<Creatures> targets)
-        {
-            Console.WriteLine("\n Chose your target: ");
-            //TODO try/catch block for out of bounds numbers.
-            try
-            {
-                Creatures target = targets[Convert.ToInt32(Console.ReadLine()) - 1];
-                Console.WriteLine("\n");
-                return target;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Please select a valid target (1 - {targets.Count()}).");
-                return SelectTarget(targets);
-            }        
-        }
 
-
-        public static void CreatureAttack(Creatures player, List<Creatures> enemies)
+        public static void CreatureAttack(List <Creatures> player, List<Creatures> enemies)
         {
             foreach (Creatures c in enemies)
             {
-                Attack catk = c.SelectAttack(c.Attacks);
+                Attack catk = c.SelectAttack(player);
                 {
                     c.AttackRoll(catk, player);
                 }

@@ -22,7 +22,8 @@ namespace Ruin
 
 
             //Phalanx - Sturdy and average damage, bleeds chance, back line blaster build option
-            Attack Puncture = new("Puncture", 3, 8, [0, 1, 1, 1], [1, 1, 1, 1]); //Basic damage, pushes target back
+            Attack Puncture = new("Puncture", 0, 0, [0, 1, 1, 1], [1, 1, 1, 1]); //Test Puncture
+            //Attack Puncture = new("Puncture", 3, 8, [0, 1, 1, 1], [1, 1, 1, 1]); //Basic damage, pushes target back
             Attack Skewer = new("Skewer", 2, 4, [0, 0, 1, 1], [1, 1, 0, 0]); //Bleed chance, hits target and 1 behind it.
             Attack ShieldBash = new("Shield Bash", 1, 4, [0, 1, 1, 1], [1, 1, 1, 1]); //Stun chance
             Attack Brace = new("Brace", 0, 0, [0, 1, 1, 1], [1, 1, 1, 1]); //Reduces all attacks by 1-4 damage.
