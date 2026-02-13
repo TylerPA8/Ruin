@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://cj6k3n5m8vxy7"]
+
+[ext_resource type="Script" path="res://Scripts/World/HexGrid.cs" id="1_hexgrid"]
+
+[node name="HexGrid" type="Node2D"]
+z_index = -1
+script = ExtResource("1_hexgrid")

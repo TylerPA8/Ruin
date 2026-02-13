@@ -1,0 +1,47 @@
+[gd_scene load_steps=4 format=3 uid="uid://b8kj3m9n8vxy3"]
+
+[ext_resource type="Script" path="res://Scripts/World/Tile.cs" id="1_tile_script"]
+
+[sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_tile"]
+points = PackedVector2Array(75, 0, 140, 38, 140, 113, 75, 150, 10, 113, 10, 38)
+
+[sub_resource type="Animation" id="Animation_flip"]
+resource_name = "flip"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(0, 1), Vector2(1, 1)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.15),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"SwapSprite"
+}]
+}
+
+[node name="Tile" type="Node2D"]
+script = ExtResource("1_tile_script")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("ConvexPolygonShape2D_tile")

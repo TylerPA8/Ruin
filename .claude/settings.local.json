@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(c:/Code/RuinGamePDT/Assets/Sprites/Tiles/tile_forest.svg:*)",
+      "Bash(c:/Code/RuinGamePDT/Assets/Sprites/Tiles/tile_plains.svg:*)",
+      "Bash(c:/Code/RuinGamePDT/Assets/Sprites/Tiles/tile_desert.svg:*)",
+      "Bash(c:/Code/RuinGamePDT/Assets/Sprites/Tiles/tile_swamp.svg:*)",
+      "Bash(c:/Code/RuinGamePDT/Assets/Sprites/Tiles/tile_mountains.svg:*)",
+      "Bash(c:/Code/RuinGamePDT/Assets/Sprites/Party/party_marker.svg:*)",
+      "Bash(c:/Code/RuinGamePDT/Assets/Sprites/Tiles/tile_fog.svg:*)"
+    ]
+  }
+}
