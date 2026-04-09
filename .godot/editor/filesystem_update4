@@ -1,6 +1,0 @@
-res://Scripts/Input/InputController.cs
-res://Scripts/World/WorldMap.cs
-res://Scripts/Party/Party.cs
-res://Scripts/Core/GameManager.cs
-res://Scripts/Core/MainScene.cs
-res://Scripts/World/HexGrid.cs
