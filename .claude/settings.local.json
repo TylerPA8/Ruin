@@ -12,7 +12,8 @@
       "Bash(dotnet add:*)",
       "Bash(dotnet test:*)",
       "Bash(find /c/Code/RuinGamePDT -name \"*.svg.import\" -delete)",
-      "Bash(dotnet build:*)"
+      "Bash(dotnet build:*)",
+      "Bash(Remove-Item \"c:\\\\Code\\\\RuinGamePDT\\\\Tests\\\\GoblinStatDumpTests.cs\")"
     ]
   }
 }

@@ -12,6 +12,7 @@
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="Udun.FastNoiseLite" Version="1.0.1" />
     <PackageReference Include="xunit" Version="2.5.3" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3" />
   </ItemGroup>
@@ -26,6 +27,23 @@
     <Compile Include="..\Scripts\Creatures\Mercenary.cs" />
     <Compile Include="..\Scripts\Creatures\Beast.cs" />
     <Compile Include="..\Scripts\Creatures\Monstrosity.cs" />
+    <Compile Include="..\Scripts\Creatures\Flaresnout.cs" />
+    <Compile Include="..\Scripts\Combat\AttackEffectType.cs" />
+    <Compile Include="..\Scripts\Combat\AttackEffect.cs" />
+    <Compile Include="..\Scripts\Combat\Attack.cs" />
+    <Compile Include="..\Scripts\Core\Constants.cs" />
+    <Compile Include="..\Scripts\Resources\BiomeType.cs" />
+    <Compile Include="..\Scripts\World\WorldTile.cs" />
+    <Compile Include="..\Scripts\World\WorldData.cs" />
+    <Compile Include="..\Scripts\Generation\NoiseMapGenerator.cs" />
+    <Compile Include="..\Scripts\Generation\ElevationMapGenerator.cs" />
+    <Compile Include="..\Scripts\Generation\HeatMapGenerator.cs" />
+    <Compile Include="..\Scripts\Generation\MoistureMapGenerator.cs" />
+    <Compile Include="..\Scripts\Generation\BiomeMapper.cs" />
+    <Compile Include="..\Scripts\Generation\WorldGenerator.cs" />
+    <Compile Include="..\Scripts\Resources\EncounterTileType.cs" />
+    <Compile Include="..\Scripts\World\EncounterMap.cs" />
+    <Compile Include="..\Scripts\Generation\EncounterMapGenerator.cs" />
   </ItemGroup>
 
 </Project>

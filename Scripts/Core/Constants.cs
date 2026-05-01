@@ -9,9 +9,12 @@ public static class Constants
     public const float NOISE_LACUNARITY = 2.0f;
 
     // Biome thresholds (0-1 range)
-    public const float HIGH_ELEVATION_THRESHOLD = 0.7f;
+    public const float HIGH_ELEVATION_THRESHOLD = 0.77f;
     public const float LOW_ELEVATION_THRESHOLD = 0.3f;
-    public const float HIGH_HEAT_THRESHOLD = 0.65f;
+    public const float HIGH_HEAT_THRESHOLD = 0.58f;
     public const float LOW_HEAT_THRESHOLD = 0.35f;
-    public const float MEDIUM_HEAT_THRESHOLD = 0.5f;
+    public const float MEDIUM_HEAT_THRESHOLD = 0.50f;
+    public const float HIGH_MOISTURE_THRESHOLD = 0.60f;
+    public const float MEDIUM_MOISTURE_THRESHOLD = 0.45f;
+    public const float LOW_MOISTURE_THRESHOLD = 0.50f;
 }

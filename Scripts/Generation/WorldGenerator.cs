@@ -8,6 +8,7 @@ public class WorldGenerator
     private NoiseMapGenerator _noiseGenerator;
     private HeatMapGenerator _heatGenerator;
     private ElevationMapGenerator _elevationGenerator;
+    private MoistureMapGenerator _moistureGenerator;
     private BiomeMapper _biomeMapper;
 
     public WorldGenerator()
@@ -15,6 +16,7 @@ public class WorldGenerator
         _noiseGenerator = new NoiseMapGenerator();
         _heatGenerator = new HeatMapGenerator();
         _elevationGenerator = new ElevationMapGenerator();
+        _moistureGenerator = new MoistureMapGenerator();
         _biomeMapper = new BiomeMapper();
     }
 
@@ -28,8 +30,11 @@ public class WorldGenerator
         Console.WriteLine("Generating elevation map...");
         float[,] elevationMap = _elevationGenerator.GenerateElevationMap(width, height, seed);
 
+        Console.WriteLine("Generating moisture map...");
+        float[,] moistureMap = _moistureGenerator.GenerateMoistureMap(width, height, seed);
+
         Console.WriteLine("Mapping biomes...");
-        BiomeType[,] biomeMap = _biomeMapper.MapBiomes(heatMap, elevationMap);
+        BiomeType[,] biomeMap = _biomeMapper.MapBiomes(heatMap, elevationMap, moistureMap);
 
         Console.WriteLine("Creating tile data...");
         WorldData world = new WorldData(width, height);

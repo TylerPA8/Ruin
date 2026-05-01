@@ -25,7 +25,7 @@ public class BanditTests
         Assert.Equal(f, bandit.BaseStats.Focus);
         Assert.Equal(m, bandit.BaseStats.Mind);
         Assert.Equal(s, bandit.BaseStats.Strength);
-        Assert.Equal(t, bandit.BaseStats.Toughness);
+        Assert.Equal(t, bandit.BaseStats.Stamina);
     }
 
     [Fact]
@@ -39,7 +39,7 @@ public class BanditTests
         Assert.Equal(6, bandit.BaseStats.Focus);
         Assert.Equal(6, bandit.BaseStats.Mind);
         Assert.Equal(6, bandit.BaseStats.Strength);
-        Assert.Equal(6, bandit.BaseStats.Toughness);
+        Assert.Equal(6, bandit.BaseStats.Stamina);
     }
 
     [Fact]
