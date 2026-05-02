@@ -27,9 +27,10 @@
     <Compile Include="..\Scripts\Creatures\Mercenary.cs" />
     <Compile Include="..\Scripts\Creatures\Beast.cs" />
     <Compile Include="..\Scripts\Creatures\Monstrosity.cs" />
-    <Compile Include="..\Scripts\Creatures\Flaresnout.cs" />
+    <Compile Include="..\Scripts\Creatures\PricklebackGoblin.cs" />
     <Compile Include="..\Scripts\Combat\AttackEffectType.cs" />
     <Compile Include="..\Scripts\Combat\AttackEffect.cs" />
+    <Compile Include="..\Scripts\Combat\StatusEffect.cs" />
     <Compile Include="..\Scripts\Combat\Attack.cs" />
     <Compile Include="..\Scripts\Core\Constants.cs" />
     <Compile Include="..\Scripts\Resources\BiomeType.cs" />
