@@ -15,10 +15,10 @@ public class BaseStats(int agility, int focus, int mind, int strength, int stami
 
 public class CombatStats(BaseStats b)
 {
-    // 1 Agility = 2.5 CritChance, 0.5 Evasion, ? ActionPoints
+    // 1 Agility = 2.5 CritChance, 0.5 Evasion, .5 ActionPoints
     public float CritChance { get; set; }     = b.Agility * 2.5f;
     public float Evasion { get; set; }        = b.Agility * 0.5f;
-    public float ActionPoints { get; set; }   = MathF.Round(b.Agility * 0f);   // ratio TBD
+    public float ActionPoints { get; set; }   = MathF.Round(b.Agility * 0.1f);
 
     // 1 Focus = 1 Accuracy, 2.5 AbilityCooldown, 5 StaminaPool
     public float Accuracy { get; set; }       = b.Focus * 1f;
@@ -30,12 +30,12 @@ public class CombatStats(BaseStats b)
     public float MagicDamage { get; set; }    = b.Mind * 2.5f;
     public float MagicDefense { get; set; }   = b.Mind * 1f;
 
-    // 1 Strength = 2.5 AttackPower, ? PhysicalDefense, 5 CritDamageBonus
+    // 1 Strength = 2.5 AttackPower, 1 PhysicalDefense, 5 CritDamageBonus
     public float AttackPower { get; set; }    = b.Strength * 2.5f;
-    public float PhysicalDefense { get; set; }= b.Strength * 0f;  // ratio TBD
+    public float PhysicalDefense { get; set; }= b.Strength * 1f;
     public float CritDamageBonus { get; set; }= b.Strength * 5f;
 
-    // 1 Stamina = 2 HitPoints, ? MovementPoints
+    // 1 Stamina = 2 HitPoints, .5 MovementPoints
     public float HitPoints { get; set; }      = MathF.Round(b.Stamina * 2f);
     public float MovementPoints { get; set; } = MathF.Round(b.Stamina * 0.5f + 3f);
 }
@@ -52,6 +52,7 @@ public abstract class Creature
     public float CurrentMana { get; set; }
 
     public List<Attack> Attacks { get; } = [];
+    public List<StatusEffect> StatusEffects { get; } = [];
 
     protected virtual int StatCap => int.MaxValue;
 
@@ -70,6 +71,46 @@ public abstract class Creature
         CurrentHp = CombatStats.HitPoints;
         CurrentStamina = CombatStats.StaminaPool;
         CurrentMana = CombatStats.ManaPool;
+    }
+
+    public void ApplyStatusEffect(AttackEffect effect)
+    {
+        var statusEffect = new StatusEffect(
+            (StatusEffectType)effect.Type,
+            Random.Shared.NextSingle() * (effect.MaxAmount - effect.MinAmount) + effect.MinAmount,
+            Random.Shared.Next(effect.MinDuration, effect.MaxDuration + 1)
+        );
+        StatusEffects.Add(statusEffect);
+    }
+
+    public void TickStatusEffects()
+    {
+        foreach (var effect in StatusEffects.ToList())
+        {
+            effect.Tick();
+            switch (effect.Type)
+            {
+                case StatusEffectType.Bleed:
+                case StatusEffectType.Burn:
+                case StatusEffectType.Poison:
+                    CurrentHp -= effect.Amount;
+                    break;
+                case StatusEffectType.Chill:
+                    CombatStats.MovementPoints -= effect.Amount;
+                    break;
+                case StatusEffectType.Static:
+                    break;
+                case StatusEffectType.StatReduction:
+                    // Generic stat reduction, e.g., reduce Strength
+                    break;
+                case StatusEffectType.Stun:
+                    break;
+            }
+            if (effect.IsExpired)
+            {
+                StatusEffects.Remove(effect);
+            }
+        }
     }
 
     public void LowerStat(BaseStat stat, int amount)

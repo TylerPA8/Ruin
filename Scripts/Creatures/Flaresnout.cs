@@ -2,9 +2,9 @@ using RuinGamePDT.Combat;
 
 namespace RuinGamePDT.Creatures;
 
-public class Flaresnout : Monstrosity
+public class PricklebackGoblin : Monstrosity
 {
-    public Flaresnout() : base("Flaresnout", 6, 6, 2, 3, 3)
+    public PricklebackGoblin() : base("Prickleback Goblin", 6, 6, 2, 3, 3)
     {
         CombatStats.MovementPoints  += 11;
         CombatStats.CritDamageBonus *= 1.5f;
