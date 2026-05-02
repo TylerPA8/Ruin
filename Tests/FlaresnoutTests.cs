@@ -1,0 +1,72 @@
+using RuinGamePDT.Combat;
+using RuinGamePDT.Creatures;
+
+namespace RuinGamePDT.Tests;
+
+public class PricklebackGoblinTests
+{
+    private readonly PricklebackGoblin _f = new();
+
+    [Fact] public void PricklebackGoblin_IsAMonstrosity()          => Assert.IsAssignableFrom<Monstrosity>(_f);
+    [Fact] public void PricklebackGoblin_HasCorrectName()           => Assert.Equal("Prickleback Goblin", _f.Name);
+
+    [Fact]
+    public void PricklebackGoblin_HasCorrectBaseStats()
+    {
+        Assert.Equal(6, _f.BaseStats.Agility);
+        Assert.Equal(6, _f.BaseStats.Focus);
+        Assert.Equal(2, _f.BaseStats.Mind);
+        Assert.Equal(3, _f.BaseStats.Strength);
+        Assert.Equal(3, _f.BaseStats.Stamina);
+    }
+
+    [Fact] public void PricklebackGoblin_HasBonusMovementPoints()  => Assert.Equal(15f, _f.CombatStats.MovementPoints);
+    [Fact] public void PricklebackGoblin_HasBonusCritDamageBonus() => Assert.Equal(22.5f, _f.CombatStats.CritDamageBonus);
+    [Fact] public void PricklebackGoblin_HasThreeAttacks()         => Assert.Equal(3, _f.Attacks.Count);
+
+    [Fact]
+    public void Scratch_HasCorrectProperties()
+    {
+        var a = _f.Attacks.First(a => a.Name == "Scratch");
+        Assert.Equal(1, a.MinDamage);
+        Assert.Equal(3, a.MaxDamage);
+        Assert.Equal(1, a.MinRange);
+        Assert.Equal(1, a.MaxRange);
+        Assert.Null(a.OnCrit);
+        Assert.Null(a.OnHit);
+    }
+
+    [Fact]
+    public void Skewer_HasCorrectProperties()
+    {
+        var a = _f.Attacks.First(a => a.Name == "Skewer");
+        Assert.Equal(2, a.MinDamage);
+        Assert.Equal(4, a.MaxDamage);
+        Assert.Equal(2, a.MinRange);
+        Assert.Equal(5, a.MaxRange);
+        Assert.Null(a.OnHit);
+        Assert.NotNull(a.OnCrit);
+        Assert.Equal(AttackEffectType.MovementSpeedReduction, a.OnCrit!.Type);
+        Assert.Equal(1f, a.OnCrit.MinAmount);
+        Assert.Equal(3f, a.OnCrit.MaxAmount);
+        Assert.Equal(1,  a.OnCrit.MinDuration);
+        Assert.Equal(2,  a.OnCrit.MaxDuration);
+    }
+
+    [Fact]
+    public void GrubGoo_HasCorrectProperties()
+    {
+        var a = _f.Attacks.First(a => a.Name == "Grub Goo");
+        Assert.Equal(0, a.MinDamage);
+        Assert.Equal(1, a.MaxDamage);
+        Assert.Equal(1, a.MinRange);
+        Assert.Equal(3, a.MaxRange);
+        Assert.Null(a.OnCrit);
+        Assert.NotNull(a.OnHit);
+        Assert.Equal(AttackEffectType.AccuracyReduction, a.OnHit!.Type);
+        Assert.Equal(5f, a.OnHit.MinAmount);
+        Assert.Equal(5f, a.OnHit.MaxAmount);
+        Assert.Equal(1,  a.OnHit.MinDuration);
+        Assert.Equal(4,  a.OnHit.MaxDuration);
+    }
+}
