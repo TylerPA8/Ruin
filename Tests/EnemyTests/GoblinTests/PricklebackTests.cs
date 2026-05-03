@@ -20,8 +20,8 @@ public class PricklebackGoblinTests
         Assert.Equal(3, _f.BaseStats.Stamina);
     }
 
-    [Fact] public void PricklebackGoblin_HasBonusMovementPoints()  => Assert.Equal(15f, _f.CombatStats.MovementPoints);
-    [Fact] public void PricklebackGoblin_HasBonusCritChance() => Assert.Equal(25f, _f.CombatStats.CritChance);
+    [Fact] public void PricklebackGoblin_HasBonusMovementPoints()  => Assert.Equal(15.00f, _f.CombatStats.MovementPoints);
+    [Fact] public void PricklebackGoblin_HasBonusCritChance() => Assert.Equal(25.00f, _f.CombatStats.CritChance);
     [Fact] public void PricklebackGoblin_HasThreeAttacks()         => Assert.Equal(3, _f.Attacks.Count);
 
     [Fact]
@@ -44,17 +44,17 @@ public class PricklebackGoblinTests
         Assert.Equal(4, a.MaxDamage);
         Assert.Equal(2, a.MinRange);
         Assert.Equal(5, a.MaxRange);
-        Assert.Null(a.OnHit);
-        Assert.NotNull(a.OnCrit);
-        Assert.Equal(AttackEffectType.Chill, a.OnCrit!.Type);
-        Assert.Equal(1f, a.OnCrit.MinAmount);
-        Assert.Equal(3f, a.OnCrit.MaxAmount);
-        Assert.Equal(1,  a.OnCrit.MinDuration);
-        Assert.Equal(2,  a.OnCrit.MaxDuration);
+        Assert.NotNull(a.OnHit);
+        Assert.Null(a.OnCrit);
+        Assert.Equal(AttackEffectType.Bleed, a.OnHit!.Type);
+        Assert.Equal(0.05f, a.OnHit.MinAmount);
+        Assert.Equal(0.05f, a.OnHit.MaxAmount);
+        Assert.Equal(1,  a.OnHit.MinDuration);
+        Assert.Equal(1,  a.OnHit.MaxDuration);
     }
 
     [Fact]
-    public void GrubGoo_HasCorrectProperties()
+    public void QuillSpray_HasCorrectProperties()
     {
         var a = _f.Attacks.First(a => a.Name == "Quill Spray");
         Assert.Equal(0, a.MinDamage);
@@ -63,10 +63,10 @@ public class PricklebackGoblinTests
         Assert.Equal(3, a.MaxRange);
         Assert.Null(a.OnCrit);
         Assert.NotNull(a.OnHit);
-        Assert.Equal(AttackEffectType.Static, a.OnHit!.Type);
-        Assert.Equal(5f, a.OnHit.MinAmount);
-        Assert.Equal(5f, a.OnHit.MaxAmount);
+        Assert.Equal(AttackEffectType.Bleed, a.OnHit!.Type);
+        Assert.Equal(0.25f, a.OnHit.MinAmount);
+        Assert.Equal(0.25f, a.OnHit.MaxAmount);
         Assert.Equal(1,  a.OnHit.MinDuration);
-        Assert.Equal(4,  a.OnHit.MaxDuration);
+        Assert.Equal(1,  a.OnHit.MaxDuration);
     }
 }
