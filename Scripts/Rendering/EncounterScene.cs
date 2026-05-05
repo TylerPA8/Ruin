@@ -23,6 +23,15 @@ public class EncounterScene(EncounterState state, TurnManager turns, Texture2D p
             int gridX = mouse.X / TileSize;
             int gridY = mouse.Y / TileSize;
 
+            if (gridX < 0 || gridX >= state.Map.Width ||
+                gridY < 0 || gridY >= state.Map.Height)
+            {
+                _selected = null;
+                _reachable = new();
+                _prevMouse = mouse;
+                return;
+            }
+
             if (_selected == null)
             {
                 var creature = state.GetCreatureAt(gridX, gridY);
