@@ -82,4 +82,57 @@ public class EncounterStateTests
         state.PlaceCreature(merc, 0, 0);
         Assert.Equal(5f, state.GetRemainingMovement(merc));
     }
+
+    [Fact]
+    public void MoveCreature_ReturnsTrue_AndUpdatesBothDictionaries()
+    {
+        var state = new EncounterState(new EncounterMap(10, 10));
+        var merc = new Mercenary(stamina: 4); // 5 MP
+        state.PlaceCreature(merc, 0, 0);
+        Assert.True(state.MoveCreature(merc, 1, 0));
+        Assert.Equal(merc, state.GetCreatureAt(1, 0));
+        Assert.Null(state.GetCreatureAt(0, 0));
+        Assert.Equal((1, 0), state.GetPosition(merc));
+    }
+
+    [Fact]
+    public void MoveCreature_DeductsCorrectMovementCost()
+    {
+        var state = new EncounterState(new EncounterMap(10, 10));
+        var merc = new Mercenary(stamina: 4); // MovementPoints = MathF.Round(2+3) = 5
+        state.PlaceCreature(merc, 0, 0);
+        state.MoveCreature(merc, 2, 0); // 2 steps
+        Assert.Equal(3f, state.GetRemainingMovement(merc));
+    }
+
+    [Fact]
+    public void MoveCreature_ReturnsFalse_WhenDestinationIsOccupied()
+    {
+        var state = new EncounterState(new EncounterMap(10, 10));
+        var merc1 = new Mercenary(stamina: 4);
+        var merc2 = new Mercenary(stamina: 4);
+        state.PlaceCreature(merc1, 0, 0);
+        state.PlaceCreature(merc2, 1, 0);
+        Assert.False(state.MoveCreature(merc1, 1, 0));
+    }
+
+    [Fact]
+    public void MoveCreature_ReturnsFalse_WhenDestinationIsObstacle()
+    {
+        var map = new EncounterMap(10, 10);
+        map.SetTile(1, 0, EncounterTileType.Obstacle);
+        var state = new EncounterState(map);
+        var merc = new Mercenary(stamina: 4);
+        state.PlaceCreature(merc, 0, 0);
+        Assert.False(state.MoveCreature(merc, 1, 0));
+    }
+
+    [Fact]
+    public void MoveCreature_ReturnsFalse_WhenDestinationOutOfMovementRange()
+    {
+        var state = new EncounterState(new EncounterMap(10, 10));
+        var merc = new Mercenary(stamina: 0); // 3 MP
+        state.PlaceCreature(merc, 0, 0);
+        Assert.False(state.MoveCreature(merc, 0, 9)); // 9 steps away
+    }
 }

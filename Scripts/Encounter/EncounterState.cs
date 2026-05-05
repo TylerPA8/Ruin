@@ -41,4 +41,17 @@ public class EncounterState(EncounterMap map)
         if (!_positions.ContainsKey(creature)) return;
         _remainingMovement[creature] = creature.CombatStats.MovementPoints;
     }
+
+    public bool MoveCreature(Creature creature, int toX, int toY)
+    {
+        if (!_positions.ContainsKey(creature)) return false;
+        var reachable = MovementValidator.GetReachableTiles(creature, this);
+        if (!reachable.ContainsKey((toX, toY))) return false;
+        var from = _positions[creature];
+        _occupancy.Remove(from);
+        _occupancy[(toX, toY)] = creature;
+        _positions[creature] = (toX, toY);
+        _remainingMovement[creature] -= reachable[(toX, toY)];
+        return true;
+    }
 }
