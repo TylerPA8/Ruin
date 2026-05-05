@@ -21,7 +21,7 @@ Three new classes in `Scripts/Encounter/`:
 | `TurnManager` | Owns the 4-phase turn loop and tracks who has moved |
 | `MovementValidator` | Computes reachable tiles via BFS |
 
-One new MonoGame class in `Scripts/Rendering/` (or similar):
+One new MonoGame class in `Scripts/Rendering/`:
 
 | Class | Responsibility |
 |---|---|
@@ -62,11 +62,13 @@ EncounterState
 
 ```
 Phase 1 → First ceil(n/2) mercenaries     (player chooses order)
-Phase 2 → First ceil(n/2) enemies         (AI)
+Phase 2 → First ceil(n/2) enemies         (placeholder: skip turn)
 Phase 3 → Remaining mercenaries           (player chooses order)
-Phase 4 → Remaining enemies               (AI)
+Phase 4 → Remaining enemies               (placeholder: skip turn)
 → Repeat
 ```
+
+Enemy AI movement is out of scope for this spec. During enemy phases, enemies skip their turn. A real AI movement system will be designed separately.
 
 Odd rosters round up for the first half: 3 mercs → 2 in phase 1, 1 in phase 3.
 
@@ -83,6 +85,9 @@ Odd rosters round up for the first half: 3 mercs → 2 in phase 1, 1 in phase 3.
 - `EndCreatureTurn(Creature)` — marks creature as moved; if phase queue exhausted, calls `AdvancePhase()`
 - `AdvancePhase()` — increments `CurrentPhase` (wraps 4→1), rebuilds `PhaseQueue`, resets `MovedThisTurn`
 - `CheckEndCondition()` → `EncounterResult` (`Victory` / `Defeat` / `Fled` / `Ongoing`)
+  - `Victory`: all enemies have been removed from `EncounterState`
+  - `Defeat`: all mercenaries have been removed from `EncounterState`
+  - `Fled`: not yet implemented — always returns `Ongoing` if neither above condition is met
 
 ---
 
@@ -122,7 +127,7 @@ BFS is used for both UI highlighting and move validation. There is no Manhattan 
 ### Mouse Input Flow
 
 1. Player clicks → convert: `gridX = mouseX / 25`, `gridY = mouseY / 25`
-2. **No selection:** if `GetCreatureAt(gridX, gridY)` returns a friendly creature and `TurnManager.CanMove(creature)` is true → select it, run BFS, highlight reachable tiles
+2. **No selection:** if `GetCreatureAt(gridX, gridY)` returns a `Mercenary` (player-controlled) and `TurnManager.CanMove(creature)` is true → select it, run BFS, highlight reachable tiles
 3. **Creature selected, click on highlighted tile:** call `EncounterState.MoveCreature`, then `TurnManager.EndCreatureTurn`, deselect
 4. **Creature selected, click on non-highlighted tile:** deselect, clear highlights
 
