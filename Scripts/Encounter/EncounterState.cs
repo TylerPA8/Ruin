@@ -45,6 +45,7 @@ public class EncounterState(EncounterMap map)
     public bool MoveCreature(Creature creature, int toX, int toY)
     {
         if (!_positions.ContainsKey(creature)) return false;
+        if (toX < 0 || toX >= Map.Width || toY < 0 || toY >= Map.Height) return false;
         var reachable = MovementValidator.GetReachableTiles(creature, this);
         if (!reachable.ContainsKey((toX, toY))) return false;
         var from = _positions[creature];

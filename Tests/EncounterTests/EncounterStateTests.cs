@@ -135,4 +135,12 @@ public class EncounterStateTests
         state.PlaceCreature(merc, 0, 0);
         Assert.False(state.MoveCreature(merc, 0, 9)); // 9 steps away
     }
+
+    [Fact]
+    public void MoveCreature_ReturnsFalse_WhenCreatureNotPlaced()
+    {
+        var state = new EncounterState(new EncounterMap(10, 10));
+        var merc = new Mercenary();
+        Assert.False(state.MoveCreature(merc, 1, 0));
+    }
 }
