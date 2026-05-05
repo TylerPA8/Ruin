@@ -8,17 +8,18 @@ public class TurnManager(EncounterState state)
 
     private readonly HashSet<Creature> _movedThisTurn = [];
     private List<Creature> _phaseQueue = [];
+    private readonly HashSet<Creature> _phaseSet = [];
 
     public void StartEncounter()
     {
         CurrentPhase = 1;
         _movedThisTurn.Clear();
-        _phaseQueue = BuildPhaseQueue(1);
+        SetPhaseQueue(BuildPhaseQueue(1));
         foreach (var c in _phaseQueue) state.ResetMovement(c);
     }
 
     public bool CanMove(Creature creature) =>
-        _phaseQueue.Contains(creature) && !_movedThisTurn.Contains(creature);
+        _phaseSet.Contains(creature) && !_movedThisTurn.Contains(creature);
 
     public void EndCreatureTurn(Creature creature)
     {
@@ -29,9 +30,10 @@ public class TurnManager(EncounterState state)
 
     public void AdvancePhase()
     {
+        if (CurrentPhase == 0) return;
         CurrentPhase = CurrentPhase == 4 ? 1 : CurrentPhase + 1;
         _movedThisTurn.Clear();
-        _phaseQueue = BuildPhaseQueue(CurrentPhase);
+        SetPhaseQueue(BuildPhaseQueue(CurrentPhase));
         foreach (var c in _phaseQueue) state.ResetMovement(c);
     }
 
@@ -40,6 +42,13 @@ public class TurnManager(EncounterState state)
         if (state.Enemies.Count == 0) return EncounterResult.Victory;
         if (state.Mercenaries.Count == 0) return EncounterResult.Defeat;
         return EncounterResult.Ongoing;
+    }
+
+    private void SetPhaseQueue(List<Creature> queue)
+    {
+        _phaseQueue = queue;
+        _phaseSet.Clear();
+        _phaseSet.UnionWith(queue);
     }
 
     private List<Creature> BuildPhaseQueue(int phase)
