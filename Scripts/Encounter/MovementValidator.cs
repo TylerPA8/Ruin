@@ -7,10 +7,15 @@ public static class MovementValidator
 {
     private static readonly (int dx, int dy)[] Directions = [(0, 1), (0, -1), (1, 0), (-1, 0)];
 
+    /// <summary>
+    /// Returns all tiles the creature can reach from its current position given its
+    /// remaining movement. The creature must already be placed in state via PlaceCreature.
+    /// </summary>
     public static Dictionary<(int X, int Y), int> GetReachableTiles(Creature creature, EncounterState state)
     {
         var (startX, startY) = state.GetPosition(creature);
-        int maxSteps = (int)state.GetRemainingMovement(creature);
+        // Truncate fractional remaining movement; partial steps cannot be used.
+        int maxSteps = (int)MathF.Floor(state.GetRemainingMovement(creature));
 
         var result = new Dictionary<(int X, int Y), int>();
         var queue = new Queue<((int X, int Y) pos, int steps)>();
