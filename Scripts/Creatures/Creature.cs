@@ -82,6 +82,29 @@ public abstract class Creature
         CurrentMana = CombatStats.ManaPool;
     }
 
+    public void RaiseStat(BaseStat stat, int amount)
+    {
+        switch (stat)
+        {
+            case BaseStat.Agility:
+                BaseStats.Agility = Math.Clamp(BaseStats.Agility + amount, 0, StatCap);
+                break;
+            case BaseStat.Focus:
+                BaseStats.Focus = Math.Clamp(BaseStats.Focus + amount, 0, StatCap);
+                break;
+            case BaseStat.Mind:
+                BaseStats.Mind = Math.Clamp(BaseStats.Mind + amount, 0, StatCap);
+                break;
+            case BaseStat.Strength:
+                BaseStats.Strength = Math.Clamp(BaseStats.Strength + amount, 0, StatCap);
+                break;
+            case BaseStat.Stamina:
+                BaseStats.Stamina = Math.Clamp(BaseStats.Stamina + amount, 0, StatCap);
+                break;
+        }
+        CombatStats = new CombatStats(BaseStats);
+    }
+
     public void ApplyStatusEffect(AttackEffect effect)
     {
         var statusEffect = new StatusEffect(

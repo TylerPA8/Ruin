@@ -45,6 +45,10 @@
     <Compile Include="..\Scripts\Resources\EncounterTileType.cs" />
     <Compile Include="..\Scripts\World\EncounterMap.cs" />
     <Compile Include="..\Scripts\Generation\EncounterMapGenerator.cs" />
+    <Compile Include="..\Scripts\Encounter\EncounterResult.cs" />
+    <Compile Include="..\Scripts\Encounter\EncounterState.cs" />
+    <Compile Include="..\Scripts\Encounter\MovementValidator.cs" />
+    <Compile Include="..\Scripts\Encounter\TurnManager.cs" />
   </ItemGroup>
 
 </Project>
