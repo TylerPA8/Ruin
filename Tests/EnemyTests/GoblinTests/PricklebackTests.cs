@@ -41,14 +41,14 @@ public class PricklebackGoblinTests
         var a = _f.Attacks.First(a => a.Name == "Skewer");
         Assert.Equal(2, a.MinDamage);
         Assert.Equal(4, a.MaxDamage);
-        Assert.Equal(2, a.Range);
+        Assert.Equal(5, a.Range);
         Assert.NotNull(a.OnHit);
         Assert.Null(a.OnCrit);
         Assert.Equal(AttackEffectType.Bleed, a.OnHit!.Type);
-        Assert.Equal(0.05f, a.OnHit.MinAmount);
-        Assert.Equal(0.05f, a.OnHit.MaxAmount);
-        Assert.Equal(1,  a.OnHit.MinDuration);
-        Assert.Equal(1,  a.OnHit.MaxDuration);
+        Assert.Equal(5, a.OnHit.MinAmount);
+        Assert.Equal(5, a.OnHit.MaxAmount);
+        Assert.Equal(1, a.OnHit.MinDuration);
+        Assert.Equal(3, a.OnHit.MaxDuration);
     }
 
     [Fact]
@@ -57,13 +57,13 @@ public class PricklebackGoblinTests
         var a = _f.Attacks.First(a => a.Name == "Quill Spray");
         Assert.Equal(0, a.MinDamage);
         Assert.Equal(1, a.MaxDamage);
-        Assert.Equal(1, a.Range);
+        Assert.Equal(3, a.Range);
         Assert.Null(a.OnCrit);
         Assert.NotNull(a.OnHit);
         Assert.Equal(AttackEffectType.Bleed, a.OnHit!.Type);
-        Assert.Equal(0.25f, a.OnHit.MinAmount);
-        Assert.Equal(0.25f, a.OnHit.MaxAmount);
-        Assert.Equal(1,  a.OnHit.MinDuration);
-        Assert.Equal(1,  a.OnHit.MaxDuration);
+        Assert.Equal(5, a.OnHit.MinAmount);
+        Assert.Equal(5, a.OnHit.MaxAmount);
+        Assert.Equal(1, a.OnHit.MinDuration);
+        Assert.Equal(1, a.OnHit.MaxDuration);
     }
 }

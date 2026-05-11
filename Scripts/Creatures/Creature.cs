@@ -143,8 +143,8 @@ public abstract class Creature
         var statusEffect = new StatusEffect(
             (StatusEffectType)effect.Type,
             targetStat,
-            Random.Shared.Next(effect.MinAmount, effect.MaxAmount),
-            Random.Shared.Next(effect.MinDuration, effect.MaxDuration)
+            Random.Shared.Next(effect.MinAmount, effect.MaxAmount + 1),
+            Random.Shared.Next(effect.MinDuration, effect.MaxDuration + 1)
         );
         StatusEffects.Add(statusEffect);
     }

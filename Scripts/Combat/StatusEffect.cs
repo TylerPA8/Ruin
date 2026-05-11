@@ -28,6 +28,7 @@ public class StatusEffect
         TargetStat = targetStat;
         Amount = amount;
         Duration = duration;
+        MaxDuration = duration;
     }
 
     public void Tick()
