@@ -9,7 +9,7 @@ public class Mercenary : Creature
     public Mercenary(int agility = 1, int focus = 1, int mind = 1, int strength = 1, int stamina = 1)
         : base("Mercenary", agility, focus, mind, strength, stamina)
     {
-        EquippedWeapon = new Sword();
+        EquippedWeapon = new Unarmed();
         Attacks.AddRange(EquippedWeapon.Attacks);
     }
 

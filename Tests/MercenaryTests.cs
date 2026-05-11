@@ -49,9 +49,9 @@ public class MercenaryTests
     }
 
     [Fact]
-    public void Mercenary_DefaultEquippedWeapon_IsSword()
+    public void Mercenary_DefaultEquippedWeapon_IsUnarmed()
     {
-        Assert.IsType<Sword>(new Mercenary().EquippedWeapon);
+        Assert.IsType<Unarmed>(new Mercenary().EquippedWeapon);
     }
 
     [Fact]

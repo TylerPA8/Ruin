@@ -112,37 +112,9 @@ public abstract class Creature
 
     public void ApplyStatusEffect(AttackEffect effect)
     {
-        CombatStat targetStat;
-        switch (effect.Type)
-        {
-            case AttackEffectType.Bleed:
-                targetStat = CombatStat.HitPoints;
-                break;
-            case AttackEffectType.Burn:
-                targetStat = CombatStat.HitPoints;
-                break;
-            case AttackEffectType.Poison:
-                targetStat = CombatStat.HitPoints;
-                break;
-            case AttackEffectType.Chill:
-                targetStat = CombatStat.MovementPoints;
-                break;
-            case AttackEffectType.Static:
-                targetStat = CombatStat.HitPoints;
-                break;
-            case AttackEffectType.StatReduction:
-                targetStat = CombatStat.PhysicalDefense;
-                break;
-            case AttackEffectType.Stun:
-                targetStat = CombatStat.HitPoints;
-                break;
-            default:
-                targetStat = CombatStat.HitPoints;
-                break;
-        }
         var statusEffect = new StatusEffect(
             (StatusEffectType)effect.Type,
-            targetStat,
+            effect.TargetStat,
             Random.Shared.Next(effect.MinAmount, effect.MaxAmount + 1),
             Random.Shared.Next(effect.MinDuration, effect.MaxDuration + 1)
         );

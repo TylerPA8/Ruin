@@ -18,7 +18,7 @@ public class Sword : Weapon
             attackShape: new AttackShape(new[] { (0, 0) }),
             range: 1,
             reaction: null,
-            onHit: new AttackEffect(AttackEffectType.Bleed, 0, 0, 0, 0, null, null),
+            onHit: null,
             onCrit: null
         ));
 
@@ -32,7 +32,7 @@ public class Sword : Weapon
             attackShape: new AttackShape(new[] { (0, 0), (0, 1) }),
             range: 2,
             reaction: null,
-            onHit: new AttackEffect(AttackEffectType.StatReduction, 0, 0, 0, 0, null, new StatusEffect(StatusEffectType.StatReduction, CombatStat.PhysicalDefense, -5, 2)),
+            onHit: new AttackEffect(AttackEffectType.StatReduction, CombatStat.PhysicalDefense, 5, 5, 2, 2),
             onCrit: null
         ));
 
@@ -46,7 +46,7 @@ public class Sword : Weapon
             attackShape: new AttackShape(new[] { (0, 0) }),
             range: 0,
             reaction: new Reaction(ReactionType.OnMissCounter, "Slash"),
-            onHit: new AttackEffect(AttackEffectType.StatReduction, 0, 0, 0, 0, new StatusEffect(StatusEffectType.StatIncrease, CombatStat.PhysicalDefense, 10, 1), null),
+            onHit: new AttackEffect(AttackEffectType.StatIncrease, CombatStat.PhysicalDefense, 10, 10, 1, 1),
             onCrit: null
         ));
 
@@ -60,8 +60,8 @@ public class Sword : Weapon
             attackShape: new AttackShape(new[] { (-1, 0), (1, 0), (0, -1), (0, 1) }),
             range: 1,
             reaction: null,
-            onHit: new AttackEffect(AttackEffectType.Bleed, 0, 0, 0, 0, null, null),
-            onCrit: new AttackEffect(AttackEffectType.StatReduction, 0, 0, 0, 0, new StatusEffect(StatusEffectType.StatIncrease, CombatStat.PhysicalDefense, 5, 2), null)
+            onHit: null,
+            onCrit: new AttackEffect(AttackEffectType.StatReduction, CombatStat.PhysicalDefense, 5, 5, 2, 2)
         ));
     }
 }

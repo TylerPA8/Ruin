@@ -22,9 +22,8 @@ public class SwordTests
         Assert.Equal(110, a.Accuracy);
         Assert.Equal(1, a.Range);
         Assert.Null(a.Reaction);
+        Assert.Null(a.OnHit);
         Assert.Null(a.OnCrit);
-        Assert.NotNull(a.OnHit);
-        Assert.Equal(AttackEffectType.Bleed, a.OnHit!.Type);
     }
 
     [Fact]
@@ -39,8 +38,11 @@ public class SwordTests
         Assert.Equal(2, a.AttackShape.Offsets.Count());
         Assert.NotNull(a.OnHit);
         Assert.Equal(AttackEffectType.StatReduction, a.OnHit!.Type);
-        Assert.NotNull(a.OnHit.Debuff);
-        Assert.Equal(CombatStat.PhysicalDefense, a.OnHit.Debuff!.TargetStat);
+        Assert.Equal(CombatStat.PhysicalDefense, a.OnHit.TargetStat);
+        Assert.Equal(5, a.OnHit.MinAmount);
+        Assert.Equal(5, a.OnHit.MaxAmount);
+        Assert.Equal(2, a.OnHit.MinDuration);
+        Assert.Equal(2, a.OnHit.MaxDuration);
     }
 
     [Fact]
@@ -55,9 +57,12 @@ public class SwordTests
         Assert.Equal(ReactionType.OnMissCounter, a.Reaction!.Type);
         Assert.Equal("Slash", a.Reaction.LinkedAttackName);
         Assert.NotNull(a.OnHit);
-        Assert.NotNull(a.OnHit!.Buff);
-        Assert.Equal(StatusEffectType.StatIncrease, a.OnHit.Buff!.Type);
-        Assert.Equal(CombatStat.PhysicalDefense, a.OnHit.Buff.TargetStat);
+        Assert.Equal(AttackEffectType.StatIncrease, a.OnHit!.Type);
+        Assert.Equal(CombatStat.PhysicalDefense, a.OnHit.TargetStat);
+        Assert.Equal(10, a.OnHit.MinAmount);
+        Assert.Equal(10, a.OnHit.MaxAmount);
+        Assert.Equal(1, a.OnHit.MinDuration);
+        Assert.Equal(1, a.OnHit.MaxDuration);
     }
 
     [Fact]
@@ -70,10 +75,13 @@ public class SwordTests
         Assert.Equal(75, a.Accuracy);
         Assert.Equal(1, a.Range);
         Assert.Equal(4, a.AttackShape.Offsets.Count());
-        Assert.NotNull(a.OnHit);
-        Assert.Equal(AttackEffectType.Bleed, a.OnHit!.Type);
+        Assert.Null(a.OnHit);
         Assert.NotNull(a.OnCrit);
-        Assert.NotNull(a.OnCrit!.Buff);
-        Assert.Equal(CombatStat.PhysicalDefense, a.OnCrit.Buff!.TargetStat);
+        Assert.Equal(AttackEffectType.StatReduction, a.OnCrit!.Type);
+        Assert.Equal(CombatStat.PhysicalDefense, a.OnCrit.TargetStat);
+        Assert.Equal(5, a.OnCrit.MinAmount);
+        Assert.Equal(5, a.OnCrit.MaxAmount);
+        Assert.Equal(2, a.OnCrit.MinDuration);
+        Assert.Equal(2, a.OnCrit.MaxDuration);
     }
 }

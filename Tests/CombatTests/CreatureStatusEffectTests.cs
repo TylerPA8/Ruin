@@ -9,10 +9,9 @@ public class CreatureStatusEffectTests
     public void ApplyStatusEffect_WithEqualMinMax_ProducesExactValue()
     {
         var merc = new Mercenary();
-        var effect = new AttackEffect(AttackEffectType.Bleed,
+        var effect = new AttackEffect(AttackEffectType.Bleed, CombatStat.HitPoints,
             MinAmount: 5, MaxAmount: 5,
-            MinDuration: 2, MaxDuration: 2,
-            Buff: null, Debuff: null);
+            MinDuration: 2, MaxDuration: 2);
 
         merc.ApplyStatusEffect(effect);
 
@@ -34,15 +33,30 @@ public class CreatureStatusEffectTests
         for (int i = 0; i < 200; i++)
         {
             merc.StatusEffects.Clear();
-            merc.ApplyStatusEffect(new AttackEffect(AttackEffectType.Bleed,
+            merc.ApplyStatusEffect(new AttackEffect(AttackEffectType.Bleed, CombatStat.HitPoints,
                 MinAmount: 1, MaxAmount: 3,
-                MinDuration: 1, MaxDuration: 3,
-                Buff: null, Debuff: null));
+                MinDuration: 1, MaxDuration: 3));
             observedMaxAmount   = Math.Max(observedMaxAmount,   merc.StatusEffects[0].Amount);
             observedMaxDuration = Math.Max(observedMaxDuration, merc.StatusEffects[0].Duration);
         }
 
         Assert.Equal(3, observedMaxAmount);
         Assert.Equal(3, observedMaxDuration);
+    }
+
+    [Fact]
+    public void ApplyStatusEffect_PropagatesTargetStat_FromAttackEffect()
+    {
+        // Regression: TargetStat is now explicit on AttackEffect, not derived
+        // from Type. Verify a non-default stat survives the round trip.
+        var merc = new Mercenary();
+        var effect = new AttackEffect(AttackEffectType.StatReduction, CombatStat.Accuracy,
+            MinAmount: 3, MaxAmount: 3,
+            MinDuration: 1, MaxDuration: 1);
+
+        merc.ApplyStatusEffect(effect);
+
+        Assert.Single(merc.StatusEffects);
+        Assert.Equal(CombatStat.Accuracy, merc.StatusEffects[0].TargetStat);
     }
 }
