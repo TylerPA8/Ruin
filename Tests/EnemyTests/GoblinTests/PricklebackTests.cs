@@ -30,8 +30,7 @@ public class PricklebackGoblinTests
         var a = _f.Attacks.First(a => a.Name == "Scratch");
         Assert.Equal(1, a.MinDamage);
         Assert.Equal(3, a.MaxDamage);
-        Assert.Equal(1, a.MinRange);
-        Assert.Equal(1, a.MaxRange);
+        Assert.Equal(1, a.Range);
         Assert.Null(a.OnCrit);
         Assert.Null(a.OnHit);
     }
@@ -42,8 +41,7 @@ public class PricklebackGoblinTests
         var a = _f.Attacks.First(a => a.Name == "Skewer");
         Assert.Equal(2, a.MinDamage);
         Assert.Equal(4, a.MaxDamage);
-        Assert.Equal(2, a.MinRange);
-        Assert.Equal(5, a.MaxRange);
+        Assert.Equal(2, a.Range);
         Assert.NotNull(a.OnHit);
         Assert.Null(a.OnCrit);
         Assert.Equal(AttackEffectType.Bleed, a.OnHit!.Type);
@@ -59,8 +57,7 @@ public class PricklebackGoblinTests
         var a = _f.Attacks.First(a => a.Name == "Quill Spray");
         Assert.Equal(0, a.MinDamage);
         Assert.Equal(1, a.MaxDamage);
-        Assert.Equal(1, a.MinRange);
-        Assert.Equal(3, a.MaxRange);
+        Assert.Equal(1, a.Range);
         Assert.Null(a.OnCrit);
         Assert.NotNull(a.OnHit);
         Assert.Equal(AttackEffectType.Bleed, a.OnHit!.Type);

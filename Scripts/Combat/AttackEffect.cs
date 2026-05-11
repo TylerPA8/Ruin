@@ -2,8 +2,10 @@ namespace RuinGamePDT.Combat;
 
 public record AttackEffect(
     AttackEffectType Type,
-    float MinAmount,
-    float MaxAmount,
+    int MinAmount,
+    int MaxAmount,
     int MinDuration,
-    int MaxDuration
+    int MaxDuration,
+    StatusEffect? Buff,
+    StatusEffect? Debuff
 );

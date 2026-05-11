@@ -9,10 +9,10 @@ public class PricklebackGoblin : Monstrosity
         CombatStats.MovementPoints += 11;
         CombatStats.CritChance += 10;
 
-        Attacks.Add(new Attack("Scratch", 1, 3, 1, 1));
-        Attacks.Add(new Attack("Skewer",  2, 4, 2, 5,
-            onHit: new AttackEffect(AttackEffectType.Bleed, 0.05f, 0.05f, 1, 1)));
-        Attacks.Add(new Attack("Quill Spray", 0, 1, 1, 3,
-            onHit: new AttackEffect(AttackEffectType.Bleed, 0.25f, 0.25f, 1, 1)));
+        Attacks.Add(new Attack("Scratch", 1, 3, 1, 100, new AttackShape(new[] { (0, 0) }), 1));
+        Attacks.Add(new Attack("Skewer", 2, 4, 1, 100, new AttackShape(new[] { (0, 0) }), 5,
+            onHit: new AttackEffect(AttackEffectType.Bleed, 5, 5, 1, 3, null, null)));
+        Attacks.Add(new Attack("Quill Spray", 0, 1, 1, 100, new AttackShape(new[] { (0, 0) }), 3,
+            onHit: new AttackEffect(AttackEffectType.Bleed, 5, 5, 1, 1, null, null)));
     }
 }

@@ -1,4 +1,5 @@
 using RuinGamePDT.Combat;
+using RuinGamePDT.Weapons;
 
 namespace RuinGamePDT.Creatures;
 
@@ -28,6 +29,9 @@ public class CombatStats(BaseStats b)
     public float CritChance { get; set; }     = b.Agility * 2.5f;
     public float Evasion { get; set; }        = b.Agility * 0.5f;
     public float ActionPoints { get; set; }   = b.Agility * .25f;
+
+//TODO: Change evasion to int based off 100 and update accuracy as well. 
+//Needs to be added to weapon attacks.
 
     // 1 Focus = 1 Accuracy, 2.5 AbilityCooldown, 5 StaminaPool
     public float Accuracy { get; set; }       = b.Focus * 1f;
@@ -62,6 +66,7 @@ public abstract class Creature
 
     public List<Attack> Attacks { get; } = [];
     public List<StatusEffect> StatusEffects { get; } = [];
+    public Weapon? EquippedWeapon { get; set; }
 
     protected virtual int StatCap => int.MaxValue;
 
@@ -107,10 +112,39 @@ public abstract class Creature
 
     public void ApplyStatusEffect(AttackEffect effect)
     {
+        CombatStat targetStat;
+        switch (effect.Type)
+        {
+            case AttackEffectType.Bleed:
+                targetStat = CombatStat.HitPoints;
+                break;
+            case AttackEffectType.Burn:
+                targetStat = CombatStat.HitPoints;
+                break;
+            case AttackEffectType.Poison:
+                targetStat = CombatStat.HitPoints;
+                break;
+            case AttackEffectType.Chill:
+                targetStat = CombatStat.MovementPoints;
+                break;
+            case AttackEffectType.Static:
+                targetStat = CombatStat.HitPoints;
+                break;
+            case AttackEffectType.StatReduction:
+                targetStat = CombatStat.PhysicalDefense;
+                break;
+            case AttackEffectType.Stun:
+                targetStat = CombatStat.HitPoints;
+                break;
+            default:
+                targetStat = CombatStat.HitPoints;
+                break;
+        }
         var statusEffect = new StatusEffect(
             (StatusEffectType)effect.Type,
-            Random.Shared.NextSingle() * (effect.MaxAmount - effect.MinAmount) + effect.MinAmount,
-            Random.Shared.Next(effect.MinDuration, effect.MaxDuration + 1)
+            targetStat,
+            Random.Shared.Next(effect.MinAmount, effect.MaxAmount),
+            Random.Shared.Next(effect.MinDuration, effect.MaxDuration)
         );
         StatusEffects.Add(statusEffect);
     }
@@ -132,8 +166,11 @@ public abstract class Creature
                     break;
                 case StatusEffectType.Static:
                     break;
+                case StatusEffectType.StatIncrease:
+                    RaiseCombatStat(effect.TargetStat, effect.Amount);
+                    break;
                 case StatusEffectType.StatReduction:
-                    // Generic stat reduction, e.g., reduce Strength
+                    LowerCombatStat(effect.TargetStat, effect.Amount);
                     break;
                 case StatusEffectType.Stun:
                     break;
