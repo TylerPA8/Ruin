@@ -15,11 +15,13 @@ public class TurnManager(EncounterState state)
         CurrentPhase = 1;
         _movedThisTurn.Clear();
         SetPhaseQueue(BuildPhaseQueue(1));
-        foreach (var c in _phaseQueue) state.ResetMovement(c);
+        RefreshPhaseQueue();
     }
 
     public bool CanMove(Creature creature) =>
-        _phaseSet.Contains(creature) && !_movedThisTurn.Contains(creature);
+        _phaseSet.Contains(creature)
+        && !_movedThisTurn.Contains(creature)
+        && state.IsPlaced(creature);
 
     public void EndCreatureTurn(Creature creature)
     {
@@ -34,7 +36,17 @@ public class TurnManager(EncounterState state)
         CurrentPhase = CurrentPhase == 4 ? 1 : CurrentPhase + 1;
         _movedThisTurn.Clear();
         SetPhaseQueue(BuildPhaseQueue(CurrentPhase));
-        foreach (var c in _phaseQueue) state.ResetMovement(c);
+        RefreshPhaseQueue();
+    }
+
+    private void RefreshPhaseQueue()
+    {
+        foreach (var c in _phaseQueue)
+        {
+            state.ResetMovement(c);
+            state.ResetActionPoints(c);
+            c.TickStatusEffects();
+        }
     }
 
     public EncounterResult CheckEndCondition()

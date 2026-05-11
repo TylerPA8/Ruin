@@ -143,4 +143,73 @@ public class EncounterStateTests
         var merc = new Mercenary();
         Assert.False(state.MoveCreature(merc, 1, 0));
     }
+
+    [Fact]
+    public void GetRemainingActionPoints_EqualsActionPoints_AfterPlacement()
+    {
+        var state = new EncounterState(new EncounterMap(10, 10));
+        var merc = new Mercenary(agility: 5); // ActionPoints = 5/2 + 1 = 3
+        state.PlaceCreature(merc, 0, 0);
+        Assert.Equal(3, state.GetRemainingActionPoints(merc));
+    }
+
+    [Fact]
+    public void SpendActionPoints_DeductsFromRemaining()
+    {
+        var state = new EncounterState(new EncounterMap(10, 10));
+        var merc = new Mercenary(agility: 5); // 3 AP
+        state.PlaceCreature(merc, 0, 0);
+        state.SpendActionPoints(merc, 2);
+        Assert.Equal(1, state.GetRemainingActionPoints(merc));
+    }
+
+    [Fact]
+    public void ResetActionPoints_RestoresToMax()
+    {
+        var state = new EncounterState(new EncounterMap(10, 10));
+        var merc = new Mercenary(agility: 5); // 3 AP
+        state.PlaceCreature(merc, 0, 0);
+        state.SpendActionPoints(merc, 3);
+        Assert.Equal(0, state.GetRemainingActionPoints(merc));
+        state.ResetActionPoints(merc);
+        Assert.Equal(3, state.GetRemainingActionPoints(merc));
+    }
+
+    [Fact]
+    public void RemoveCreature_ClearsAllStateForThatCreature()
+    {
+        var state = new EncounterState(new EncounterMap(10, 10));
+        var merc = new Mercenary();
+        state.Mercenaries.Add(merc);
+        state.PlaceCreature(merc, 4, 4);
+
+        state.RemoveCreature(merc);
+
+        Assert.Null(state.GetCreatureAt(4, 4));
+        Assert.False(state.IsOccupied(4, 4));
+        Assert.DoesNotContain(merc, state.Mercenaries);
+    }
+
+    [Fact]
+    public void RemoveCreature_RemovesFromEnemyList()
+    {
+        var state = new EncounterState(new EncounterMap(10, 10));
+        var enemy = new PricklebackGoblin();
+        state.Enemies.Add(enemy);
+        state.PlaceCreature(enemy, 2, 2);
+
+        state.RemoveCreature(enemy);
+
+        Assert.DoesNotContain(enemy, state.Enemies);
+        Assert.Null(state.GetCreatureAt(2, 2));
+    }
+
+    [Fact]
+    public void RemoveCreature_IsSafeForUnplacedCreature()
+    {
+        var state = new EncounterState(new EncounterMap(10, 10));
+        var merc = new Mercenary();
+        // Should not throw
+        state.RemoveCreature(merc);
+    }
 }

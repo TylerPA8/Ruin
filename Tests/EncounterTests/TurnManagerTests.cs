@@ -1,3 +1,4 @@
+using RuinGamePDT.Combat;
 using RuinGamePDT.Creatures;
 using RuinGamePDT.Encounter;
 using RuinGamePDT.World;
@@ -126,5 +127,61 @@ public class TurnManagerTests
         var tm = new TurnManager(state);
         tm.StartEncounter();
         Assert.Equal(EncounterResult.Ongoing, tm.CheckEndCondition());
+    }
+
+    [Fact]
+    public void StartEncounter_ResetsActionPoints_ForPhase1Creatures()
+    {
+        var state = MakeState(mercCount: 2, enemyCount: 1);
+        var merc = state.Mercenaries.First();
+        state.SpendActionPoints(merc, merc.CombatStats.ActionPoints);
+        Assert.Equal(0, state.GetRemainingActionPoints(merc));
+
+        new TurnManager(state).StartEncounter();
+
+        Assert.Equal(merc.CombatStats.ActionPoints, state.GetRemainingActionPoints(merc));
+    }
+
+    [Fact]
+    public void AdvancePhase_ResetsActionPoints_ForNewPhaseCreatures()
+    {
+        var state = MakeState(mercCount: 1, enemyCount: 1);
+        var enemy = state.Enemies.First();
+        state.SpendActionPoints(enemy, enemy.CombatStats.ActionPoints);
+        var tm = new TurnManager(state);
+        tm.StartEncounter();
+
+        tm.EndCreatureTurn(state.Mercenaries.First()); // advance to phase 2
+
+        Assert.Equal(2, tm.CurrentPhase);
+        Assert.Equal(enemy.CombatStats.ActionPoints, state.GetRemainingActionPoints(enemy));
+    }
+
+    [Fact]
+    public void StartEncounter_TicksStatusEffects_ForPhase1Creatures()
+    {
+        var state = MakeState(mercCount: 1, enemyCount: 1);
+        var merc = state.Mercenaries.First();
+        merc.StatusEffects.Add(new StatusEffect(StatusEffectType.Bleed, CombatStat.HitPoints, amount: 3, duration: 2));
+        float hpBefore = merc.CurrentHp;
+
+        new TurnManager(state).StartEncounter();
+
+        Assert.Equal(hpBefore - 3, merc.CurrentHp);
+        Assert.Equal(1, merc.StatusEffects[0].Duration); // 2 → 1 after tick
+    }
+
+    [Fact]
+    public void CanMove_ReturnsFalse_ForRemovedCreature()
+    {
+        var state = MakeState(mercCount: 2, enemyCount: 1);
+        var merc = state.Mercenaries.First();
+        var tm = new TurnManager(state);
+        tm.StartEncounter();
+        Assert.True(tm.CanMove(merc));
+
+        state.RemoveCreature(merc);
+
+        Assert.False(tm.CanMove(merc));
     }
 }

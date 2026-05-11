@@ -36,7 +36,7 @@ public class CreatureTests
 
         Assert.Equal(MathF.Round(a * 2.50f), MathF.Round(c.CombatStats.CritChance));
         Assert.Equal(MathF.Round(a * 0.50f), MathF.Round(c.CombatStats.Evasion));
-        Assert.Equal(MathF.Round(a * 0.25f), MathF.Round(c.CombatStats.ActionPoints));
+        Assert.Equal(a / 2 + 1, c.CombatStats.ActionPoints);
 
         Assert.Equal(MathF.Round(f * 1.00f), MathF.Round(c.CombatStats.Accuracy));
         Assert.Equal(MathF.Round(f * 2.50f), MathF.Round(c.CombatStats.AbilityCooldown));

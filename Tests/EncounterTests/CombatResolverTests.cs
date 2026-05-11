@@ -1,0 +1,308 @@
+using RuinGamePDT.Combat;
+using RuinGamePDT.Creatures;
+using RuinGamePDT.Encounter;
+using RuinGamePDT.World;
+
+namespace RuinGamePDT.Tests;
+
+public class CombatResolverTests
+{
+    // Queued RNG: the resolver calls Func<int,int,int> for each random roll.
+    // Tests supply the exact value to return on each call, regardless of the
+    // (min, max) args — the test contract is to know the call sequence.
+    private static Func<int, int, int> Rolls(params int[] values)
+    {
+        var queue = new Queue<int>(values);
+        return (_, _) => queue.Dequeue();
+    }
+
+    private static (EncounterState state, Creature attacker, Creature defender) MakeFight(
+        int attackerAgility = 0, int attackerStrength = 0,
+        int defenderAgility = 0, int defenderStrength = 0, int defenderStamina = 10)
+    {
+        var state = new EncounterState(new EncounterMap(20, 20));
+        var attacker = new TestCreature("A", attackerAgility, 1, 1, attackerStrength, 1);
+        var defender = new TestCreature("D", defenderAgility, 1, 1, defenderStrength, defenderStamina);
+        state.Mercenaries.Add(attacker);
+        state.Enemies.Add(defender);
+        state.PlaceCreature(attacker, 0, 0);
+        state.PlaceCreature(defender, 1, 0);
+        return (state, attacker, defender);
+    }
+
+    private static Attack BasicAttack(int minDmg = 5, int maxDmg = 5, int accuracy = 100, int ap = 1,
+        IEnumerable<(int, int)>? shape = null, AttackEffect? onHit = null, AttackEffect? onCrit = null,
+        bool autoCrit = false, int minHits = 1, int maxHits = 1)
+    {
+        return new Attack("Test", minDmg, maxDmg, ap, accuracy,
+            new AttackShape(shape ?? new[] { (0, 0) }), range: 5,
+            reaction: null, onHit: onHit, onCrit: onCrit,
+            minRange: 0, autoCrit: autoCrit, minHits: minHits, maxHits: maxHits);
+    }
+
+    [Fact]
+    public void Resolve_HitAtExactThreshold_DealsDamage()
+    {
+        // accuracy 80, evasion 0 → threshold = 20. Roll 20 hits.
+        var (state, attacker, defender) = MakeFight();
+        var attack = BasicAttack(minDmg: 5, maxDmg: 5, accuracy: 80);
+        float hpBefore = defender.CurrentHp;
+
+        // rolls: hitCount=1, hit=20, crit=0 (miss crit), dmg=5
+        new CombatResolver(Rolls(1, 20, 0, 5)).Resolve(attacker, attack, (1, 0), state);
+
+        Assert.True(defender.CurrentHp < hpBefore);
+    }
+
+    [Fact]
+    public void Resolve_RollBelowThreshold_Misses()
+    {
+        // accuracy 80, evasion 0 → threshold = 20. Roll 19 misses.
+        var (state, attacker, defender) = MakeFight();
+        var attack = BasicAttack(accuracy: 80);
+        float hpBefore = defender.CurrentHp;
+
+        // rolls: hitCount=1, hit=19 (miss). No further rolls consumed.
+        new CombatResolver(Rolls(1, 19)).Resolve(attacker, attack, (1, 0), state);
+
+        Assert.Equal(hpBefore, defender.CurrentHp);
+    }
+
+    [Fact]
+    public void Resolve_EvasionRaisesHitThreshold()
+    {
+        // accuracy 80, evasion 20 → threshold = 40. Roll 39 misses, 40 hits.
+        // Defender agility 40 → Evasion = 40 * 0.5 = 20.
+        var (state, attacker, defender) = MakeFight(defenderAgility: 40);
+        var attack = BasicAttack(accuracy: 80);
+        float hpBefore = defender.CurrentHp;
+
+        new CombatResolver(Rolls(1, 39)).Resolve(attacker, attack, (1, 0), state);
+        Assert.Equal(hpBefore, defender.CurrentHp);
+
+        // Reset to a fresh fight and verify 40 lands.
+        var (state2, attacker2, defender2) = MakeFight(defenderAgility: 40);
+        float hp2 = defender2.CurrentHp;
+        new CombatResolver(Rolls(1, 40, 0, 5)).Resolve(attacker2, attack, (1, 0), state2);
+        Assert.True(defender2.CurrentHp < hp2);
+    }
+
+    [Fact]
+    public void Resolve_AutoCrit_DoublesDamageWithoutCritRoll()
+    {
+        var (state, attacker, defender) = MakeFight();
+        var attack = BasicAttack(minDmg: 5, maxDmg: 5, autoCrit: true);
+        float hpBefore = defender.CurrentHp;
+
+        // rolls: hitCount=1, hit=100, dmg=5. No crit roll because AutoCrit.
+        new CombatResolver(Rolls(1, 100, 5)).Resolve(attacker, attack, (1, 0), state);
+
+        Assert.Equal(hpBefore - 10, defender.CurrentHp); // 5 base * 2 crit
+    }
+
+    [Fact]
+    public void Resolve_CritAtExactThreshold_DoublesDamage()
+    {
+        // attacker crit chance 25 (agility 10 → CritChance = 25).
+        // Crit if roll >= 100 - 25 = 75. Roll 75 = crit.
+        var (state, attacker, defender) = MakeFight(attackerAgility: 10);
+        var attack = BasicAttack(minDmg: 5, maxDmg: 5, accuracy: 100);
+        float hpBefore = defender.CurrentHp;
+
+        // rolls: hitCount=1, hit=100, crit=75, dmg=5
+        new CombatResolver(Rolls(1, 100, 75, 5)).Resolve(attacker, attack, (1, 0), state);
+
+        Assert.Equal(hpBefore - 10, defender.CurrentHp);
+    }
+
+    [Fact]
+    public void Resolve_CritJustBelowThreshold_NoCrit()
+    {
+        var (state, attacker, defender) = MakeFight(attackerAgility: 10);
+        var attack = BasicAttack(minDmg: 5, maxDmg: 5, accuracy: 100);
+        float hpBefore = defender.CurrentHp;
+
+        // rolls: hitCount=1, hit=100, crit=74 (one below threshold), dmg=5
+        new CombatResolver(Rolls(1, 100, 74, 5)).Resolve(attacker, attack, (1, 0), state);
+
+        Assert.Equal(hpBefore - 5, defender.CurrentHp);
+    }
+
+    [Fact]
+    public void Resolve_DamageIncludesAttackPower_AndSubtractsDefense()
+    {
+        // strength 4 → AttackPower = 10, PhysicalDefense = 4.
+        var (state, attacker, defender) = MakeFight(attackerStrength: 4, defenderStrength: 4);
+        var attack = BasicAttack(minDmg: 5, maxDmg: 5, accuracy: 100);
+        float hpBefore = defender.CurrentHp;
+
+        // hitCount=1, hit=100, crit=0 (no crit), dmg=5
+        // final = 5 + 10 - 4 = 11
+        new CombatResolver(Rolls(1, 100, 0, 5)).Resolve(attacker, attack, (1, 0), state);
+
+        Assert.Equal(hpBefore - 11, defender.CurrentHp);
+    }
+
+    [Fact]
+    public void Resolve_DamageClampedToZero_WhenDefenseExceedsAttack()
+    {
+        var (state, attacker, defender) = MakeFight(defenderStrength: 20); // PhysDef = 20
+        var attack = BasicAttack(minDmg: 1, maxDmg: 1, accuracy: 100);
+        float hpBefore = defender.CurrentHp;
+
+        new CombatResolver(Rolls(1, 100, 0, 1)).Resolve(attacker, attack, (1, 0), state);
+
+        Assert.Equal(hpBefore, defender.CurrentHp);
+    }
+
+    [Fact]
+    public void Resolve_AOE_HitsAllCreaturesInShape()
+    {
+        var state = new EncounterState(new EncounterMap(20, 20));
+        var attacker = new TestCreature("A", 0, 1, 1, 0, 1);
+        var d1 = new TestCreature("D1", 0, 1, 1, 0, 10);
+        var d2 = new TestCreature("D2", 0, 1, 1, 0, 10);
+        state.Mercenaries.Add(attacker);
+        state.Enemies.Add(d1);
+        state.Enemies.Add(d2);
+        state.PlaceCreature(attacker, 0, 0);
+        state.PlaceCreature(d1, 5, 5);
+        state.PlaceCreature(d2, 6, 5);
+
+        var attack = BasicAttack(minDmg: 5, maxDmg: 5, accuracy: 100, shape: new[] { (0, 0), (1, 0) });
+
+        // Targeting (5,5): hits d1 at (5,5) and d2 at (6,5).
+        // Rolls: hitCount=1, then per defender: hit, crit, dmg = 3 rolls each → 7 total.
+        new CombatResolver(Rolls(1, 100, 0, 5, 100, 0, 5)).Resolve(attacker, attack, (5, 5), state);
+
+        Assert.True(d1.CurrentHp < 20f);
+        Assert.True(d2.CurrentHp < 20f);
+    }
+
+    [Fact]
+    public void Resolve_AOE_SkipsEmptyTiles()
+    {
+        var state = new EncounterState(new EncounterMap(20, 20));
+        var attacker = new TestCreature("A", 0, 1, 1, 0, 1);
+        var d1 = new TestCreature("D1", 0, 1, 1, 0, 10);
+        state.Mercenaries.Add(attacker);
+        state.Enemies.Add(d1);
+        state.PlaceCreature(attacker, 0, 0);
+        state.PlaceCreature(d1, 5, 5);
+
+        // 3-tile shape, only middle has a defender.
+        var attack = BasicAttack(minDmg: 5, maxDmg: 5, accuracy: 100, shape: new[] { (-1, 0), (0, 0), (1, 0) });
+
+        // Only 1 defender → 3 rolls consumed (hit, crit, dmg) after hitCount.
+        new CombatResolver(Rolls(1, 100, 0, 5)).Resolve(attacker, attack, (5, 5), state);
+
+        Assert.True(d1.CurrentHp < 20f);
+    }
+
+    [Fact]
+    public void Resolve_MultiHit_AppliesEachHit()
+    {
+        var (state, attacker, defender) = MakeFight();
+        var attack = BasicAttack(minDmg: 2, maxDmg: 2, accuracy: 100, minHits: 3, maxHits: 3);
+        float hpBefore = defender.CurrentHp;
+
+        // hitCount=3, then 3 iterations of (hit=100, crit=0, dmg=2) = 9 rolls + 1 hitCount = 10
+        new CombatResolver(Rolls(3, 100, 0, 2, 100, 0, 2, 100, 0, 2)).Resolve(attacker, attack, (1, 0), state);
+
+        Assert.Equal(hpBefore - 6, defender.CurrentHp); // 3 hits * 2 dmg
+    }
+
+    [Fact]
+    public void Resolve_Death_RemovesDefenderFromState()
+    {
+        var (state, attacker, defender) = MakeFight(defenderStamina: 1); // 2 HP
+        var attack = BasicAttack(minDmg: 10, maxDmg: 10, accuracy: 100);
+
+        new CombatResolver(Rolls(1, 100, 0, 10)).Resolve(attacker, attack, (1, 0), state);
+
+        Assert.Null(state.GetCreatureAt(1, 0));
+        Assert.DoesNotContain(defender, state.Enemies);
+    }
+
+    [Fact]
+    public void Resolve_MultiHit_StopsOnDeath()
+    {
+        var (state, attacker, defender) = MakeFight(defenderStamina: 1); // 2 HP
+        var attack = BasicAttack(minDmg: 10, maxDmg: 10, accuracy: 100, minHits: 3, maxHits: 3);
+
+        // hitCount=3, but first hit kills. Only 4 rolls consumed (hitCount + hit + crit + dmg).
+        new CombatResolver(Rolls(3, 100, 0, 10)).Resolve(attacker, attack, (1, 0), state);
+
+        Assert.DoesNotContain(defender, state.Enemies);
+    }
+
+    [Fact]
+    public void Resolve_OnHit_FiresOnHit()
+    {
+        var (state, attacker, defender) = MakeFight();
+        var onHit = new AttackEffect(AttackEffectType.Bleed, CombatStat.HitPoints, 2, 2, 1, 1);
+        var attack = BasicAttack(minDmg: 1, maxDmg: 1, accuracy: 100, onHit: onHit);
+
+        new CombatResolver(Rolls(1, 100, 0, 1)).Resolve(attacker, attack, (1, 0), state);
+
+        Assert.Single(defender.StatusEffects);
+        Assert.Equal(StatusEffectType.Bleed, defender.StatusEffects[0].Type);
+    }
+
+    [Fact]
+    public void Resolve_OnCrit_FiresOnlyOnCrit()
+    {
+        var (state, attacker, defender) = MakeFight(attackerAgility: 10);
+        var onCrit = new AttackEffect(AttackEffectType.Bleed, CombatStat.HitPoints, 2, 2, 1, 1);
+        var attack = BasicAttack(minDmg: 1, maxDmg: 1, accuracy: 100, onCrit: onCrit);
+
+        // First: no crit (crit roll 74 < 75 threshold)
+        new CombatResolver(Rolls(1, 100, 74, 1)).Resolve(attacker, attack, (1, 0), state);
+        Assert.Empty(defender.StatusEffects);
+
+        // Second: crit (75 >= 75)
+        new CombatResolver(Rolls(1, 100, 75, 1)).Resolve(attacker, attack, (1, 0), state);
+        Assert.Single(defender.StatusEffects);
+    }
+
+    [Fact]
+    public void Resolve_DeductsActionPoints()
+    {
+        var (state, attacker, defender) = MakeFight(attackerAgility: 10);
+        int apBefore = state.GetRemainingActionPoints(attacker);
+        var attack = BasicAttack(ap: 2, accuracy: 100);
+
+        new CombatResolver(Rolls(1, 100, 0, 5)).Resolve(attacker, attack, (1, 0), state);
+
+        Assert.Equal(apBefore - 2, state.GetRemainingActionPoints(attacker));
+    }
+
+    [Fact]
+    public void IsInRange_ChebyshevDistance_Inclusive()
+    {
+        var (state, attacker, _) = MakeFight();
+        var attack = BasicAttack();
+        // attacker at (0,0), basic range = 5, minRange = 0.
+        var resolver = new CombatResolver(Rolls());
+
+        Assert.True(resolver.IsInRange(attacker, attack, (5, 0), state));
+        Assert.True(resolver.IsInRange(attacker, attack, (5, 5), state));   // Chebyshev: max(5,5)=5
+        Assert.False(resolver.IsInRange(attacker, attack, (6, 0), state));
+        Assert.False(resolver.IsInRange(attacker, attack, (6, 6), state));
+    }
+
+    [Fact]
+    public void IsInRange_RespectsMinRange()
+    {
+        var (state, attacker, _) = MakeFight();
+        var attack = new Attack("MinRangeAtk", 1, 1, 1, 100,
+            new AttackShape(new[] { (0, 0) }), range: 10,
+            minRange: 3);
+        var resolver = new CombatResolver(Rolls());
+
+        Assert.False(resolver.IsInRange(attacker, attack, (2, 0), state));  // too close
+        Assert.True(resolver.IsInRange(attacker, attack, (3, 0), state));   // exactly min
+        Assert.True(resolver.IsInRange(attacker, attack, (10, 0), state));  // exactly max
+        Assert.False(resolver.IsInRange(attacker, attack, (11, 0), state)); // too far
+    }
+}

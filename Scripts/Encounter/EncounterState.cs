@@ -13,6 +13,7 @@ public class EncounterState(EncounterMap map)
     private readonly Dictionary<(int X, int Y), Creature> _occupancy = new();
     private readonly Dictionary<Creature, (int X, int Y)> _positions = new();
     private readonly Dictionary<Creature, float> _remainingMovement = new();
+    private readonly Dictionary<Creature, int> _remainingActionPoints = new();
 
     public bool PlaceCreature(Creature creature, int x, int y)
     {
@@ -22,6 +23,7 @@ public class EncounterState(EncounterMap map)
         _occupancy[(x, y)] = creature;
         _positions[creature] = (x, y);
         _remainingMovement[creature] = creature.CombatStats.MovementPoints;
+        _remainingActionPoints[creature] = creature.CombatStats.ActionPoints;
         return true;
     }
 
@@ -29,6 +31,8 @@ public class EncounterState(EncounterMap map)
         _occupancy.TryGetValue((x, y), out var c) ? c : null;
 
     public bool IsOccupied(int x, int y) => _occupancy.ContainsKey((x, y));
+
+    public bool IsPlaced(Creature creature) => _positions.ContainsKey(creature);
 
     // Precondition: creature must have been placed via PlaceCreature
     public (int X, int Y) GetPosition(Creature creature) => _positions[creature];
@@ -54,5 +58,31 @@ public class EncounterState(EncounterMap map)
         _positions[creature] = (toX, toY);
         _remainingMovement[creature] -= reachable[(toX, toY)];
         return true;
+    }
+
+    // Precondition: creature must have been placed via PlaceCreature
+    public int GetRemainingActionPoints(Creature creature) => _remainingActionPoints[creature];
+
+    public void SpendActionPoints(Creature creature, int amount)
+    {
+        if (!_remainingActionPoints.ContainsKey(creature)) return;
+        _remainingActionPoints[creature] = Math.Max(0, _remainingActionPoints[creature] - amount);
+    }
+
+    public void ResetActionPoints(Creature creature)
+    {
+        if (!_positions.ContainsKey(creature)) return;
+        _remainingActionPoints[creature] = creature.CombatStats.ActionPoints;
+    }
+
+    public void RemoveCreature(Creature creature)
+    {
+        if (_positions.TryGetValue(creature, out var pos))
+            _occupancy.Remove(pos);
+        _positions.Remove(creature);
+        _remainingMovement.Remove(creature);
+        _remainingActionPoints.Remove(creature);
+        Mercenaries.Remove(creature);
+        Enemies.Remove(creature);
     }
 }

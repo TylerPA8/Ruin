@@ -25,10 +25,10 @@ public class BaseStats(int agility, int focus, int mind, int strength, int stami
 
 public class CombatStats(BaseStats b)
 {
-    // 1 Agility = 2.5 CritChance, 0.5 Evasion, .25 ActionPoints
+    // 1 Agility = 2.5 CritChance, 0.5 Evasion; ActionPoints = Agility/2 + 1
     public float CritChance { get; set; }     = b.Agility * 2.5f;
     public float Evasion { get; set; }        = b.Agility * 0.5f;
-    public float ActionPoints { get; set; }   = b.Agility * .25f;
+    public int ActionPoints { get; set; }     = b.Agility / 2 + 1;
 
 //TODO: Change evasion to int based off 100 and update accuracy as well. 
 //Needs to be added to weapon attacks.
@@ -165,7 +165,7 @@ public void RaiseCombatStat(CombatStat stat, float amount)
                 CombatStats.Evasion = MathF.Max(0, CombatStats.Evasion + amount);
                 break;
             case CombatStat.ActionPoints:
-                CombatStats.ActionPoints = MathF.Max(0, CombatStats.ActionPoints + amount);
+                CombatStats.ActionPoints = Math.Max(0, CombatStats.ActionPoints + (int)MathF.Round(amount));
                 break;
             case CombatStat.Accuracy:
                 CombatStats.Accuracy = MathF.Max(0, CombatStats.Accuracy + amount);
@@ -214,7 +214,7 @@ public void RaiseCombatStat(CombatStat stat, float amount)
                 CombatStats.Evasion = MathF.Max(0, CombatStats.Evasion - amount);
                 break;
             case CombatStat.ActionPoints:
-                CombatStats.ActionPoints = MathF.Max(0, CombatStats.ActionPoints - amount);
+                CombatStats.ActionPoints = Math.Max(0, CombatStats.ActionPoints - (int)MathF.Round(amount));
                 break;
             case CombatStat.Accuracy:
                 CombatStats.Accuracy = MathF.Max(0, CombatStats.Accuracy - amount);
