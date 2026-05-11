@@ -22,29 +22,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\Scripts\Creatures\Creature.cs" />
-    <Compile Include="..\Scripts\Creatures\Bandit.cs" />
-    <Compile Include="..\Scripts\Creatures\Mercenary.cs" />
-    <Compile Include="..\Scripts\Creatures\Beast.cs" />
-    <Compile Include="..\Scripts\Creatures\Monstrosity.cs" />
-    <Compile Include="..\Scripts\Creatures\PricklebackGoblin.cs" />
-    <Compile Include="..\Scripts\Combat\AttackEffectType.cs" />
-    <Compile Include="..\Scripts\Combat\AttackEffect.cs" />
-    <Compile Include="..\Scripts\Combat\StatusEffect.cs" />
-    <Compile Include="..\Scripts\Combat\Attack.cs" />
-    <Compile Include="..\Scripts\Core\Constants.cs" />
-    <Compile Include="..\Scripts\Resources\BiomeType.cs" />
-    <Compile Include="..\Scripts\World\WorldTile.cs" />
-    <Compile Include="..\Scripts\World\WorldData.cs" />
-    <Compile Include="..\Scripts\Generation\NoiseMapGenerator.cs" />
-    <Compile Include="..\Scripts\Generation\ElevationMapGenerator.cs" />
-    <Compile Include="..\Scripts\Generation\HeatMapGenerator.cs" />
-    <Compile Include="..\Scripts\Generation\MoistureMapGenerator.cs" />
-    <Compile Include="..\Scripts\Generation\BiomeMapper.cs" />
-    <Compile Include="..\Scripts\Generation\WorldGenerator.cs" />
-    <Compile Include="..\Scripts\Resources\EncounterTileType.cs" />
-    <Compile Include="..\Scripts\World\EncounterMap.cs" />
-    <Compile Include="..\Scripts\Generation\EncounterMapGenerator.cs" />
+    <Compile Include="..\Scripts\**\*.cs" />
+    <Compile Remove="..\Scripts\Rendering\**\*.cs" />
   </ItemGroup>
 
 </Project>

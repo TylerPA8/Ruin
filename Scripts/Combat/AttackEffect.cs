@@ -1,9 +1,12 @@
+using RuinGamePDT.Creatures;
+
 namespace RuinGamePDT.Combat;
 
 public record AttackEffect(
     AttackEffectType Type,
-    float MinAmount,
-    float MaxAmount,
+    CombatStat TargetStat,
+    int MinAmount,
+    int MaxAmount,
     int MinDuration,
     int MaxDuration
 );

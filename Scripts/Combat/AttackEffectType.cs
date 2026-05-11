@@ -8,5 +8,6 @@ public enum AttackEffectType
     Poison,
     Static,
     StatReduction,
+    StatIncrease,
     Stun
 }
