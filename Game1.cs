@@ -17,6 +17,7 @@ public class Game1 : Game
     private EncounterState _encounterState = null!;
     private TurnManager _turnManager = null!;
     private EncounterScene _scene = null!;
+    private EnemyAI _ai = null!;
 
     public Game1()
     {
@@ -62,18 +63,22 @@ public class Game1 : Game
         _turnManager = new TurnManager(_encounterState);
         _turnManager.StartEncounter();
 
-        _scene = new EncounterScene(_encounterState, _turnManager, _pixel);
+        var resolver = new CombatResolver(Random.Shared.Next);
+        _scene = new EncounterScene(_encounterState, _turnManager, _pixel, resolver);
+        _ai = new EnemyAI(resolver);
     }
 
     protected override void Update(GameTime gameTime)
     {
         _scene.Update(Mouse.GetState());
 
-        // Auto-skip enemy phases (placeholder — no AI yet)
         if (_turnManager.CurrentPhase == 2 || _turnManager.CurrentPhase == 4)
         {
-            var toSkip = _encounterState.Enemies.Where(_turnManager.CanMove).ToList();
-            foreach (var e in toSkip) _turnManager.EndCreatureTurn(e);
+            foreach (var e in _encounterState.Enemies.Where(_turnManager.CanMove).ToList())
+            {
+                _ai.TakeTurn(e, _encounterState);
+                _turnManager.EndCreatureTurn(e);
+            }
         }
 
         base.Update(gameTime);

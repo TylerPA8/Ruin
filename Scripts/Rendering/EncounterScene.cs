@@ -8,7 +8,7 @@ using RuinGamePDT.Resources;
 
 namespace RuinGamePDT.Rendering;
 
-public class EncounterScene(EncounterState state, TurnManager turns, Texture2D pixel)
+public class EncounterScene(EncounterState state, TurnManager turns, Texture2D pixel, CombatResolver resolver)
 {
     private const int TileSize = 25;
 
@@ -24,7 +24,7 @@ public class EncounterScene(EncounterState state, TurnManager turns, Texture2D p
     private MouseState _prevMouse;
     private KeyboardState _prevKeyboard;
 
-    private readonly CombatResolver _resolver = new(Random.Shared.Next);
+    private readonly CombatResolver _resolver = resolver;
 
     public void Update(MouseState mouse)
     {
