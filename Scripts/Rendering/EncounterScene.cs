@@ -82,14 +82,13 @@ public class EncounterScene(EncounterState state, TurnManager turns, Texture2D p
         // Skill keys 8/9/0: activate skills while in Movement or Attack mode.
         if (_selected is Mercenary skillUser && (_mode == Mode.Movement || _mode == Mode.Attack))
         {
-            // Key 8 → Rush (Skills[0]): self-cast, grants MP immediately this turn
+            // Key 8 → Rush (Skills[0]): spend AP, grant MP this turn only (no stat mutation)
             if (JustPressed(kb, Keys.D8) && skillUser.Skills.Count > 0)
             {
                 var skill = skillUser.Skills[0];
                 if (state.GetRemainingActionPoints(skillUser) >= skill.ActionPointCost)
                 {
-                    var pos = state.GetPosition(skillUser);
-                    _resolver.Resolve(skillUser, skill, pos, state);
+                    state.SpendActionPoints(skillUser, skill.ActionPointCost);
                     if (skill.OnHit?.Stats is { Count: > 0 } stats)
                     {
                         var s = stats[0];
