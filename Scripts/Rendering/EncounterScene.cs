@@ -82,8 +82,8 @@ public class EncounterScene(EncounterState state, TurnManager turns, Texture2D p
         // Skill keys 8/9/0: activate skills while in Movement or Attack mode.
         if (_selected is Mercenary skillUser && (_mode == Mode.Movement || _mode == Mode.Attack))
         {
-            // Key 9 → Rush (Skills[0]): self-cast
-            if (JustPressed(kb, Keys.D9) && skillUser.Skills.Count > 0)
+            // Key 8 → Rush (Skills[0]): self-cast
+            if (JustPressed(kb, Keys.D8) && skillUser.Skills.Count > 0)
             {
                 var skill = skillUser.Skills[0];
                 if (state.GetRemainingActionPoints(skillUser) >= skill.ActionPointCost)
@@ -104,8 +104,8 @@ public class EncounterScene(EncounterState state, TurnManager turns, Texture2D p
                     EnterMovementMode();
                 }
             }
-            // Key 8 → First Aid (Skills[2]): enter targeting mode
-            else if (JustPressed(kb, Keys.D8) && skillUser.Skills.Count > 2)
+            // Key 9 → First Aid (Skills[2]): enter targeting mode
+            else if (JustPressed(kb, Keys.D9) && skillUser.Skills.Count > 2)
             {
                 var skill = skillUser.Skills[2];
                 if (state.GetRemainingActionPoints(skillUser) >= skill.ActionPointCost)
@@ -349,7 +349,7 @@ public class EncounterScene(EncounterState state, TurnManager turns, Texture2D p
                     sb.Draw(icon, rect, Color.White);
             }
 
-            // Skills in fixed slots 7 (Rush/key 9), 8 (Defensive Stance/key 0), 9 (First Aid/key 8)
+            // Skills in fixed slots 7 (Rush/key 8), 8 (Defensive Stance/key 0), 9 (First Aid/key 9)
             int[] skillSlots = { 7, 8, 9 };
             for (int i = 0; i < Math.Min(skillSlots.Length, merc.Skills.Count); i++)
             {
