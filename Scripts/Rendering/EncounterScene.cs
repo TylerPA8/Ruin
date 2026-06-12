@@ -163,7 +163,21 @@ public class EncounterScene(EncounterState state, TurnManager turns, Texture2D p
             {
                 if (_validTargets.Contains((gridX, gridY)))
                 {
-                    _resolver.Resolve(_selected!, _activeAttack!, (gridX, gridY), state);
+                    if (_activeAttack!.MaxDamage < 0)
+                    {
+                        // Heal skill: bypass resolver, apply HP directly
+                        var target = state.GetCreatureAt(gridX, gridY);
+                        if (target != null)
+                        {
+                            state.SpendActionPoints(_selected!, _activeAttack.ActionPointCost);
+                            int heal = Random.Shared.Next(-_activeAttack.MaxDamage, -_activeAttack.MinDamage + 1);
+                            target.CurrentHp += heal;
+                        }
+                    }
+                    else
+                    {
+                        _resolver.Resolve(_selected!, _activeAttack!, (gridX, gridY), state);
+                    }
                     EnterMovementMode();
                 }
                 else
