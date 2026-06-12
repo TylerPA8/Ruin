@@ -46,6 +46,12 @@ public class EncounterState(EncounterMap map)
         _remainingMovement[creature] = creature.CombatStats.MovementPoints;
     }
 
+    public void AddMovement(Creature creature, float amount)
+    {
+        if (!_remainingMovement.ContainsKey(creature)) return;
+        _remainingMovement[creature] += amount;
+    }
+
     public bool MoveCreature(Creature creature, int toX, int toY)
     {
         if (!_positions.ContainsKey(creature)) return false;
