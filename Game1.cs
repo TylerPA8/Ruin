@@ -42,7 +42,10 @@ public class Game1 : Game
         {
             { "Punch", LoadTexture("Content/Icons/Punch.png") },
             { "Throw Stone", LoadTexture("Content/Icons/StoneThrow.png") },
-            { "Shout", LoadTexture("Content/Icons/Shout.png") }
+            { "Shout", LoadTexture("Content/Icons/Shout.png") },
+            { "Rush", LoadTexture("Content/Icons/Rush.png") },
+            { "Defensive Stance", LoadTexture("Content/Icons/DStance.png") },
+            { "First Aid", LoadTexture("Content/Icons/FirstAid.png") }
         };
 
         var map = new EncounterMapGenerator().Generate(BiomeType.Plains, seed: 42);

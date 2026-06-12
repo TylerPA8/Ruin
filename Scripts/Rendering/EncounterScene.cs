@@ -78,6 +78,42 @@ public class EncounterScene(EncounterState state, TurnManager turns, Texture2D p
                 break;
             }
         }
+
+        // Skill keys 8/9/0: activate skills while in Movement or Attack mode.
+        if (_selected is Mercenary skillUser && (_mode == Mode.Movement || _mode == Mode.Attack))
+        {
+            // Key 9 → Rush (Skills[0]): self-cast
+            if (JustPressed(kb, Keys.D9) && skillUser.Skills.Count > 0)
+            {
+                var skill = skillUser.Skills[0];
+                if (state.GetRemainingActionPoints(skillUser) >= skill.ActionPointCost)
+                {
+                    var pos = state.GetPosition(skillUser);
+                    _resolver.Resolve(skillUser, skill, pos, state);
+                    EnterMovementMode();
+                }
+            }
+            // Key 0 → Defensive Stance (Skills[1]): self-cast
+            else if (JustPressed(kb, Keys.D0) && skillUser.Skills.Count > 1)
+            {
+                var skill = skillUser.Skills[1];
+                if (state.GetRemainingActionPoints(skillUser) >= skill.ActionPointCost)
+                {
+                    var pos = state.GetPosition(skillUser);
+                    _resolver.Resolve(skillUser, skill, pos, state);
+                    EnterMovementMode();
+                }
+            }
+            // Key 8 → First Aid (Skills[2]): enter targeting mode
+            else if (JustPressed(kb, Keys.D8) && skillUser.Skills.Count > 2)
+            {
+                var skill = skillUser.Skills[2];
+                if (state.GetRemainingActionPoints(skillUser) >= skill.ActionPointCost)
+                {
+                    EnterAttackMode(skill);
+                }
+            }
+        }
     }
 
     private void HandleMouseClick(MouseState mouse)
@@ -304,15 +340,24 @@ public class EncounterScene(EncounterState state, TurnManager turns, Texture2D p
 
         if (_selected is Mercenary merc)
         {
-            for (int i = 0; i < Math.Min(3, merc.Attacks.Count); i++)
+            // Attacks in slots 0..N-1
+            for (int i = 0; i < Math.Min(7, merc.Attacks.Count); i++)
             {
                 int x = barX + i * (boxSize + boxGap);
                 var rect = new Rectangle(x + borderSize, barY + borderSize, boxSize - borderSize * 2, boxSize - borderSize * 2);
-                var attack = merc.Attacks[i];
-                if (_skillIcons.TryGetValue(attack.Name, out var icon))
-                {
+                if (_skillIcons.TryGetValue(merc.Attacks[i].Name, out var icon))
                     sb.Draw(icon, rect, Color.White);
-                }
+            }
+
+            // Skills in fixed slots 7 (Rush/key 9), 8 (Defensive Stance/key 0), 9 (First Aid/key 8)
+            int[] skillSlots = { 7, 8, 9 };
+            for (int i = 0; i < Math.Min(skillSlots.Length, merc.Skills.Count); i++)
+            {
+                int slot = skillSlots[i];
+                int x = barX + slot * (boxSize + boxGap);
+                var rect = new Rectangle(x + borderSize, barY + borderSize, boxSize - borderSize * 2, boxSize - borderSize * 2);
+                if (_skillIcons.TryGetValue(merc.Skills[i].Name, out var icon))
+                    sb.Draw(icon, rect, Color.White);
             }
         }
     }
