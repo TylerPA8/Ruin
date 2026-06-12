@@ -45,8 +45,8 @@ public class PricklebackGoblinTests
         Assert.NotNull(a.OnHit);
         Assert.Null(a.OnCrit);
         Assert.Equal(AttackEffectType.Bleed, a.OnHit!.Type);
-        Assert.Equal(5, a.OnHit.MinAmount);
-        Assert.Equal(5, a.OnHit.MaxAmount);
+        Assert.Equal(5, a.OnHit.Stats[0].MinAmount);
+        Assert.Equal(5, a.OnHit.Stats[0].MaxAmount);
         Assert.Equal(1, a.OnHit.MinDuration);
         Assert.Equal(3, a.OnHit.MaxDuration);
     }
@@ -61,8 +61,8 @@ public class PricklebackGoblinTests
         Assert.Null(a.OnCrit);
         Assert.NotNull(a.OnHit);
         Assert.Equal(AttackEffectType.Bleed, a.OnHit!.Type);
-        Assert.Equal(5, a.OnHit.MinAmount);
-        Assert.Equal(5, a.OnHit.MaxAmount);
+        Assert.Equal(5, a.OnHit.Stats[0].MinAmount);
+        Assert.Equal(5, a.OnHit.Stats[0].MaxAmount);
         Assert.Equal(1, a.OnHit.MinDuration);
         Assert.Equal(1, a.OnHit.MaxDuration);
     }

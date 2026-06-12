@@ -32,7 +32,7 @@ public class Sword : Weapon
             attackShape: new AttackShape(new[] { (0, 0), (0, 1) }),
             range: 2,
             reaction: null,
-            onHit: new AttackEffect(AttackEffectType.StatReduction, CombatStat.PhysicalDefense, 5, 5, 2, 2),
+            onHit: new AttackEffect(AttackEffectType.StatReduction, [new StatChange(CombatStat.PhysicalDefense, 5, 5)], MinDuration: 2, MaxDuration: 2),
             onCrit: null
         ));
 
@@ -46,7 +46,7 @@ public class Sword : Weapon
             attackShape: new AttackShape(new[] { (0, 0) }),
             range: 0,
             reaction: new Reaction(ReactionType.OnMissCounter, "Slash"),
-            onHit: new AttackEffect(AttackEffectType.StatIncrease, CombatStat.PhysicalDefense, 10, 10, 1, 1),
+            onHit: new AttackEffect(AttackEffectType.StatIncrease, [new StatChange(CombatStat.PhysicalDefense, 10, 10)], MinDuration: 1, MaxDuration: 1),
             onCrit: null
         ));
 
@@ -61,7 +61,7 @@ public class Sword : Weapon
             range: 1,
             reaction: null,
             onHit: null,
-            onCrit: new AttackEffect(AttackEffectType.StatReduction, CombatStat.PhysicalDefense, 5, 5, 2, 2)
+            onCrit: new AttackEffect(AttackEffectType.StatReduction, [new StatChange(CombatStat.PhysicalDefense, 5, 5)], MinDuration: 2, MaxDuration: 2)
         ));
     }
 }

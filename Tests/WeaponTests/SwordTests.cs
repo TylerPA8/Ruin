@@ -38,9 +38,9 @@ public class SwordTests
         Assert.Equal(2, a.AttackShape.Offsets.Count());
         Assert.NotNull(a.OnHit);
         Assert.Equal(AttackEffectType.StatReduction, a.OnHit!.Type);
-        Assert.Equal(CombatStat.PhysicalDefense, a.OnHit.TargetStat);
-        Assert.Equal(5, a.OnHit.MinAmount);
-        Assert.Equal(5, a.OnHit.MaxAmount);
+        Assert.Equal(CombatStat.PhysicalDefense, a.OnHit.Stats[0].Stat);
+        Assert.Equal(5, a.OnHit.Stats[0].MinAmount);
+        Assert.Equal(5, a.OnHit.Stats[0].MaxAmount);
         Assert.Equal(2, a.OnHit.MinDuration);
         Assert.Equal(2, a.OnHit.MaxDuration);
     }
@@ -58,9 +58,9 @@ public class SwordTests
         Assert.Equal("Slash", a.Reaction.LinkedAttackName);
         Assert.NotNull(a.OnHit);
         Assert.Equal(AttackEffectType.StatIncrease, a.OnHit!.Type);
-        Assert.Equal(CombatStat.PhysicalDefense, a.OnHit.TargetStat);
-        Assert.Equal(10, a.OnHit.MinAmount);
-        Assert.Equal(10, a.OnHit.MaxAmount);
+        Assert.Equal(CombatStat.PhysicalDefense, a.OnHit.Stats[0].Stat);
+        Assert.Equal(10, a.OnHit.Stats[0].MinAmount);
+        Assert.Equal(10, a.OnHit.Stats[0].MaxAmount);
         Assert.Equal(1, a.OnHit.MinDuration);
         Assert.Equal(1, a.OnHit.MaxDuration);
     }
@@ -78,9 +78,9 @@ public class SwordTests
         Assert.Null(a.OnHit);
         Assert.NotNull(a.OnCrit);
         Assert.Equal(AttackEffectType.StatReduction, a.OnCrit!.Type);
-        Assert.Equal(CombatStat.PhysicalDefense, a.OnCrit.TargetStat);
-        Assert.Equal(5, a.OnCrit.MinAmount);
-        Assert.Equal(5, a.OnCrit.MaxAmount);
+        Assert.Equal(CombatStat.PhysicalDefense, a.OnCrit.Stats[0].Stat);
+        Assert.Equal(5, a.OnCrit.Stats[0].MinAmount);
+        Assert.Equal(5, a.OnCrit.Stats[0].MaxAmount);
         Assert.Equal(2, a.OnCrit.MinDuration);
         Assert.Equal(2, a.OnCrit.MaxDuration);
     }

@@ -2,11 +2,11 @@ using RuinGamePDT.Creatures;
 
 namespace RuinGamePDT.Combat;
 
+public record StatChange(CombatStat Stat, int MinAmount, int MaxAmount);
+
 public record AttackEffect(
     AttackEffectType Type,
-    CombatStat TargetStat,
-    int MinAmount,
-    int MaxAmount,
+    IReadOnlyList<StatChange> Stats,
     int MinDuration,
     int MaxDuration
 );

@@ -23,29 +23,28 @@ public class Mercenary : Creature
             accuracy: 100,
             attackShape: new AttackShape(new[] { (0, 0) }),
             range: 0,
-            onHit: new AttackEffect(AttackEffectType.StatIncrease, CombatStat.MovementPoints, mpHalf, mpHalf, 1, 1)
+            onHit: new AttackEffect(AttackEffectType.StatIncrease,
+                new[] { new StatChange(CombatStat.MovementPoints, mpHalf, mpHalf) },
+                MinDuration: 1, MaxDuration: 1)
         ));
 
         Skills.Add(new Skill(
-            name: "Dodge",
+            name: "Defensive Stance",
             minDamage: 0,
             maxDamage: 0,
             actionPointCost: 1,
             accuracy: 100,
             attackShape: new AttackShape(new[] { (0, 0) }),
             range: 0,
-            onHit: new AttackEffect(AttackEffectType.StatIncrease, CombatStat.Evasion, 5, 15, 1, 1)
-        ));
-
-        Skills.Add(new Skill(
-            name: "Block",
-            minDamage: 0,
-            maxDamage: 0,
-            actionPointCost: 1,
-            accuracy: 100,
-            attackShape: new AttackShape(new[] { (0, 0) }),
-            range: 0,
-            onHit: new AttackEffect(AttackEffectType.StatIncrease, CombatStat.PhysicalDefense, 5, 15, 1, 1)
+            onHit: new AttackEffect(
+                AttackEffectType.StatIncrease,
+                new[]
+                {
+                    new StatChange(CombatStat.Evasion, 5, 15),
+                    new StatChange(CombatStat.PhysicalDefense, 5, 15)
+                },
+                MinDuration: 1,
+                MaxDuration: 1)
         ));
 
         if (BaseStats.Mind >= 3)
