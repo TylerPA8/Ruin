@@ -419,3 +419,6 @@ FodyWeavers.xsd
 
 # Claude Code
 .claude/
+
+# Markdown docs
+*.md
