@@ -37,7 +37,7 @@ public class Unarmed : Weapon
             attackShape: new AttackShape(BurstOffsets(radius: 4)),
             range: 4,
             reaction: null,
-            onHit: new AttackEffect(AttackEffectType.StatIncrease, CombatStat.PhysicalDefense, 2, 2, 3, 3),
+            onHit: new AttackEffect(AttackEffectType.StatIncrease, [new StatChange(CombatStat.PhysicalDefense, 2, 2)], MinDuration: 3, MaxDuration: 3),
             onCrit: null
         ));
     }

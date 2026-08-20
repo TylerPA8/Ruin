@@ -104,12 +104,13 @@ public class MercenaryTests
     }
 
     [Fact]
-    public void Mercenary_HasRushDodgeAndBlock_InSkills()
+    public void Mercenary_HasRushAndDefensiveStance_InSkills()
     {
         var m = new Mercenary();
         Assert.Contains(m.Skills, s => s.Name == "Rush");
-        Assert.Contains(m.Skills, s => s.Name == "Dodge");
-        Assert.Contains(m.Skills, s => s.Name == "Block");
+        Assert.Contains(m.Skills, s => s.Name == "Defensive Stance");
+        Assert.DoesNotContain(m.Skills, s => s.Name == "Dodge");
+        Assert.DoesNotContain(m.Skills, s => s.Name == "Block");
     }
 
     [Fact]
@@ -123,47 +124,37 @@ public class MercenaryTests
         Assert.Equal(0, rush.Range);
         Assert.NotNull(rush.OnHit);
         Assert.Equal(AttackEffectType.StatIncrease, rush.OnHit!.Type);
-        Assert.Equal(CombatStat.MovementPoints, rush.OnHit.TargetStat);
-        Assert.Equal(3, rush.OnHit.MinAmount);
-        Assert.Equal(3, rush.OnHit.MaxAmount);
+        Assert.Single(rush.OnHit.Stats);
+        Assert.Equal(CombatStat.MovementPoints, rush.OnHit.Stats[0].Stat);
+        Assert.Equal(3, rush.OnHit.Stats[0].MinAmount);
+        Assert.Equal(3, rush.OnHit.Stats[0].MaxAmount);
         Assert.Equal(1, rush.OnHit.MinDuration);
         Assert.Equal(1, rush.OnHit.MaxDuration);
     }
 
     [Fact]
-    public void Dodge_HasCorrectProperties()
+    public void DefensiveStance_HasCorrectProperties()
     {
         var m = new Mercenary();
-        var dodge = m.Skills.First(s => s.Name == "Dodge");
-        Assert.Equal(0, dodge.MinDamage);
-        Assert.Equal(0, dodge.MaxDamage);
-        Assert.Equal(1, dodge.ActionPointCost);
-        Assert.Equal(0, dodge.Range);
-        Assert.NotNull(dodge.OnHit);
-        Assert.Equal(AttackEffectType.StatIncrease, dodge.OnHit!.Type);
-        Assert.Equal(CombatStat.Evasion, dodge.OnHit.TargetStat);
-        Assert.Equal(5, dodge.OnHit.MinAmount);
-        Assert.Equal(15, dodge.OnHit.MaxAmount);
-        Assert.Equal(1, dodge.OnHit.MinDuration);
-        Assert.Equal(1, dodge.OnHit.MaxDuration);
-    }
+        var ds = m.Skills.First(s => s.Name == "Defensive Stance");
+        Assert.Equal(0, ds.MinDamage);
+        Assert.Equal(0, ds.MaxDamage);
+        Assert.Equal(1, ds.ActionPointCost);
+        Assert.Equal(0, ds.Range);
+        Assert.NotNull(ds.OnHit);
+        Assert.Equal(AttackEffectType.StatIncrease, ds.OnHit!.Type);
+        Assert.Equal(2, ds.OnHit.Stats.Count);
 
-    [Fact]
-    public void Block_HasCorrectProperties()
-    {
-        var m = new Mercenary();
-        var block = m.Skills.First(s => s.Name == "Block");
-        Assert.Equal(0, block.MinDamage);
-        Assert.Equal(0, block.MaxDamage);
-        Assert.Equal(1, block.ActionPointCost);
-        Assert.Equal(0, block.Range);
-        Assert.NotNull(block.OnHit);
-        Assert.Equal(AttackEffectType.StatIncrease, block.OnHit!.Type);
-        Assert.Equal(CombatStat.PhysicalDefense, block.OnHit.TargetStat);
-        Assert.Equal(5, block.OnHit.MinAmount);
-        Assert.Equal(15, block.OnHit.MaxAmount);
-        Assert.Equal(1, block.OnHit.MinDuration);
-        Assert.Equal(1, block.OnHit.MaxDuration);
+        var evasion = ds.OnHit.Stats.First(s => s.Stat == CombatStat.Evasion);
+        Assert.Equal(5,  evasion.MinAmount);
+        Assert.Equal(15, evasion.MaxAmount);
+
+        var physDef = ds.OnHit.Stats.First(s => s.Stat == CombatStat.PhysicalDefense);
+        Assert.Equal(5,  physDef.MinAmount);
+        Assert.Equal(15, physDef.MaxAmount);
+
+        Assert.Equal(1, ds.OnHit.MinDuration);
+        Assert.Equal(1, ds.OnHit.MaxDuration);
     }
 
     [Fact]

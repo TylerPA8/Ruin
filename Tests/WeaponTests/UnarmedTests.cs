@@ -85,9 +85,9 @@ public class UnarmedTests
         var a = _u.Attacks.First(a => a.Name == "Shout");
         Assert.NotNull(a.OnHit);
         Assert.Equal(AttackEffectType.StatIncrease, a.OnHit!.Type);
-        Assert.Equal(CombatStat.PhysicalDefense, a.OnHit.TargetStat);
-        Assert.Equal(2, a.OnHit.MinAmount);
-        Assert.Equal(2, a.OnHit.MaxAmount);
+        Assert.Equal(CombatStat.PhysicalDefense, a.OnHit.Stats[0].Stat);
+        Assert.Equal(2, a.OnHit.Stats[0].MinAmount);
+        Assert.Equal(2, a.OnHit.Stats[0].MaxAmount);
         Assert.Equal(3, a.OnHit.MinDuration);
         Assert.Equal(3, a.OnHit.MaxDuration);
     }

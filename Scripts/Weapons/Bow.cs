@@ -19,7 +19,7 @@ public class Bow : Weapon
             range: 15,
             reaction: null,
             onHit: null,
-            onCrit: new AttackEffect(AttackEffectType.Bleed, CombatStat.HitPoints, 3, 3, 2, 2),
+            onCrit: new AttackEffect(AttackEffectType.Bleed, [new StatChange(CombatStat.HitPoints, 3, 3)], MinDuration: 2, MaxDuration: 2),
             minRange: 3
         ));
 
@@ -50,7 +50,7 @@ public class Bow : Weapon
             range: 20,
             reaction: null,
             onHit: null,
-            onCrit: new AttackEffect(AttackEffectType.StatReduction, CombatStat.MovementPoints, 2, 2, 1, 1),
+            onCrit: new AttackEffect(AttackEffectType.StatReduction, [new StatChange(CombatStat.MovementPoints, 2, 2)], MinDuration: 1, MaxDuration: 1),
             minRange: 3
         ));
 
@@ -64,7 +64,7 @@ public class Bow : Weapon
             attackShape: new AttackShape(new[] { (0, 0) }),
             range: 15,
             reaction: null,
-            onHit: new AttackEffect(AttackEffectType.Bleed, CombatStat.HitPoints, 2, 2, 2, 2),
+            onHit: new AttackEffect(AttackEffectType.Bleed, [new StatChange(CombatStat.HitPoints, 2, 2)], MinDuration: 2, MaxDuration: 2),
             onCrit: null,
             minRange: 3,
             minHits: 3,

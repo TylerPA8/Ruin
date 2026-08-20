@@ -238,7 +238,9 @@ public class CombatResolverTests
     public void OnHitShould_FireOnHit()
     {
         var (state, attacker, defender) = MakeFight();
-        var onHit = new AttackEffect(AttackEffectType.Bleed, CombatStat.HitPoints, 2, 2, 1, 1);
+        var onHit = new AttackEffect(AttackEffectType.Bleed,
+            new[] { new StatChange(CombatStat.HitPoints, 2, 2) },
+            MinDuration: 1, MaxDuration: 1);
         var attack = BasicAttack(minDmg: 1, maxDmg: 1, accuracy: 100, onHit: onHit);
 
         new CombatResolver(Rolls(1, 100, 0, 1)).Resolve(attacker, attack, (1, 0), state);
@@ -251,7 +253,9 @@ public class CombatResolverTests
     public void OnCritShould_FireOnlyOnCrit()
     {
         var (state, attacker, defender) = MakeFight(attackerFocus: 5);
-        var onCrit = new AttackEffect(AttackEffectType.Bleed, CombatStat.HitPoints, 2, 2, 1, 1);
+        var onCrit = new AttackEffect(AttackEffectType.Bleed,
+            new[] { new StatChange(CombatStat.HitPoints, 2, 2) },
+            MinDuration: 1, MaxDuration: 1);
         var attack = BasicAttack(minDmg: 1, maxDmg: 1, accuracy: 100, onCrit: onCrit);
 
         // First: no crit (crit roll 74 < 75 threshold)

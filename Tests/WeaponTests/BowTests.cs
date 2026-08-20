@@ -29,9 +29,9 @@ public class BowTests
         Assert.Null(a.OnHit);
         Assert.NotNull(a.OnCrit);
         Assert.Equal(AttackEffectType.Bleed, a.OnCrit!.Type);
-        Assert.Equal(CombatStat.HitPoints, a.OnCrit.TargetStat);
-        Assert.Equal(3, a.OnCrit.MinAmount);
-        Assert.Equal(3, a.OnCrit.MaxAmount);
+        Assert.Equal(CombatStat.HitPoints, a.OnCrit.Stats[0].Stat);
+        Assert.Equal(3, a.OnCrit.Stats[0].MinAmount);
+        Assert.Equal(3, a.OnCrit.Stats[0].MaxAmount);
         Assert.Equal(2, a.OnCrit.MinDuration);
         Assert.Equal(2, a.OnCrit.MaxDuration);
     }
@@ -71,9 +71,9 @@ public class BowTests
         Assert.Null(a.OnHit);
         Assert.NotNull(a.OnCrit);
         Assert.Equal(AttackEffectType.StatReduction, a.OnCrit!.Type);
-        Assert.Equal(CombatStat.MovementPoints, a.OnCrit.TargetStat);
-        Assert.Equal(2, a.OnCrit.MinAmount);
-        Assert.Equal(2, a.OnCrit.MaxAmount);
+        Assert.Equal(CombatStat.MovementPoints, a.OnCrit.Stats[0].Stat);
+        Assert.Equal(2, a.OnCrit.Stats[0].MinAmount);
+        Assert.Equal(2, a.OnCrit.Stats[0].MaxAmount);
         Assert.Equal(1, a.OnCrit.MinDuration);
         Assert.Equal(1, a.OnCrit.MaxDuration);
     }
@@ -106,9 +106,9 @@ public class BowTests
         Assert.Single(a.AttackShape.Offsets);
         Assert.NotNull(a.OnHit);
         Assert.Equal(AttackEffectType.Bleed, a.OnHit!.Type);
-        Assert.Equal(CombatStat.HitPoints, a.OnHit.TargetStat);
-        Assert.Equal(2, a.OnHit.MinAmount);
-        Assert.Equal(2, a.OnHit.MaxAmount);
+        Assert.Equal(CombatStat.HitPoints, a.OnHit.Stats[0].Stat);
+        Assert.Equal(2, a.OnHit.Stats[0].MinAmount);
+        Assert.Equal(2, a.OnHit.Stats[0].MaxAmount);
         Assert.Equal(2, a.OnHit.MinDuration);
         Assert.Equal(2, a.OnHit.MaxDuration);
         Assert.Null(a.OnCrit);

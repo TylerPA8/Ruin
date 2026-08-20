@@ -115,13 +115,17 @@ public abstract class Creature
 
     public void ApplyStatusEffect(AttackEffect effect)
     {
-        var statusEffect = new StatusEffect(
-            (StatusEffectType)effect.Type,
-            effect.TargetStat,
-            Random.Shared.Next(effect.MinAmount, effect.MaxAmount + 1),
-            Random.Shared.Next(effect.MinDuration, effect.MaxDuration + 1)
-        );
-        StatusEffects.Add(statusEffect);
+        int duration = Random.Shared.Next(effect.MinDuration, effect.MaxDuration + 1);
+        foreach (var statChange in effect.Stats)
+        {
+            var statusEffect = new StatusEffect(
+                (StatusEffectType)effect.Type,
+                statChange.Stat,
+                Random.Shared.Next(statChange.MinAmount, statChange.MaxAmount + 1),
+                duration
+            );
+            StatusEffects.Add(statusEffect);
+        }
     }
 
     public void TickStatusEffects()
